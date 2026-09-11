@@ -99,18 +99,33 @@ Qualquer hospedagem de site estático serve. A mais simples:
 
 Depois de publicar, gere o QR Code do convite impresso apontando para o endereço final.
 
-### Sobre o cache
+### Sobre o cache — rode `versionar.py` antes de cada deploy
 
-O GitHub Pages envia `Cache-Control: max-age=600` em todos os arquivos, HTML incluído.
-Na prática: depois de um `git push`, a construção leva de um a dois minutos e a versão
-nova chega a quem já visitou em **até 10 minutos**, sozinha. Não há nada a fazer para
-apressar — e quem abre o site pela primeira vez já pega a versão nova na hora.
+O GitHub Pages envia `Cache-Control: max-age=600` em todos os arquivos. Sem
+cuidado, depois de um `git push` o navegador pode pegar o `index.html` novo e
+continuar com o `main.js` velho por até 10 minutos. E um HTML novo rodando com
+JS velho não fica desatualizado: fica **quebrado** — o elemento existe na
+página, o código que preenche ele não.
 
-Se quiser conferir você mesmo antes disso, abra o site numa janela anônima.
+Para evitar isso, antes de commitar mudanças em CSS, JS ou nas imagens que
+trocam de conteúdo mantendo o nome:
 
-O `?v=23` no fim do `<link>` do CSS em `index.html` e `admin.html` não serve para furar
-esse cache: ele só garante que uma folha de estilo antiga não fique valendo para um HTML
-novo. Ao mexer no CSS, troque para o número seguinte nos dois arquivos.
+```bash
+python versionar.py
+```
+
+Ele carimba uma versão nova (`?v=202609111953`) em três lugares: nas tags do
+HTML, nos `import` entre os módulos JS — o navegador trata `./db.js` e
+`./db.js?v=1` como arquivos diferentes — e nas imagens listadas em
+`IMAGENS_VERSIONADAS`, dentro do próprio script.
+
+Assim o HTML novo aponta para URLs que ainda não estão em cache, e tudo troca
+junto. Quem abrir o site pela primeira vez também pega tudo certo.
+
+Nem toda imagem é versionada de propósito: se todas fossem, cada convidado
+rebaixaria o site inteiro a cada deploy. Só entram na lista as que forem
+realmente substituídas mantendo o mesmo nome.
+
 
 ---
 
