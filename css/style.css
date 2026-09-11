@@ -86,11 +86,25 @@ button { font: inherit; color: inherit; }
 .mono {
   display: block; margin-inline: auto;
   aspect-ratio: 418.48 / 244.36;
-  background: linear-gradient(158deg, #E8D0A8 4%, #C89A63 42%, #8B5E3C 88%);
+  background: linear-gradient(158deg, #A87A4E 4%, #8B5E3C 45%, #6B4527 92%);
   -webkit-mask: url(../img/monograma.svg) no-repeat center / contain;
   mask: url(../img/monograma.svg) no-repeat center / contain;
 }
 .mono--madeira { background: var(--madeira); }
+
+/* fio bordado: pontos de cetim na diagonal, brilho do fio e relevo da agulha.
+   Como a forma vem da máscara, o drop-shadow segue o contorno das letras. */
+.mono--bordado {
+  background:
+    repeating-linear-gradient(56deg,
+      rgba(255, 238, 216, .085) 0 1px,
+      rgba(46, 24, 10, .12) 1px 2px,
+      transparent 2px 3px),
+    linear-gradient(158deg, #96683F 2%, #7A5030 46%, #59351D 96%);
+  filter:
+    drop-shadow(0 1.6px 1.4px rgba(8, 18, 12, .62))
+    drop-shadow(0 -1px .5px rgba(255, 236, 208, .15));
+}
 
 /* régua fina com coração ao centro */
 .regua {
@@ -185,11 +199,22 @@ button { font: inherit; color: inherit; }
     radial-gradient(120% 82% at 50% 36%, rgba(255, 255, 255, .05), transparent 62%),
     radial-gradient(100% 100% at 50% 112%, rgba(0, 0, 0, .32), transparent 66%);
 }
+/* trama de tecido: dois fios cruzados mais o grão irregular do linho */
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(0deg,  rgba(0, 0, 0, .05)       0 1px, transparent 1px 3px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: auto, auto, 160px 160px;
+  mix-blend-mode: soft-light;
+  opacity: .8;
+}
 .hero__marca {
   position: absolute; inset: 0; z-index: -1;
   display: grid; place-items: center; pointer-events: none;
 }
-.hero__marca .mono { width: min(86vw, 52vh, 40rem); background: #fff; opacity: .035; }
+.hero__marca .mono { width: min(86vw, 52vh, 40rem); background: #fff; opacity: .026; }
 .hero__conteudo { position: relative; max-width: 36rem; }
 
 .hero__mono { width: clamp(9.5rem, 42vw, 15rem); margin-bottom: clamp(1.3rem, 5vw, 2.1rem); }
