@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel · Mozar &amp; Eduarda</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&family=Allura&display=swap">
+<link rel="stylesheet" href="css/style.css?v=8">
+<style>
+  body { background: var(--marfim); }
+  .topo {
+    background: var(--floresta); color: var(--marfim);
+    padding: 1.4rem 0; position: sticky; top: 0; z-index: 20;
+  }
+  .topo .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+  .topo h1 {
+    margin: 0; font: 400 clamp(.82rem, 3.4vw, .95rem)/1.4 var(--serif);
+    letter-spacing: .22em; text-transform: uppercase;
+  }
+  .topo button { background: none; border: 1px solid rgba(212,175,124,.5); color: var(--dourado);
+    font: 400 .62rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase;
+    padding: .7rem 1rem; cursor: pointer; border-radius: 2px; }
+  .topo button:hover { background: rgba(212,175,124,.12); }
+
+  .painel { padding: clamp(2rem, 6vw, 3.5rem) 0 5rem; }
+
+  .cartoes { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 2.5rem; }
+  .kpi { background: #fff; border: 1px solid rgba(139,94,60,.14); padding: 1.1rem 1.2rem; }
+  .kpi b { display: block; font: 400 clamp(1.5rem,6vw,2rem)/1.2 var(--serif); color: var(--floresta); }
+  .kpi span { font: 400 .6rem/1.5 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--madeira); }
+
+  .abas { display: flex; gap: .3rem; border-bottom: 1px solid rgba(139,94,60,.18); margin-bottom: 1.6rem; overflow-x: auto; scrollbar-width: none; }
+  .abas::-webkit-scrollbar { display: none; }
+  .aba { flex: none; background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer;
+    padding: .8rem 1rem; font: 400 .66rem/1 var(--sans); letter-spacing: .18em;
+    text-transform: uppercase; color: var(--tinta-suave); }
+  .aba[aria-selected="true"] { color: var(--floresta); border-color: var(--dourado); }
+
+  .barra { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.2rem; }
+  .barra input[type=search] {
+    flex: 1; min-width: 180px; padding: .7rem .9rem; background: #fff;
+    border: 1px solid rgba(139,94,60,.2); font: 300 .85rem/1.4 var(--sans); color: var(--tinta);
+  }
+  .mini { background: none; border: 1px solid rgba(139,94,60,.3); color: var(--madeira); cursor: pointer;
+    padding: .65rem .9rem; font: 400 .6rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
+  .mini:hover { background: rgba(139,94,60,.07); }
+  .mini--forte { background: var(--floresta); border-color: var(--floresta); color: var(--marfim); }
+  .mini--forte:hover { background: var(--floresta-esc); }
+
+  .tabela-wrap { overflow-x: auto; border: 1px solid rgba(139,94,60,.14); background: #fff; }
+  table { width: 100%; border-collapse: collapse; min-width: 640px; }
+  th, td { text-align: left; padding: .85rem .9rem; border-bottom: 1px solid rgba(139,94,60,.1); vertical-align: top; }
+  th { font: 400 .6rem/1.4 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--madeira); white-space: nowrap; }
+  td { font: 300 .85rem/1.6 var(--sans); color: var(--tinta); }
+  td.nome { font-weight: 400; }
+  tr:last-child td { border-bottom: 0; }
+  .msg { color: var(--tinta-suave); font-style: italic; max-width: 22rem; }
+
+  .tag { display: inline-block; padding: .25rem .55rem; font: 400 .58rem/1.4 var(--sans);
+    letter-spacing: .12em; text-transform: uppercase; border: 1px solid; border-radius: 2px; white-space: nowrap; }
+  .tag--ok    { color: #2F6B45; border-color: #9DC4AC; background: #EDF5F0; }
+  .tag--espera{ color: #8B5E3C; border-color: #DCC2A4; background: #FAF2E9; }
+  .tag--nao   { color: #A23A63; border-color: #E3B9CC; background: #FBEFF4; }
+  .acoes { display: flex; flex-wrap: wrap; gap: .3rem; }
+
+  .vazio { padding: 2.5rem 1rem; text-align: center; color: var(--tinta-suave); font: 300 .9rem/1.7 var(--sans); }
+
+  .login { min-height: 100svh; display: grid; place-items: center; padding: 2rem var(--gutter); background: var(--floresta); }
+  .login__caixa { width: min(100%, 24rem); background: var(--marfim-claro); padding: clamp(1.8rem,6vw,2.6rem); text-align: center; }
+  .aviso-modo { margin: 0 0 1.6rem; padding: .8rem 1rem; background: #FAF2E9; border: 1px solid #DCC2A4;
+    font: 300 .78rem/1.6 var(--sans); color: var(--madeira); }
+</style>
+</head>
+<body>
+
+<!-- ------------------------------------------------------------- login -->
+<div class="login" id="tela-login">
+  <div class="login__caixa">
+    <span class="mono" style="font-size:2.4rem;color:var(--madeira)"><i>M</i><i>E</i></span>
+    <h1 class="titulo" style="font-size:1rem;margin:1rem 0 .4rem">Painel dos noivos</h1>
+    <p class="texto" style="margin-bottom:1.8rem">Mozar &amp; Eduarda · 02 · 10 · 2027</p>
+
+    <p class="aviso-modo" id="aviso-local" hidden>
+      Modo local: os dados estão só neste navegador. Configure o Firebase em
+      <strong>js/config.js</strong> para usar de verdade.
+    </p>
+
+    <form class="form" id="form-login" novalidate>
+      <label class="campo" id="campo-email">
+        <span>E-mail</span>
+        <input type="email" name="email" autocomplete="username" placeholder="voce@email.com">
+      </label>
+      <label class="campo" id="campo-senha">
+        <span>Senha</span>
+        <input type="password" name="senha" autocomplete="current-password" placeholder="••••••••">
+      </label>
+      <p class="form__erro" id="erro-login" role="alert"></p>
+      <button class="btn btn--bloco" type="submit">Entrar</button>
+    </form>
+  </div>
+</div>
+
+<!-- ------------------------------------------------------------ painel -->
+<div id="tela-painel" hidden>
+  <header class="topo">
+    <div class="container">
+      <h1>Painel · Mozar &amp; Eduarda</h1>
+      <button type="button" id="sair">Sair</button>
+    </div>
+  </header>
+
+  <main class="painel">
+    <div class="container">
+
+      <div class="cartoes" id="kpis"></div>
+
+      <div class="abas" role="tablist">
+        <button class="aba" role="tab" data-aba="presentes" aria-selected="true">Presentes</button>
+        <button class="aba" role="tab" data-aba="rsvps" aria-selected="false">Confirmações</button>
+        <button class="aba" role="tab" data-aba="lista" aria-selected="false">Status da lista</button>
+      </div>
+
+      <!-- presentes recebidos -->
+      <section id="painel-presentes">
+        <div class="barra">
+          <input type="search" id="busca-presentes" placeholder="Buscar por convidado ou presente…">
+          <button class="mini" type="button" data-csv="presentes">Baixar CSV</button>
+          <button class="mini" type="button" id="recarregar">Atualizar</button>
+        </div>
+        <div class="tabela-wrap"><table id="tab-presentes"></table></div>
+      </section>
+
+      <!-- rsvps -->
+      <section id="painel-rsvps" hidden>
+        <div class="barra">
+          <input type="search" id="busca-rsvps" placeholder="Buscar convidado…">
+          <button class="mini" type="button" data-csv="rsvps">Baixar CSV</button>
+        </div>
+        <div class="tabela-wrap"><table id="tab-rsvps"></table></div>
+      </section>
+
+      <!-- status da lista -->
+      <section id="painel-lista" hidden>
+        <div class="barra">
+          <p class="texto" style="margin:0">
+            Aqui você libera um presente de volta para a lista ou marca como recebido.
+          </p>
+        </div>
+        <div class="tabela-wrap"><table id="tab-lista"></table></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+rules_version = '2';
+
+// Regras de segurança do Firestore — Mozar & Eduarda
+// Cole este conteúdo em: Firebase Console > Firestore Database > Regras > Publicar
+//
+// Ideia central:
+//   presentes/  -> leitura pública, mas guarda SÓ o status (nenhum nome de convidado)
+//   registros/  -> convidado só pode CRIAR; apenas os noivos logados conseguem ler
+//   rsvps/      -> idem
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function noivos() { return request.auth != null; }
+
+    function textoOk(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
+    }
+
+    // ---------------------------------------------------- status dos presentes
+    match /presentes/{presenteId} {
+      allow read: if true;
+      allow write: if noivos();
+
+      // um convidado só pode marcar um presente ainda livre como reservado
+      allow create: if !noivos()
+        && request.resource.data.keys().hasOnly(['status', 'metodo', 'em'])
+        && request.resource.data.status == 'reservado';
+
+      allow update: if !noivos()
+        && resource.data.status == 'disponivel'
+        && request.resource.data.keys().hasOnly(['status', 'metodo', 'em'])
+        && request.resource.data.status == 'reservado';
+    }
+
+    // --------------------------------------- quem presenteou (privado)
+    match /registros/{id} {
+      allow read, update, delete: if noivos();
+      allow create: if textoOk(request.resource.data.nome, 120)
+        && textoOk(request.resource.data.presenteId, 80)
+        && textoOk(request.resource.data.presenteNome, 160)
+        && request.resource.data.mensagem is string
+        && request.resource.data.mensagem.size() <= 600
+        && request.resource.data.valor is number
+        && request.resource.data.valor >= 0
+        && request.resource.data.valor <= 100000
+        && request.resource.data.metodo in ['pix', 'loja'];
+    }
+
+    // ------------------------------------------ confirmações (privado)
+    match /rsvps/{id} {
+      allow read, update, delete: if noivos();
+      allow create: if textoOk(request.resource.data.nome, 120)
+        && textoOk(request.resource.data.contato, 160)
+        && request.resource.data.presenca in ['sim', 'nao']
+        && request.resource.data.acompanhantes is number
+        && request.resource.data.acompanhantes >= 0
+        && request.resource.data.acompanhantes <= 10
+        && request.resource.data.mensagem is string
+        && request.resource.data.mensagem.size() <= 600;
+    }
+
+    // nada mais é acessível
+    match /{documento=**} {
+      allow read, write: if false;
+    }
+  }
+}
