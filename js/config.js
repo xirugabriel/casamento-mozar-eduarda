@@ -19,8 +19,10 @@ export const CASAMENTO = {
   dizeres: {
     abertura: ['Natureza', 'Encontros', 'Histórias', 'Para sempre'],
     aquarela: ['Mesma', 'Essência', 'Novas', 'Histórias', 'Sempre juntos'],
-    rodape:   ['O amor', 'também se vive', 'em lugares assim.'],
   },
+
+  /* frase de fechamento do rodapé */
+  fraseFinal: 'Que seja inesquecível, não apenas para nós, mas para todos que fazem parte da nossa história.',
 
   /* 'dias'  -> só o número de dias (como pedido no briefing)
      'completa' -> dias | horas | minutos | segundos (como no mockup) */

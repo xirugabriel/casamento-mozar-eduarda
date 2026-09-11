@@ -10,6 +10,7 @@
 | `img/identidade/igreja.webp` | `cerimonia.jpeg` | 1400px, horizontal. |
 | `img/identidade/recepcao.webp` | `recepção.jpeg` | 1400px, horizontal. |
 | `img/identidade/rsvp.webp` | `rsvp.jpeg` | 1400px, horizontal. |
+| `img/identidade/cachorras.webp` | `cachorras.jpg` | 850px. O desenho completo, sem corte. O fundo de papel foi removido por limiar de luminosidade medido na própria borda do arquivo. |
 | `img/identidade/aquarela.jpg` | `AQUARELA.png` | 1200px, **só** para a prévia do link no WhatsApp. Achatada sobre o marfim porque JPEG não tem transparência, e mantida abaixo de 300KB — acima disso o WhatsApp desiste de montar o cartão. |
 | `img/flores/*.webp` | `flores1-5.png` e os quatro PNGs de canto | Nove recortes com transparência. Seis em uso, três de reserva. |
 
@@ -37,7 +38,7 @@ posição e opacidade de cada uma ficam em `css/style.css`, nas classes `.folha-
 
 ## O que ainda falta
 
-### Fotos dos presentes (única pendência real)
+### Fotos dos presentes — única pendência
 
 Uma foto por presente, em `img/presentes/`, quadrada ou 4:3, **800px**, fundo claro e
 neutro. O nome do arquivo deve bater com o `id` do presente em `js/data.js`:
@@ -58,9 +59,3 @@ Depois é só apontar no `js/data.js`:
 Sem a foto, o presente usa `img/presentes/_placeholder.svg`, uma folhagem discreta na
 paleta do casamento — dá para publicar assim sem parecer quebrado.
 
-### Ilustração das cachorras (opcional)
-
-`img/identidade/cachorras.webp` ainda é um recorte do JPEG da identidade visual: o
-fundo de papel foi removido por limiar de luminosidade, o que funciona bem mas come um
-pouco dos traços mais claros. Se o designer mandar o desenho em **PNG com fundo
-transparente**, fica perfeito. É a última arte provisória do site.

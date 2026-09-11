@@ -583,7 +583,7 @@ button { font: inherit; color: inherit; }
 
 /* ------------------------------------------------------- final + rodapé */
 .final { background: var(--marfim); padding: clamp(3rem, 9vw, 4.5rem) 0 0; text-align: center; }
-.final img { width: min(72%, 320px); margin: 0 auto; }
+.final img { width: min(88%, 440px); margin: 0 auto; }
 
 .rodape {
   position: relative; isolation: isolate; overflow: hidden;
@@ -604,6 +604,12 @@ button { font: inherit; color: inherit; }
   letter-spacing: .3em; color: var(--madeira); padding-left: .3em;
 }
 .rodape__frase { margin-top: clamp(1.4rem, 4.5vw, 2rem); }
+/* frase inteira, não mais um bordão curto: precisa de medida e entrelinha */
+.rodape__fecho {
+  max-width: 26rem; margin-inline: auto;
+  font-size: clamp(1.2rem, 4.8vw, 1.65rem); line-height: 1.7;
+  text-wrap: balance;
+}
 .rodape__duvidas { margin: 1.2rem 0 0; font: 300 .72rem/1.9 var(--sans); color: var(--tinta-suave); }
 .rodape__duvidas a { color: var(--madeira); }
 .folha--rod-e { bottom: -14%; left: -12%; width: clamp(160px, 40vw, 400px); opacity: .5; }
@@ -669,10 +675,6 @@ button { font: inherit; color: inherit; }
   .aquarela__dizeres { justify-content: flex-start; }
   .aquarela__dizeres .dizeres { text-align: left; }
 
-  .rodape__grade { grid-template-columns: 1fr auto 1fr; align-items: center; }
-  .rodape__marca { grid-column: 2; }
-  .rodape__dizeres { grid-column: 3; justify-self: end; text-align: left; }
-  .rodape__frase { grid-column: 1 / -1; }
 }
 
 /* --------------------------------------------------------- acessibilidade */

@@ -59,8 +59,8 @@ function dizeres() {
   };
   linhas('#dizeres-abertura', CASAMENTO.dizeres.abertura);
   linhas('#dizeres-aquarela', CASAMENTO.dizeres.aquarela);
-  linhas('#dizeres-rodape', CASAMENTO.dizeres.rodape);
   $('#credito-frase').textContent = CASAMENTO.fraseCredito || '';
+  $('#frase-final').textContent = CASAMENTO.fraseFinal || '';
 }
 
 /* ------------------------------------------------------------- contagem */
