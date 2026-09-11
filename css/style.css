@@ -92,18 +92,33 @@ button { font: inherit; color: inherit; }
 }
 .mono--madeira { background: var(--madeira); }
 
-/* fio bordado: pontos de cetim na diagonal, brilho do fio e relevo da agulha.
-   Como a forma vem da máscara, o drop-shadow segue o contorno das letras. */
+/* bordado em alto relevo, em três camadas:
+   1. o fio de cetim, cada ponto com o brilho arredondado da seção do fio
+   2. a abóbada (::before), que levanta a luz em cima e some a sombra embaixo
+   3. o rebordo e a sombra projetada no tecido, via drop-shadow encadeado.
+   Como a forma vem da máscara SVG, tudo acompanha o contorno das letras —
+   inclusive o ::before, que a máscara do pai recorta. */
 .mono--bordado {
+  position: relative;
   background:
     repeating-linear-gradient(56deg,
-      rgba(255, 238, 216, .085) 0 1px,
-      rgba(46, 24, 10, .12) 1px 2px,
-      transparent 2px 3px),
-    linear-gradient(158deg, #96683F 2%, #7A5030 46%, #59351D 96%);
+      rgba(255, 242, 222, .17) 0 .6px,
+      rgba(255, 242, 222, .06) .6px 1.3px,
+      rgba(36, 18, 6, .17)     1.3px 2.3px,
+      rgba(36, 18, 6, .05)     2.3px 3.1px),
+    linear-gradient(158deg, #96693E 0%, #775030 48%, #4F2F16 100%);
   filter:
-    drop-shadow(0 1.6px 1.4px rgba(8, 18, 12, .62))
-    drop-shadow(0 -1px .5px rgba(255, 236, 208, .15));
+    drop-shadow(-1px -1px 0 rgba(255, 241, 216, .50))
+    drop-shadow(1.2px 1.4px 0 rgba(32, 15, 4, .62))
+    drop-shadow(0 3.5px 5px rgba(6, 16, 10, .55));
+}
+.mono--bordado::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(152deg,
+    rgba(255, 242, 218, .32) 0%,
+    rgba(255, 242, 218, 0)   36%,
+    rgba(28, 13, 4, .13)     70%,
+    rgba(28, 13, 4, .32)     100%);
 }
 
 /* régua fina com coração ao centro */
