@@ -266,6 +266,16 @@ button { font: inherit; color: inherit; }
 .aquarela__dizeres { display: flex; justify-content: center; }
 .aquarela__dizeres .dizeres { text-align: center; }
 
+/* no celular a aquarela sangra até as bordas e ainda transborda um pouco:
+   a arte tem borda esfumada, então não existe corte reto para disfarçar e o
+   que sai da tela não faz falta. A seção tem overflow hidden, sem rolagem lateral. */
+@media (max-width: 759px) {
+  .aquarela { padding-top: clamp(1.8rem, 6vw, 3rem); }
+  .aquarela .container { width: 100%; }
+  .aquarela figure { width: 114%; margin-left: -7%; }
+  .aquarela__dizeres { padding-inline: var(--gutter); margin-top: clamp(.5rem, 2vw, 1rem); }
+}
+
 /* ============================================== 3. CONTAGEM REGRESSIVA */
 .contagem { text-align: center; }
 .contagem__rotulo {
