@@ -92,10 +92,10 @@ button { font: inherit; color: inherit; }
 }
 .mono--madeira { background: var(--madeira); }
 
-/* monograma em couro: o relevo e o grão vêm da iluminação dentro do próprio
-   SVG (img/monograma-couro.svg), então aqui só resta o tamanho. O arquivo
+/* monograma em cera dourada: o relevo vem da iluminação dentro do próprio
+   SVG (img/monograma-lacre.svg), então aqui só resta o tamanho. O arquivo
    tem margem no viewBox para caber a sombra projetada. */
-.mono-couro { display: block; width: 100%; height: auto; margin-inline: auto; }
+.mono-lacre { display: block; width: 100%; height: auto; margin-inline: auto; }
 
 
 /* régua fina com coração ao centro */

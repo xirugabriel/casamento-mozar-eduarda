@@ -4,7 +4,7 @@
 
 | Arquivo | Origem | Observação |
 |---|---|---|
-| `img/monograma-couro.svg` | `ME.svg` | Monograma em couro, usado na abertura e no rodapé. O relevo e o grão vêm de iluminação SVG de verdade (`feDiffuseLighting` + `feSpecularLighting` sobre um mapa de altura), não de sombras planas — por isso a peça parece levantada do tecido. |
+| `img/monograma-lacre.svg` | `ME.svg` | Monograma em cera dourada, como o lacre do convite. Usado na abertura e no rodapé. O relevo vem de iluminação SVG (`feDiffuseLighting` + `feSpecularLighting` sobre a silhueta amaciada). O que faz ler como ouro é a faixa tonal larga somada a um reflexo **estreito** — reflexo largo e difuso é o que parece plástico. |
 | `img/monograma.svg` | `ME.svg` | A forma limpa, sem relevo. Serve de **máscara CSS** para a marca d'água da abertura e para o monograma do painel. |
 | `img/identidade/aquarela.webp` | `AQUARELA.png` | 1600px, **com transparência preservada**. A borda esfumada da arte se dissolve no marfim da seção, sem moldura nem recorte reto. |
 | `img/identidade/igreja.webp` | `cerimonia.jpeg` | 1400px, horizontal. |
