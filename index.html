@@ -23,7 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=13">
+<link rel="stylesheet" href="css/style.css?v=16">
 </head>
 <body>
 
@@ -106,15 +106,15 @@
     </figure>
 
     <div class="locais__texto rv" style="--d:.08s">
-      <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
-        <path d="M24 4v9M20.5 7.5h7" stroke-linecap="round"/>
-        <path d="M24 13 10 24v20h28V24L24 13Z" stroke-linejoin="round"/>
-        <path d="M20 44V33a4 4 0 0 1 8 0v11" stroke-linejoin="round"/>
-        <path d="M24 20v7M21 23h6" stroke-linecap="round"/>
+      <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+           stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M24 4v6M21.4 6.4h5.2"/>
+        <path d="M24 10 11.5 22.5V44h25V22.5L24 10Z"/>
+        <path d="M24 18.5a3.2 3.2 0 0 1 3.2 3.2V26h-6.4v-4.3A3.2 3.2 0 0 1 24 18.5Z"/>
+        <path d="M19.8 44V34.2a4.2 4.2 0 0 1 8.4 0V44"/>
       </svg>
       <h2 class="titulo locais__titulo">Cerimônia</h2>
       <ul class="horarios" id="horarios-cerimonia"></ul>
-      <p class="locais__aviso" id="aviso-cerimonia"></p>
       <h3 class="locais__nome" id="nome-cerimonia"></h3>
       <p class="locais__endereco" id="endereco-cerimonia"></p>
       <a class="btn" id="maps-cerimonia" href="#" target="_blank" rel="noopener">
@@ -131,11 +131,17 @@
     </figure>
 
     <div class="locais__texto rv" style="--d:.08s">
-      <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
-        <path d="M12 7h11l-3.5 12a4 4 0 0 1-8 0L8 7h4Z" stroke-linejoin="round"/>
-        <path d="M15.5 29v11M11 41h9" stroke-linecap="round"/>
-        <path d="M30 7h11l-3.5 12a4 4 0 0 1-8 0L26 7h4Z" stroke-linejoin="round"/>
-        <path d="M33.5 29v11M29 41h9" stroke-linecap="round"/>
+      <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor"
+           stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M24 4v3.4M18.8 6.2l1.6 2.4M29.2 6.2l-1.6 2.4" opacity=".6"/>
+        <g transform="translate(17.2 13.5) rotate(-16)">
+          <path d="M-6.4 0h12.8c0 5.9-2.9 9.6-6.4 9.6S-6.4 5.9-6.4 0Z"/>
+          <path d="M0 9.6V21.4M-4.4 22.4h8.8"/>
+        </g>
+        <g transform="translate(30.8 13.5) rotate(16)">
+          <path d="M-6.4 0h12.8c0 5.9-2.9 9.6-6.4 9.6S-6.4 5.9-6.4 0Z"/>
+          <path d="M0 9.6V21.4M-4.4 22.4h8.8"/>
+        </g>
       </svg>
       <h2 class="titulo locais__titulo">Recepção</h2>
       <p class="texto" id="texto-recepcao"></p>

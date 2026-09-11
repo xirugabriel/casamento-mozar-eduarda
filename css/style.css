@@ -297,35 +297,39 @@ button { font: inherit; color: inherit; }
 .locais__foto { margin: 0; }
 .locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 2; filter: saturate(.95); }
 .locais__texto {
-  display: flex; flex-direction: column; align-items: center; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
   padding: clamp(2.2rem, 8vw, 3.2rem) var(--gutter);
   background: var(--marfim);
 }
-.locais__icone { width: 34px; height: 34px; color: var(--madeira); margin-bottom: 1rem; }
+.locais__icone { width: clamp(30px, 3.2vw, 40px); height: clamp(30px, 3.2vw, 40px); color: var(--madeira); margin-bottom: 1rem; }
 .locais__titulo { margin-bottom: clamp(1.2rem, 4vw, 1.6rem); }
 
-.horarios { list-style: none; margin: 0 0 clamp(1.2rem, 4vw, 1.6rem); padding: 0; display: grid; gap: .5rem; }
-.horarios li { display: grid; grid-template-columns: auto 1fr; align-items: baseline; gap: .7rem; text-align: left; }
-.horarios b {
-  font: 400 clamp(.95rem, 4vw, 1.1rem)/1.4 var(--serif);
-  letter-spacing: .04em; color: var(--madeira); white-space: nowrap;
+.horarios {
+  list-style: none; margin: 0 0 clamp(1.3rem, 4vw, 1.8rem); padding: 0;
+  display: grid; gap: clamp(.75rem, 2.6vw, 1rem); text-align: left;
 }
-.horarios span { font: 300 clamp(.76rem, 3.1vw, .84rem)/1.6 var(--sans); color: var(--tinta-suave); }
+.horarios b {
+  display: flex; align-items: center; gap: .45rem;
+  font: 400 clamp(1rem, 4.2vw, 1.25rem)/1.3 var(--serif);
+  letter-spacing: .03em; color: var(--madeira);
+}
+.horarios__ico { width: 13px; height: 13px; flex: none; color: var(--madeira); }
+.horarios li:not(:first-child) .horarios__ico { visibility: hidden; }
+.horarios span {
+  display: block; margin-top: .15rem;
+  font: 300 clamp(.74rem, 3vw, .82rem)/1.55 var(--sans); color: var(--tinta-suave);
+}
 
 .locais__nome {
-  margin: 0 0 .3rem;
-  font: 400 clamp(.74rem, 3.1vw, .82rem)/1.7 var(--sans);
-  letter-spacing: .22em; text-transform: uppercase; color: var(--floresta);
+  margin: 0 0 .35rem;
+  font: 400 clamp(.8rem, 3.3vw, .95rem)/1.55 var(--serif);
+  letter-spacing: .15em; text-transform: uppercase; color: var(--floresta);
 }
 .locais__endereco {
   margin: 0 0 clamp(1.3rem, 4vw, 1.8rem);
-  font: 300 clamp(.72rem, 3vw, .78rem)/1.7 var(--sans);
-  letter-spacing: .06em; color: var(--tinta-suave);
-}
-.locais__aviso {
-  margin: 0 0 1.3rem; max-width: 20rem; padding: .7rem .9rem;
-  border-top: 1px solid rgba(212, 175, 124, .5); border-bottom: 1px solid rgba(212, 175, 124, .5);
-  font: 300 italic clamp(.74rem, 3vw, .8rem)/1.7 var(--sans); color: var(--madeira);
+  font: 400 clamp(.62rem, 2.6vw, .7rem)/1.6 var(--serif);
+  letter-spacing: .1em; color: var(--madeira);
 }
 .locais__texto .texto { margin-bottom: clamp(1.2rem, 4vw, 1.7rem); max-width: 19rem; }
 
@@ -596,7 +600,7 @@ button { font: inherit; color: inherit; }
 /* ======== até 559px: tudo encolhe para as duas colunas caberem no celular */
 @media (max-width: 559px) {
   .locais__texto { padding: clamp(1.5rem, 6vw, 2.2rem) clamp(.7rem, 3.2vw, 1.1rem); }
-  .locais__icone { width: 26px; height: 26px; margin-bottom: .75rem; }
+  .locais__icone { width: 32px; height: 32px; margin-bottom: .8rem; }
   .locais__titulo { font-size: 1.02rem; letter-spacing: .13em; margin-bottom: 1rem; }
 
   .horarios { gap: .75rem; margin-bottom: 1.1rem; }
@@ -604,8 +608,7 @@ button { font: inherit; color: inherit; }
   .horarios b { font-size: .98rem; }
   .horarios span { font-size: .7rem; line-height: 1.5; }
 
-  .locais__aviso { padding: .6rem .45rem; font-size: .69rem; line-height: 1.6; margin-bottom: 1.1rem; }
-  .locais__nome { font-size: .67rem; letter-spacing: .13em; }
+    .locais__nome { font-size: .67rem; letter-spacing: .13em; }
   .locais__endereco { font-size: .67rem; margin-bottom: 1.2rem; }
   .locais__texto .texto { font-size: .76rem; line-height: 1.75; }
   .locais .btn {
@@ -618,7 +621,7 @@ button { font: inherit; color: inherit; }
 /* ============= >= 1040px: as quatro faixas da arte (foto, texto, foto, texto)
    Abaixo disso as colunas de texto ficariam estreitas demais para o botão. */
 @media (min-width: 1040px) {
-  .locais { grid-template-columns: 1fr 1.08fr 1fr 1.08fr; }
+  .locais { grid-template-columns: 1.4fr 1fr 1.4fr 1fr; }
   .locais > *:nth-child(1), .locais > *:nth-child(2),
   .locais > *:nth-child(3), .locais > *:nth-child(4) { grid-area: auto; }
   .locais__texto { padding-inline: clamp(1rem, 2.3vw, 2rem); }

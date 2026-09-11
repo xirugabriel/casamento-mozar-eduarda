@@ -38,7 +38,6 @@ export const CASAMENTO = {
       ['16h',   'chegada dos convidados'],
       ['16h30', 'início da cerimônia, pontualmente'],
     ],
-    aviso: 'Pedimos que cheguem às 16h — a cerimônia começa pontualmente às 16h30.',
     // Cole aqui o link do Google Maps do local (botão "Compartilhar" no Maps).
     // Se deixar vazio, o site busca pelo nome + endereço.
     mapsUrl: '',

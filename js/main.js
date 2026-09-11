@@ -137,9 +137,11 @@ const mapsHref = (l) => l.mapsUrl
 
 function locais() {
   const c = CASAMENTO.cerimonia;
+  const relogio = '<svg class="horarios__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+    + ' stroke-width="1.6" stroke-linecap="round" aria-hidden="true">'
+    + '<circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/></svg>';
   $('#horarios-cerimonia').innerHTML = c.horarios
-    .map(([h, t]) => `<li><b>${esc(h)}</b><span>${esc(t)}</span></li>`).join('');
-  $('#aviso-cerimonia').textContent = c.aviso;
+    .map(([h, t]) => `<li><b>${relogio}${esc(h)}</b><span>${esc(t)}</span></li>`).join('');
   $('#nome-cerimonia').textContent = c.titulo;
   $('#endereco-cerimonia').textContent = c.endereco;
   $('#maps-cerimonia').href = mapsHref(c);
