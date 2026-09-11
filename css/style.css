@@ -160,7 +160,8 @@ button { font: inherit; color: inherit; }
 .nav ul {
   display: flex; justify-content: center; justify-content: safe center; align-items: center;
   gap: clamp(.72rem, 3.2vw, 2.6rem);
-  margin: 0; padding: clamp(.9rem, 3vw, 1.4rem) var(--gutter);
+  margin: 0;
+  padding: calc(clamp(.9rem, 3vw, 1.4rem) + env(safe-area-inset-top)) var(--gutter) clamp(.9rem, 3vw, 1.4rem);
   list-style: none; overflow-x: auto; scrollbar-width: none;
 }
 .nav ul::-webkit-scrollbar { display: none; }
@@ -178,9 +179,15 @@ button { font: inherit; color: inherit; }
 /* =================================================== 1. ABERTURA (verde) */
 .hero {
   position: relative; isolation: isolate;
-  min-height: 100svh; min-height: 100vh;
+  /* 100vh no iOS é a altura COM as barras recolhidas, então o fim da abertura
+     some atrás da barra do Safari. svh é a altura sempre visível. */
+  min-height: 100vh;
+  min-height: 100svh;
   display: grid; place-items: center;
-  padding: clamp(6rem, 18vw, 8rem) var(--gutter) clamp(4.5rem, 12vw, 6rem);
+  /* viewport-fit=cover pinta até as bordas; o recuo tira o conteúdo de baixo
+     do notch sem tirar o verde de lá */
+  padding: calc(clamp(6rem, 18vw, 8rem) + env(safe-area-inset-top)) var(--gutter)
+           calc(clamp(4.5rem, 12vw, 6rem) + env(safe-area-inset-bottom));
   background: var(--floresta); color: var(--marfim);
   text-align: center; overflow: hidden;
 }
@@ -248,8 +255,9 @@ button { font: inherit; color: inherit; }
 .hero__dizeres { display: none; }
 
 .hero__scroll {
-  position: absolute; left: 50%; bottom: clamp(1.3rem, 4vw, 2.2rem);
-  translate: -50% 0; z-index: 2;
+  position: absolute; left: 50%; z-index: 2;
+  bottom: calc(clamp(1.3rem, 4vw, 2.2rem) + env(safe-area-inset-bottom));
+  translate: -50% 0;
   color: rgba(212, 175, 124, .8); text-decoration: none;
 }
 .hero__scroll svg { width: 20px; height: 20px; animation: descer 2.6s ease-in-out infinite; }
@@ -588,7 +596,8 @@ button { font: inherit; color: inherit; }
 .rodape {
   position: relative; isolation: isolate; overflow: hidden;
   background: var(--marfim); color: var(--tinta);
-  padding: clamp(2rem, 6vw, 3rem) 0 clamp(2.4rem, 8vw, 3.4rem);
+  padding: clamp(2rem, 6vw, 3rem) 0
+           calc(clamp(4.5rem, 15vw, 6.5rem) + env(safe-area-inset-bottom));
   text-align: center;
 }
 .rodape__grade { position: relative; display: grid; gap: clamp(1.4rem, 5vw, 2rem); justify-items: center; }
@@ -612,8 +621,10 @@ button { font: inherit; color: inherit; }
 }
 .rodape__duvidas { margin: 1.2rem 0 0; font: 300 .72rem/1.9 var(--sans); color: var(--tinta-suave); }
 .rodape__duvidas a { color: var(--madeira); }
-.folha--rod-e { bottom: -14%; left: -12%; width: clamp(160px, 40vw, 400px); opacity: .5; }
-.folha--rod-d { bottom: -14%; right: -12%; width: clamp(160px, 40vw, 400px); opacity: .5; transform: scaleX(-1); }
+/* assentadas na borda de baixo, inteiras: antes transbordavam 14% e o
+   overflow do rodapé cortava as folhas ao meio */
+.folha--rod-e { bottom: env(safe-area-inset-bottom); left: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; }
+.folha--rod-d { bottom: env(safe-area-inset-bottom); right: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; transform: scaleX(-1); }
 
 /* ------------------------------------------------------------- revelação */
 .rv { opacity: 0; transform: translateY(16px); }
