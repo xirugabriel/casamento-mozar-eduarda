@@ -287,9 +287,15 @@ button { font: inherit; color: inherit; }
 .folha--dir { top: 50%; right: -8%; translate: 0 -50%; width: clamp(115px, 29vw, 300px); opacity: .5; transform: scaleX(-1); }
 
 /* ================================================= 4/5. LOCAIS (4 faixas) */
-.locais { display: grid; }
+/* cerimônia e recepção ficam SEMPRE lado a lado: cada uma é uma coluna,
+   com a própria foto em cima do próprio texto. */
+.locais { display: grid; grid-template-columns: 1fr 1fr; }
+.locais > *:nth-child(1) { grid-area: 1 / 1; }
+.locais > *:nth-child(2) { grid-area: 2 / 1; }
+.locais > *:nth-child(3) { grid-area: 1 / 2; }
+.locais > *:nth-child(4) { grid-area: 2 / 2; }
 .locais__foto { margin: 0; }
-.locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; filter: saturate(.95); }
+.locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 3 / 2; filter: saturate(.95); }
 .locais__texto {
   display: flex; flex-direction: column; align-items: center; text-align: center;
   padding: clamp(2.2rem, 8vw, 3.2rem) var(--gutter);
@@ -582,22 +588,40 @@ button { font: inherit; color: inherit; }
 }
 .toast.on { opacity: 1; translate: -50% -6px; }
 
-/* =================================== >= 560px: cerimônia e recepção lado a lado
-   Cada uma vira uma coluna, com a foto em cima do próprio texto. */
-@media (min-width: 560px) {
-  .locais { grid-template-columns: 1fr 1fr; }
-  .locais > *:nth-child(1) { grid-area: 1 / 1; }
-  .locais > *:nth-child(2) { grid-area: 2 / 1; }
-  .locais > *:nth-child(3) { grid-area: 1 / 2; }
-  .locais > *:nth-child(4) { grid-area: 2 / 2; }
-  .locais__foto img { aspect-ratio: 3 / 2; }
+/* ================ até 1039px: filete separando as duas colunas de texto */
+@media (max-width: 1039px) {
+  .locais > *:nth-child(4) { border-left: 1px solid var(--linha); }
 }
 
-/* ============== >= 900px: as quatro faixas da arte (foto, texto, foto, texto) */
-@media (min-width: 900px) {
+/* ======== até 559px: tudo encolhe para as duas colunas caberem no celular */
+@media (max-width: 559px) {
+  .locais__texto { padding: clamp(1.5rem, 6vw, 2.2rem) clamp(.7rem, 3.2vw, 1.1rem); }
+  .locais__icone { width: 26px; height: 26px; margin-bottom: .75rem; }
+  .locais__titulo { font-size: 1.02rem; letter-spacing: .13em; margin-bottom: 1rem; }
+
+  .horarios { gap: .75rem; margin-bottom: 1.1rem; }
+  .horarios li { grid-template-columns: 1fr; gap: .12rem; text-align: center; }
+  .horarios b { font-size: .98rem; }
+  .horarios span { font-size: .7rem; line-height: 1.5; }
+
+  .locais__aviso { padding: .6rem .45rem; font-size: .69rem; line-height: 1.6; margin-bottom: 1.1rem; }
+  .locais__nome { font-size: .67rem; letter-spacing: .13em; }
+  .locais__endereco { font-size: .67rem; margin-bottom: 1.2rem; }
+  .locais__texto .texto { font-size: .76rem; line-height: 1.75; }
+  .locais .btn {
+    width: 100%; padding: .8rem .4rem; min-height: 48px;
+    font-size: .57rem; letter-spacing: .1em; gap: .35rem;
+  }
+  .locais .btn svg { width: 12px; height: 12px; }
+}
+
+/* ============= >= 1040px: as quatro faixas da arte (foto, texto, foto, texto)
+   Abaixo disso as colunas de texto ficariam estreitas demais para o botão. */
+@media (min-width: 1040px) {
   .locais { grid-template-columns: 1fr 1.08fr 1fr 1.08fr; }
   .locais > *:nth-child(1), .locais > *:nth-child(2),
   .locais > *:nth-child(3), .locais > *:nth-child(4) { grid-area: auto; }
+  .locais__texto { padding-inline: clamp(1rem, 2.3vw, 2rem); }
   .locais__foto img { height: 100%; aspect-ratio: auto; min-height: 26rem; }
 }
 
