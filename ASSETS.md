@@ -5,12 +5,11 @@
 | Arquivo | Origem | Observação |
 |---|---|---|
 | `img/monograma.svg` | `ME.svg` | Monograma oficial. Usado como **máscara CSS**, então o site pinta ele de dourado na abertura e de marrom no painel sem precisar de outro arquivo. |
-| `img/identidade/aquarela.webp` | `AQUARELA.jpg` | 1600px. O banner completo, com os dizeres já na arte. Usado de 760px para cima. |
-| `img/identidade/aquarela-movel.webp` | `AQUARELA.jpg` | 1000px, cortado antes da coluna de texto. No celular aquele texto teria 39px de largura e seria ilegível, então ali entra só a arte e os dizeres voltam a ser texto de verdade, logo abaixo. |
+| `img/identidade/aquarela.webp` | `AQUARELA.png` | 1600px, **com transparência preservada**. A borda esfumada da arte se dissolve no marfim da seção, sem moldura nem recorte reto. |
 | `img/identidade/igreja.webp` | `cerimonia.jpeg` | 1400px, horizontal. |
 | `img/identidade/recepcao.webp` | `recepção.jpeg` | 1400px, horizontal. |
 | `img/identidade/rsvp.webp` | `rsvp.jpeg` | 1400px, horizontal. |
-| `img/identidade/aquarela.jpg` | `AQUARELA.jpg` | 1200px, **só** para a prévia do link no WhatsApp — que falha acima de ~300KB, por isso essa versão separada. |
+| `img/identidade/aquarela.jpg` | `AQUARELA.png` | 1200px, **só** para a prévia do link no WhatsApp. Achatada sobre o marfim porque JPEG não tem transparência, e mantida abaixo de 300KB — acima disso o WhatsApp desiste de montar o cartão. |
 | `img/flores/*.webp` | `flores1-5.png` e os quatro PNGs de canto | Nove recortes com transparência. Seis em uso, três de reserva. |
 
 Os originais (3 a 5 MB cada) ficam na pasta do projeto, **fora** do repositório —
