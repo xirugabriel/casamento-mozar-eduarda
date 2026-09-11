@@ -243,11 +243,12 @@ button { font: inherit; color: inherit; }
 .secao--claro { background: var(--marfim-claro); }
 
 .aquarela { padding: clamp(2.5rem, 8vw, 4rem) 0; }
-.aquarela__grade { display: grid; gap: clamp(1.4rem, 5vw, 2.5rem); align-items: center; }
 .aquarela figure { margin: 0; }
 .aquarela img { width: 100%; }
-.aquarela__dizeres { display: flex; justify-content: center; }
+/* os dizeres só aparecem no celular: na tela larga eles já vêm na própria arte */
+.aquarela__dizeres { display: flex; justify-content: center; margin-top: clamp(1.5rem, 5vw, 2rem); }
 .aquarela__dizeres .dizeres { text-align: center; }
+@media (min-width: 760px) { .aquarela__dizeres { display: none; } }
 
 /* ============================================== 3. CONTAGEM REGRESSIVA */
 .contagem { text-align: center; }
@@ -629,10 +630,6 @@ button { font: inherit; color: inherit; }
     padding-left: 1.6rem; border-left: 1px solid rgba(212, 175, 124, .35);
     text-align: left;
   }
-  .aquarela__grade { grid-template-columns: 1fr auto; gap: clamp(2rem, 5vw, 3.5rem); }
-  .aquarela__dizeres { justify-content: flex-start; }
-  .aquarela__dizeres .dizeres { text-align: left; }
-
   .rodape__grade { grid-template-columns: 1fr auto 1fr; align-items: center; }
   .rodape__marca { grid-column: 2; }
   .rodape__dizeres { grid-column: 3; justify-self: end; text-align: left; }
