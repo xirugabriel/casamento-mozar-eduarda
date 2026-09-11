@@ -4,7 +4,7 @@
 
 | Arquivo | Origem | Observação |
 |---|---|---|
-| `img/monograma-lacre.svg` | `ME.svg` | Monograma em cera dourada, como o lacre do convite. Usado na abertura e no rodapé. O relevo vem de iluminação SVG (`feDiffuseLighting` + `feSpecularLighting` sobre a silhueta amaciada). O que faz ler como ouro é a faixa tonal larga somada a um reflexo **estreito** — reflexo largo e difuso é o que parece plástico. |
+| `img/monograma-ouro.svg` | `ME.svg` | Monograma em folha de ouro, usado na abertura e no rodapé. **Sem bisel**: o que faz ler como metal é a faixa tonal alternando claro e escuro ao longo da diagonal, imitando a folha refletindo a luz em ângulos diferentes. Bisel arredondado lê como texto 3D de editor antigo. |
 | `img/monograma.svg` | `ME.svg` | A forma limpa, sem relevo. Serve de **máscara CSS** para a marca d'água da abertura e para o monograma do painel. |
 | `img/identidade/aquarela.webp` | `AQUARELA.png` | 1600px, **com transparência preservada**. A borda esfumada da arte se dissolve no marfim da seção, sem moldura nem recorte reto. |
 | `img/identidade/igreja.webp` | `cerimonia.jpeg` | 1400px, horizontal. |
@@ -26,7 +26,9 @@ não vão para o ar. Só as versões reduzidas são publicadas.
 | `canto-rosa.webp` | lista de presentes, canto superior direito |
 | `ramo-fino.webp` | confirmação de presença, canto inferior esquerdo |
 | `ramo-cheio.webp` | rodapé, as duas pontas |
-| `cluster-creme.webp`, `canto-ocre.webp`, `canto-verde.webp` | reserva, não usadas |
+| `ramo-cheio.webp` | também na base da abertura, à esquerda, espelhado |
+| `cluster-creme.webp` | base da abertura, à direita, girado 180° |
+| `canto-ocre.webp`, `canto-verde.webp` | reserva, não usadas |
 
 Para trocar uma flor de lugar, basta mudar o `src` no `index.html` — tamanho,
 posição e opacidade de cada uma ficam em `css/style.css`, nas classes `.folha--*`.

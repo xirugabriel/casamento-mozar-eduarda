@@ -92,10 +92,9 @@ button { font: inherit; color: inherit; }
 }
 .mono--madeira { background: var(--madeira); }
 
-/* monograma em cera dourada: o relevo vem da iluminação dentro do próprio
-   SVG (img/monograma-lacre.svg), então aqui só resta o tamanho. O arquivo
-   tem margem no viewBox para caber a sombra projetada. */
-.mono-lacre { display: block; width: 100%; height: auto; margin-inline: auto; }
+/* monograma em folha de ouro (img/monograma-ouro.svg): o metal vem da faixa
+   tonal do próprio SVG, sem bisel. Aqui só resta o tamanho. */
+.mono-ouro { display: block; width: 100%; height: auto; margin-inline: auto; }
 
 
 /* régua fina com coração ao centro */
@@ -254,6 +253,10 @@ button { font: inherit; color: inherit; }
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
 .folha--hero-se { top: -4%; left: -12%; width: clamp(330px, 92vw, 780px); opacity: .95; }
 .folha--hero-d  { top: 8%; right: -14%; width: clamp(120px, 30vw, 280px); opacity: .62; }
+/* base do verde: fecha o quadro sem competir com o topo, por isso menores
+   e mais apagadas — o peso da composição fica em cima. */
+.folha--hero-ib { bottom: -2%; left: -12%; width: clamp(180px, 48vw, 420px); opacity: .5; transform: scaleY(-1); }
+.folha--hero-id { bottom: -3%; right: -13%; width: clamp(155px, 41vw, 350px); opacity: .46; transform: rotate(180deg); }
 
 /* ================================================= 2. AQUARELA (marfim) */
 .secao { position: relative; isolation: isolate; padding: var(--secao) 0; overflow: hidden; }
