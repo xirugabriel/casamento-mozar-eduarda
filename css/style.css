@@ -92,34 +92,11 @@ button { font: inherit; color: inherit; }
 }
 .mono--madeira { background: var(--madeira); }
 
-/* bordado em alto relevo, em três camadas:
-   1. o fio de cetim, cada ponto com o brilho arredondado da seção do fio
-   2. a abóbada (::before), que levanta a luz em cima e some a sombra embaixo
-   3. o rebordo e a sombra projetada no tecido, via drop-shadow encadeado.
-   Como a forma vem da máscara SVG, tudo acompanha o contorno das letras —
-   inclusive o ::before, que a máscara do pai recorta. */
-.mono--bordado {
-  position: relative;
-  background:
-    repeating-linear-gradient(56deg,
-      rgba(255, 242, 222, .17) 0 .6px,
-      rgba(255, 242, 222, .06) .6px 1.3px,
-      rgba(36, 18, 6, .17)     1.3px 2.3px,
-      rgba(36, 18, 6, .05)     2.3px 3.1px),
-    linear-gradient(158deg, #96693E 0%, #775030 48%, #4F2F16 100%);
-  filter:
-    drop-shadow(-1px -1px 0 rgba(255, 241, 216, .50))
-    drop-shadow(1.2px 1.4px 0 rgba(32, 15, 4, .62))
-    drop-shadow(0 3.5px 5px rgba(6, 16, 10, .55));
-}
-.mono--bordado::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(152deg,
-    rgba(255, 242, 218, .32) 0%,
-    rgba(255, 242, 218, 0)   36%,
-    rgba(28, 13, 4, .13)     70%,
-    rgba(28, 13, 4, .32)     100%);
-}
+/* monograma em couro: o relevo e o grão vêm da iluminação dentro do próprio
+   SVG (img/monograma-couro.svg), então aqui só resta o tamanho. O arquivo
+   tem margem no viewBox para caber a sombra projetada. */
+.mono-couro { display: block; width: 100%; height: auto; margin-inline: auto; }
+
 
 /* régua fina com coração ao centro */
 .regua {
@@ -232,7 +209,7 @@ button { font: inherit; color: inherit; }
 .hero__marca .mono { width: min(86vw, 52vh, 40rem); background: #fff; opacity: .026; }
 .hero__conteudo { position: relative; max-width: 36rem; }
 
-.hero__mono { width: clamp(9.5rem, 42vw, 15rem); margin-bottom: clamp(1.3rem, 5vw, 2.1rem); }
+.hero__mono { width: clamp(11rem, 49vw, 17.5rem); margin-bottom: clamp(.9rem, 3.5vw, 1.5rem); }
 .hero__nomes {
   margin: 0 0 clamp(1rem, 3.5vw, 1.4rem);
   font: 400 clamp(1.1rem, 5.2vw, 1.9rem)/1.45 var(--serif);
@@ -596,7 +573,7 @@ button { font: inherit; color: inherit; }
   text-align: center;
 }
 .rodape__grade { position: relative; display: grid; gap: clamp(1.4rem, 5vw, 2rem); justify-items: center; }
-.rodape__mono { width: clamp(6.5rem, 26vw, 9rem); }
+.rodape__mono { display: block; width: clamp(7.5rem, 30vw, 10.5rem); margin-inline: auto; }
 .rodape__nomes {
   margin: 1.1rem 0 .6rem;
   font: 400 clamp(.82rem, 3.6vw, .98rem)/1.5 var(--serif);

@@ -4,7 +4,8 @@
 
 | Arquivo | Origem | Observação |
 |---|---|---|
-| `img/monograma.svg` | `ME.svg` | Monograma oficial. Usado como **máscara CSS**, então o site pinta ele de dourado na abertura e de marrom no painel sem precisar de outro arquivo. |
+| `img/monograma-couro.svg` | `ME.svg` | Monograma em couro, usado na abertura e no rodapé. O relevo e o grão vêm de iluminação SVG de verdade (`feDiffuseLighting` + `feSpecularLighting` sobre um mapa de altura), não de sombras planas — por isso a peça parece levantada do tecido. |
+| `img/monograma.svg` | `ME.svg` | A forma limpa, sem relevo. Serve de **máscara CSS** para a marca d'água da abertura e para o monograma do painel. |
 | `img/identidade/aquarela.webp` | `AQUARELA.png` | 1600px, **com transparência preservada**. A borda esfumada da arte se dissolve no marfim da seção, sem moldura nem recorte reto. |
 | `img/identidade/igreja.webp` | `cerimonia.jpeg` | 1400px, horizontal. |
 | `img/identidade/recepcao.webp` | `recepção.jpeg` | 1400px, horizontal. |
