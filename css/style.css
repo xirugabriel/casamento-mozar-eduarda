@@ -141,7 +141,10 @@ button { font: inherit; color: inherit; }
 /* ------------------------------------------------------------------- nav */
 .nav {
   position: fixed; inset: 0 0 auto; z-index: 60;
-  background: transparent; border-bottom: 1px solid transparent;
+  /* sobre a abertura, um véu escuro quase imperceptível mantém o menu
+     legível por cima das flores; ao rolar, vira a barra marfim. */
+  background: linear-gradient(180deg, rgba(22, 40, 31, .5) 15%, rgba(22, 40, 31, 0));
+  border-bottom: 1px solid transparent;
   transition: background .45s, border-color .45s;
 }
 .nav.on {
@@ -233,7 +236,7 @@ button { font: inherit; color: inherit; }
 
 /* folhagens */
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
-.folha--hero-se { top: -3%; left: -13%; width: clamp(215px, 58vw, 470px); opacity: .92; }
+.folha--hero-se { top: -1%; left: -7%; width: clamp(210px, 56vw, 500px); opacity: .95; }
 .folha--hero-d  { top: 2%; right: -13%; width: clamp(115px, 29vw, 225px); opacity: .7; }
 
 /* ================================================= 2. AQUARELA (marfim) */
