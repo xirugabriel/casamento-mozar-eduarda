@@ -274,6 +274,15 @@ button { font: inherit; color: inherit; }
 .contagem--unica .relogio__n { font-size: clamp(3.6rem, 22vw, 7rem); }
 .contagem--unica .relogio__u { letter-spacing: .42em; padding-left: .42em; }
 
+/* quatro colunas: números menores para caber na tela do celular */
+.contagem--completa .relogio__bloco { padding: 0 clamp(.5rem, 3.1vw, 2.2rem); }
+.contagem--completa .relogio__n { font-size: clamp(1.7rem, 8.4vw, 3.4rem); }
+.contagem--completa .relogio__u {
+  margin-top: .55rem;
+  font-size: clamp(.44rem, 1.95vw, .58rem);
+  letter-spacing: .16em; padding-left: .16em;
+}
+
 .folha--esq { top: 50%; left: -8%; translate: 0 -50%; width: clamp(115px, 29vw, 300px); opacity: .5; }
 .folha--dir { top: 50%; right: -8%; translate: 0 -50%; width: clamp(115px, 29vw, 300px); opacity: .5; transform: scaleX(-1); }
 

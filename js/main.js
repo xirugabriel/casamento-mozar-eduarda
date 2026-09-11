@@ -87,6 +87,7 @@ function contagem() {
 
   $('#contagem-sub').textContent = CASAMENTO.contagemSub || '';
   secao.classList.toggle('contagem--unica', !completa);
+  secao.classList.toggle('contagem--completa', completa);
 
   const diaLocal = new Intl.DateTimeFormat('en-CA', {
     timeZone: CASAMENTO.fuso, year: 'numeric', month: '2-digit', day: '2-digit',

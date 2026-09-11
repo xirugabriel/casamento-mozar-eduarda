@@ -24,7 +24,7 @@ export const CASAMENTO = {
 
   /* 'dias'  -> só o número de dias (como pedido no briefing)
      'completa' -> dias | horas | minutos | segundos (como no mockup) */
-  contagem: 'dias',
+  contagem: 'completa',
   contagemSub: 'para o nosso grande dia',
 
   /* 'carrossel' -> presentes deslizando com setas (como no mockup)
