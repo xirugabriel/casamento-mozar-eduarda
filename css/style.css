@@ -582,10 +582,27 @@ button { font: inherit; color: inherit; }
 }
 .toast.on { opacity: 1; translate: -50% -6px; }
 
+/* =================================== >= 560px: cerimônia e recepção lado a lado
+   Cada uma vira uma coluna, com a foto em cima do próprio texto. */
+@media (min-width: 560px) {
+  .locais { grid-template-columns: 1fr 1fr; }
+  .locais > *:nth-child(1) { grid-area: 1 / 1; }
+  .locais > *:nth-child(2) { grid-area: 2 / 1; }
+  .locais > *:nth-child(3) { grid-area: 1 / 2; }
+  .locais > *:nth-child(4) { grid-area: 2 / 2; }
+  .locais__foto img { aspect-ratio: 3 / 2; }
+}
+
+/* ============== >= 900px: as quatro faixas da arte (foto, texto, foto, texto) */
+@media (min-width: 900px) {
+  .locais { grid-template-columns: 1fr 1.08fr 1fr 1.08fr; }
+  .locais > *:nth-child(1), .locais > *:nth-child(2),
+  .locais > *:nth-child(3), .locais > *:nth-child(4) { grid-area: auto; }
+  .locais__foto img { height: 100%; aspect-ratio: auto; min-height: 26rem; }
+}
+
 /* ============================================================ >= 680px */
 @media (min-width: 680px) {
-  .locais { grid-template-columns: 1fr 1fr; }
-  .locais__foto img { height: 100%; aspect-ratio: auto; min-height: 22rem; }
   .rsvp__grade { grid-template-columns: .9fr 1.1fr; align-items: stretch; }
   .rsvp__foto img { aspect-ratio: auto; min-height: 100%; }
   .rsvp__corpo { text-align: left; }
@@ -605,9 +622,6 @@ button { font: inherit; color: inherit; }
   .aquarela__grade { grid-template-columns: 1fr auto; gap: clamp(2rem, 5vw, 3.5rem); }
   .aquarela__dizeres { justify-content: flex-start; }
   .aquarela__dizeres .dizeres { text-align: left; }
-
-  .locais { grid-template-columns: 1fr 1.08fr 1fr 1.08fr; }
-  .locais__foto img { min-height: 26rem; }
 
   .rodape__grade { grid-template-columns: 1fr auto 1fr; align-items: center; }
   .rodape__marca { grid-column: 2; }
