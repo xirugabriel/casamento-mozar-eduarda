@@ -1,29 +1,42 @@
-# Artes que o site precisa
+# Artes do site
 
-Tudo que está em `img/identidade/` hoje foi **recortado dos JPEGs da identidade
-visual** só para o site não ficar vazio. Funciona, mas está em baixa resolução e com
-sobras das artes originais. Para trocar, salve o arquivo novo **com o mesmo nome** na
-mesma pasta — nada mais precisa ser mexido.
+## O que já está no site (arte definitiva)
 
-## Prioridade alta
-
-| Arquivo | O que é | Formato ideal |
+| Arquivo | Origem | Observação |
 |---|---|---|
-| `img/identidade/aquarela.jpg` | A aquarela do casal com as cachorras e a capela — a mesma do forro do envelope. É a imagem principal do site. | JPG, **2000 px de largura**, horizontal, sem moldura nem fundo do envelope |
-| `img/identidade/cachorras.png` | A ilustração das duas cachorras do fecho do site | **PNG com fundo transparente**, ~1200 px de largura |
-| *(novo)* `img/identidade/monograma.svg` | O monograma **ME** oficial | SVG (ou PNG transparente, 800 px), em uma cor só — o site tinge de dourado ou madeira |
+| `img/monograma.svg` | `ME.svg` | Monograma oficial. Usado como **máscara CSS**, então o site pinta ele de dourado na abertura e de marrom no painel sem precisar de outro arquivo. |
+| `img/identidade/aquarela.webp` | `AQUARELA.jpeg` | 1400px. A imagem principal do site. |
+| `img/identidade/igreja.webp` | `cerimonia.jpeg` | 900px, vertical. |
+| `img/identidade/recepcao.webp` | `recepção.jpeg` | 900px, vertical. |
+| `img/identidade/rsvp.webp` | `rsvp.jpeg` | 1100px, quadrada. |
+| `img/identidade/aquarela.jpg` | `AQUARELA.jpeg` | 1200px, **só** para a prévia do link no WhatsApp — que falha acima de ~300KB, por isso essa versão separada. |
+| `img/flores/*.webp` | `flores1-5.png` e os quatro PNGs de canto | Nove recortes com transparência. Seis em uso, três de reserva. |
 
-## Prioridade média
+Os originais (3 a 5 MB cada) ficam na pasta do projeto, **fora** do repositório —
+não vão para o ar. Só as versões reduzidas são publicadas.
 
-| Arquivo | O que é | Formato ideal |
-|---|---|---|
-| `img/identidade/igreja.jpg` | Foto ou aquarela da Matriz Paróquia São Pedro Apóstolo | JPG, 1400 px, vertical (3:4) |
-| `img/identidade/recepcao.jpg` | Foto do Rancho Bela Vista | JPG, 1400 px, vertical (3:4) |
-| `img/identidade/rsvp.jpg` | Imagem de apoio ao lado do formulário (o cartão RSVP fotografado serve muito bem) | JPG, 1200 px |
+### Onde cada flor está
 
-## Presentes
+| Arquivo | Seção |
+|---|---|
+| `canto-flores.webp` | abertura, canto superior esquerdo |
+| `haste-branca.webp` | abertura, lateral direita |
+| `ramo-horizontal.webp` | contagem regressiva, as duas laterais |
+| `canto-rosa.webp` | lista de presentes, canto superior direito |
+| `ramo-fino.webp` | confirmação de presença, canto inferior esquerdo |
+| `ramo-cheio.webp` | rodapé, as duas pontas |
+| `cluster-creme.webp`, `canto-ocre.webp`, `canto-verde.webp` | reserva, não usadas |
 
-Uma foto por presente, em `img/presentes/`, quadrada ou 4:3, **800 px**, fundo claro e
+Para trocar uma flor de lugar, basta mudar o `src` no `index.html` — tamanho,
+posição e opacidade de cada uma ficam em `css/style.css`, nas classes `.folha--*`.
+
+---
+
+## O que ainda falta
+
+### Fotos dos presentes (única pendência real)
+
+Uma foto por presente, em `img/presentes/`, quadrada ou 4:3, **800px**, fundo claro e
 neutro. O nome do arquivo deve bater com o `id` do presente em `js/data.js`:
 
 ```
@@ -39,12 +52,12 @@ Depois é só apontar no `js/data.js`:
 { id: 'jogo-panelas', …, img: 'img/presentes/jogo-panelas.jpg', link: 'https://…' }
 ```
 
-Enquanto a foto não chegar, o presente usa `img/presentes/_placeholder.svg`, uma
-folhagem discreta na paleta do casamento — dá para publicar assim sem parecer quebrado.
+Sem a foto, o presente usa `img/presentes/_placeholder.svg`, uma folhagem discreta na
+paleta do casamento — dá para publicar assim sem parecer quebrado.
 
-## O que **não** precisa ser enviado
+### Ilustração das cachorras (opcional)
 
-As folhagens (`ramo-1.svg`, `ramo-2.svg`, `sprig.svg`, `divisor.svg`) foram desenhadas
-em vetor na cor verde-sálvia da identidade. São leves, nítidas em qualquer tela e já
-estão posicionadas nos cantos. Se preferir as folhagens originais da papelaria, mande
-em PNG transparente que eu troco.
+`img/identidade/cachorras.webp` ainda é um recorte do JPEG da identidade visual: o
+fundo de papel foi removido por limiar de luminosidade, o que funciona bem mas come um
+pouco dos traços mais claros. Se o designer mandar o desenho em **PNG com fundo
+transparente**, fica perfeito. É a última arte provisória do site.

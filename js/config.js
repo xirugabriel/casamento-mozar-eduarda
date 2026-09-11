@@ -41,7 +41,7 @@ export const CASAMENTO = {
     // Cole aqui o link do Google Maps do local (botão "Compartilhar" no Maps).
     // Se deixar vazio, o site busca pelo nome + endereço.
     mapsUrl: '',
-    imagem: 'img/identidade/igreja.jpg',
+    imagem: 'img/identidade/igreja.webp',
   },
 
   recepcao: {
@@ -49,7 +49,7 @@ export const CASAMENTO = {
     texto:  'Após a cerimônia, seguiremos para celebrar juntos.',
     endereco: 'Bonito • MS',                       // TODO: endereço completo
     mapsUrl: '',
-    imagem: 'img/identidade/recepcao.jpg',
+    imagem: 'img/identidade/recepcao.webp',
   },
 
   /* ---- PIX ------------------------------------------------------------

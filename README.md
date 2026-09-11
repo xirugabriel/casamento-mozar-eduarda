@@ -17,7 +17,11 @@ site/
 │   ├── db.js           camada de dados (Firestore, com modo local para testes)
 │   ├── main.js         comportamento do site
 │   └── admin.js        comportamento do painel
-└── img/                aquarela, folhagens, fotos dos presentes
+└── img/
+    ├── monograma.svg   monograma oficial (usado como máscara CSS)
+    ├── identidade/     aquarela, igreja, recepção, RSVP, cachorras
+    ├── flores/         recortes em aquarela com transparência
+    └── presentes/      fotos dos presentes
 ```
 
 ---
@@ -104,7 +108,7 @@ apressar — e quem abre o site pela primeira vez já pega a versão nova na hor
 
 Se quiser conferir você mesmo antes disso, abra o site numa janela anônima.
 
-O `?v=9` no fim do `<link>` do CSS em `index.html` e `admin.html` não serve para furar
+O `?v=23` no fim do `<link>` do CSS em `index.html` e `admin.html` não serve para furar
 esse cache: ele só garante que uma folha de estilo antiga não fique valendo para um HTML
 novo. Ao mexer no CSS, troque para o número seguinte nos dois arquivos.
 
@@ -149,9 +153,12 @@ engano ou brincadeira, é um clique em **Liberar** no painel.
 
 ## 7. Trocar as artes
 
-As imagens em `img/identidade/` são **provisórias**, recortadas dos JPEGs da
-identidade visual. Veja `ASSETS.md` para a lista exata do que enviar. Para trocar,
-basta salvar o arquivo novo com o mesmo nome.
+As artes definitivas já estão no site: monograma oficial, aquarela, igreja, recepção
+e RSVP, mais nove recortes de flores com transparência. Os originais em alta ficam na
+pasta do projeto, fora do repositório.
 
-O monograma **ME** hoje é desenhado com a fonte Playfair Display. Quando o SVG oficial
-chegar, ele entra no lugar dos elementos `.mono` do HTML.
+Falta só a foto de cada presente. Veja `ASSETS.md` para tamanhos e nomes de arquivo.
+
+O monograma é `img/monograma.svg` aplicado como **máscara CSS**: o elemento `.mono`
+fica vazio no HTML e o SVG recorta um fundo colorido. É o que permite pintá-lo com o
+degradê dourado na abertura e de marrom no painel usando um arquivo só.

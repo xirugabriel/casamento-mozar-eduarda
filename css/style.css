@@ -81,16 +81,16 @@ button { font: inherit; color: inherit; }
   color: var(--tinta-suave);
 }
 
-/* monograma ME — trocar pelo SVG oficial quando chegar */
+/* monograma oficial: a forma vem de img/monograma.svg usado como máscara,
+   o que permite pintá-lo com o degradê dourado/madeira da identidade. */
 .mono {
-  display: inline-flex; line-height: 1;
-  font-family: var(--serif); font-weight: 500;
+  display: block; margin-inline: auto;
+  aspect-ratio: 418.48 / 244.36;
   background: linear-gradient(158deg, #E8D0A8 4%, #C89A63 42%, #8B5E3C 88%);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
+  -webkit-mask: url(../img/monograma.svg) no-repeat center / contain;
+  mask: url(../img/monograma.svg) no-repeat center / contain;
 }
-.mono i { font-style: normal; }
-.mono i + i { margin-left: -.17em; }
+.mono--madeira { background: var(--madeira); }
 
 /* régua fina com coração ao centro */
 .regua {
@@ -188,12 +188,11 @@ button { font: inherit; color: inherit; }
 .hero__marca {
   position: absolute; inset: 0; z-index: -1;
   display: grid; place-items: center; pointer-events: none;
-  font-family: var(--serif); font-size: min(58vw, 50vh, 34rem); line-height: 1;
-  color: #fff; opacity: .03; letter-spacing: -.06em;
 }
+.hero__marca .mono { width: min(86vw, 52vh, 40rem); background: #fff; opacity: .035; }
 .hero__conteudo { position: relative; max-width: 36rem; }
 
-.hero__mono { font-size: clamp(3.4rem, 17vw, 5.4rem); margin-bottom: clamp(1.2rem, 4.5vw, 1.9rem); }
+.hero__mono { width: clamp(9.5rem, 42vw, 15rem); margin-bottom: clamp(1.3rem, 5vw, 2.1rem); }
 .hero__nomes {
   margin: 0 0 clamp(1rem, 3.5vw, 1.4rem);
   font: 400 clamp(1.1rem, 5.2vw, 1.9rem)/1.45 var(--serif);
@@ -236,11 +235,11 @@ button { font: inherit; color: inherit; }
 
 /* folhagens */
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
-.folha--hero-se { top: -1%; left: -7%; width: clamp(210px, 56vw, 500px); opacity: .95; }
-.folha--hero-d  { top: 2%; right: -13%; width: clamp(115px, 29vw, 225px); opacity: .7; }
+.folha--hero-se { top: -4%; left: -12%; width: clamp(330px, 92vw, 780px); opacity: .95; }
+.folha--hero-d  { top: 8%; right: -14%; width: clamp(120px, 30vw, 280px); opacity: .62; }
 
 /* ================================================= 2. AQUARELA (marfim) */
-.secao { position: relative; padding: var(--secao) 0; overflow: hidden; }
+.secao { position: relative; isolation: isolate; padding: var(--secao) 0; overflow: hidden; }
 .secao--claro { background: var(--marfim-claro); }
 
 .aquarela { padding: clamp(2.5rem, 8vw, 4rem) 0; }
@@ -286,8 +285,10 @@ button { font: inherit; color: inherit; }
   letter-spacing: .16em; padding-left: .16em;
 }
 
-.folha--esq { top: 50%; left: -8%; translate: 0 -50%; width: clamp(115px, 29vw, 300px); opacity: .5; }
-.folha--dir { top: 50%; right: -8%; translate: 0 -50%; width: clamp(115px, 29vw, 300px); opacity: .5; transform: scaleX(-1); }
+.folha--esq { top: 50%; left: -13%; translate: 0 -50%; width: clamp(150px, 38vw, 380px); opacity: .55; }
+.folha--dir { top: 50%; right: -13%; translate: 0 -50%; width: clamp(150px, 38vw, 380px); opacity: .55; transform: scaleX(-1); }
+.folha--pres { top: -4%; right: -12%; width: clamp(130px, 34vw, 330px); opacity: .4; transform: scaleX(-1); }
+.folha--rsvp { bottom: -5%; left: -11%; width: clamp(120px, 30vw, 290px); opacity: .38; }
 
 /* ================================================= 4/5. LOCAIS (4 faixas) */
 /* no celular, cerimônia e recepção ficam uma embaixo da outra;
@@ -535,7 +536,7 @@ button { font: inherit; color: inherit; }
 .form__erro:empty { display: none; }
 
 /* ------------------------------------------------------------------ RSVP */
-.rsvp { padding: 0; }
+.rsvp { position: relative; isolation: isolate; padding: 0; overflow: hidden; }
 .rsvp__grade { display: grid; }
 .rsvp__foto { margin: 0; }
 .rsvp__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 5 / 3; }
@@ -549,13 +550,13 @@ button { font: inherit; color: inherit; }
 .final img { width: min(72%, 320px); margin: 0 auto; }
 
 .rodape {
-  position: relative; overflow: hidden;
+  position: relative; isolation: isolate; overflow: hidden;
   background: var(--marfim); color: var(--tinta);
   padding: clamp(2rem, 6vw, 3rem) 0 clamp(2.4rem, 8vw, 3.4rem);
   text-align: center;
 }
 .rodape__grade { position: relative; display: grid; gap: clamp(1.4rem, 5vw, 2rem); justify-items: center; }
-.rodape__mono { font-size: clamp(2.3rem, 11vw, 3.2rem); }
+.rodape__mono { width: clamp(6.5rem, 26vw, 9rem); }
 .rodape__nomes {
   margin: 1.1rem 0 .6rem;
   font: 400 clamp(.82rem, 3.6vw, .98rem)/1.5 var(--serif);
@@ -569,8 +570,8 @@ button { font: inherit; color: inherit; }
 .rodape__frase { margin-top: clamp(1.4rem, 4.5vw, 2rem); }
 .rodape__duvidas { margin: 1.2rem 0 0; font: 300 .72rem/1.9 var(--sans); color: var(--tinta-suave); }
 .rodape__duvidas a { color: var(--madeira); }
-.folha--rod-e { bottom: -26%; left: -10%; width: clamp(125px, 32vw, 290px); opacity: .45; }
-.folha--rod-d { bottom: -26%; right: -10%; width: clamp(125px, 32vw, 290px); opacity: .45; transform: scaleX(-1); }
+.folha--rod-e { bottom: -14%; left: -12%; width: clamp(160px, 40vw, 400px); opacity: .5; }
+.folha--rod-d { bottom: -14%; right: -12%; width: clamp(160px, 40vw, 400px); opacity: .5; transform: scaleX(-1); }
 
 /* ------------------------------------------------------------- revelação */
 .rv { opacity: 0; transform: translateY(16px); }
