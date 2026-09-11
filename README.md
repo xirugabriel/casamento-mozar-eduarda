@@ -95,8 +95,18 @@ Qualquer hospedagem de site estático serve. A mais simples:
 
 Depois de publicar, gere o QR Code do convite impresso apontando para o endereço final.
 
-Ao atualizar o CSS, troque o `?v=8` no fim do `<link>` em `index.html` e `admin.html`
-para o número seguinte — isso força o navegador dos convidados a baixar a versão nova.
+### Sobre o cache
+
+O GitHub Pages envia `Cache-Control: max-age=600` em todos os arquivos, HTML incluído.
+Na prática: depois de um `git push`, a construção leva de um a dois minutos e a versão
+nova chega a quem já visitou em **até 10 minutos**, sozinha. Não há nada a fazer para
+apressar — e quem abre o site pela primeira vez já pega a versão nova na hora.
+
+Se quiser conferir você mesmo antes disso, abra o site numa janela anônima.
+
+O `?v=9` no fim do `<link>` do CSS em `index.html` e `admin.html` não serve para furar
+esse cache: ele só garante que uma folha de estilo antiga não fique valendo para um HTML
+novo. Ao mexer no CSS, troque para o número seguinte nos dois arquivos.
 
 ---
 
