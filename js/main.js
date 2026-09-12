@@ -1,10 +1,10 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202609112009';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202609112009';
-import { gerarPix, desenharQR } from './pix.js?v=202609112009';
-import * as DB from './db.js?v=202609112009';
+import { CASAMENTO } from './config.js?v=202609112013';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202609112013';
+import { gerarPix, desenharQR } from './pix.js?v=202609112013';
+import * as DB from './db.js?v=202609112013';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -68,7 +68,11 @@ function barrasDoSistema() {
     if (cor === atual) return;
     atual = cor;
     if (meta) meta.setAttribute('content', cor);
+    /* o Safari tira a cor da faixa do <body>, não do <html>: com o body
+       marfim fixo a barra ficava clara e a hora saía em preto, mesmo com a
+       raiz já pintada de verde. As duas precisam mudar juntas. */
     document.documentElement.style.backgroundColor = cor;
+    document.body.style.backgroundColor = cor;
   }
 
   aplicar();
