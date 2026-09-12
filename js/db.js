@@ -7,7 +7,7 @@
    Nome, mensagem e valor de quem presenteou ficam em `registros`, que apenas
    o admin autenticado consegue ler.
    ============================================================= */
-import { FIREBASE } from './config.js?v=202609112004';
+import { FIREBASE } from './config.js?v=202609112009';
 
 const V = '10.12.5';
 const U = 'https://www.gstatic.com/firebasejs/' + V;
