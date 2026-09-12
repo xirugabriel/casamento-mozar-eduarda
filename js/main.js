@@ -1,10 +1,10 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202609112013';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202609112013';
-import { gerarPix, desenharQR } from './pix.js?v=202609112013';
-import * as DB from './db.js?v=202609112013';
+import { CASAMENTO } from './config.js?v=202609112027';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202609112027';
+import { gerarPix, desenharQR } from './pix.js?v=202609112027';
+import * as DB from './db.js?v=202609112027';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));

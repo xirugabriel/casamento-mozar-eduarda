@@ -273,7 +273,13 @@ button { font: inherit; color: inherit; }
 .folha--hero-id { bottom: -3%; right: -13%; width: clamp(155px, 41vw, 350px); opacity: .46; transform: rotate(180deg); }
 
 /* ================================================= 2. AQUARELA (marfim) */
-.secao { position: relative; isolation: isolate; padding: var(--secao) 0; overflow: hidden; }
+.secao {
+  position: relative; isolation: isolate;
+  padding: var(--secao) 0; overflow: hidden;
+  /* cor própria, nunca herdada do body: o body muda de cor conforme a
+     seção no topo, para tingir a barra de status do iPhone */
+  background: var(--marfim);
+}
 .secao--claro { background: var(--marfim-claro); }
 
 .aquarela { padding: clamp(2.5rem, 8vw, 4rem) 0; }
@@ -337,7 +343,7 @@ button { font: inherit; color: inherit; }
 /* ================================================= 4/5. LOCAIS (4 faixas) */
 /* no celular, cerimônia e recepção ficam uma embaixo da outra;
    a partir de 1040px viram as quatro faixas da arte aprovada. */
-.locais { display: grid; }
+.locais { display: grid; background: var(--marfim); }
 .locais__foto { margin: 0; }
 .locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; filter: saturate(.95); }
 .locais__texto {
@@ -580,7 +586,7 @@ button { font: inherit; color: inherit; }
 .form__erro:empty { display: none; }
 
 /* ------------------------------------------------------------------ RSVP */
-.rsvp { position: relative; isolation: isolate; padding: 0; overflow: hidden; }
+.rsvp { position: relative; isolation: isolate; padding: 0; overflow: hidden; background: var(--marfim); }
 .rsvp__grade { display: grid; }
 .rsvp__foto { margin: 0; }
 .rsvp__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 5 / 3; }
