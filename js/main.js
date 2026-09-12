@@ -1,10 +1,10 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202609111958';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202609111958';
-import { gerarPix, desenharQR } from './pix.js?v=202609111958';
-import * as DB from './db.js?v=202609111958';
+import { CASAMENTO } from './config.js?v=202609112004';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202609112004';
+import { gerarPix, desenharQR } from './pix.js?v=202609112004';
+import * as DB from './db.js?v=202609112004';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -47,6 +47,33 @@ function nav() {
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
   secoes.forEach((s) => io.observe(s));
+}
+
+/* ------------------------------------------------------ barras do sistema */
+/* O Safari do iPhone pinta a faixa do notch e a da barra de endereço com a
+   cor de fundo da página, não com a theme-color declarada. Como o fundo é
+   marfim fixo, as barras ficavam marfim mesmo sobre a abertura verde. Aqui a
+   cor acompanha a seção que está no topo — e a theme-color vai junto, porque
+   em outros navegadores é ela que manda. */
+function barrasDoSistema() {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const hero = $('#inicio');
+  if (!hero) return;
+  const VERDE = '#1F3B2E';
+  const MARFIM = '#F6EFE7';
+  let atual = '';
+
+  function aplicar() {
+    const cor = window.scrollY < hero.offsetHeight - 4 ? VERDE : MARFIM;
+    if (cor === atual) return;
+    atual = cor;
+    if (meta) meta.setAttribute('content', cor);
+    document.documentElement.style.backgroundColor = cor;
+  }
+
+  aplicar();
+  window.addEventListener('scroll', aplicar, { passive: true });
+  window.addEventListener('resize', aplicar);
 }
 
 /* --------------------------------------------------------------- dizeres */
@@ -459,6 +486,7 @@ function rsvp() {
 /* ------------------------------------------------------------------ start */
 (async function iniciar() {
   nav();
+  barrasDoSistema();
   dizeres();
   contagem();
   locais();
