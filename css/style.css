@@ -298,21 +298,24 @@ button { font: inherit; color: inherit; }
 }
 .secao--claro { background: var(--marfim-claro); }
 
-.aquarela { padding: clamp(2.5rem, 8vw, 4rem) 0; }
+.aquarela {
+  padding: clamp(.85rem, 3vw, 2rem) 0 clamp(2rem, 6vw, 3.5rem);
+  background: linear-gradient(var(--marfim) 72%, var(--marfim-claro));
+}
 .aquarela__grade { display: grid; gap: clamp(1.4rem, 5vw, 2.5rem); align-items: center; }
 .aquarela figure { margin: 0; }
-.aquarela img { width: 100%; }
+.aquarela img {
+  width: 100%;
+  mask-image: linear-gradient(transparent, #000 6%, #000 90%, transparent);
+}
 .aquarela__dizeres { display: flex; justify-content: center; }
 .aquarela__dizeres .dizeres { text-align: center; }
 
-/* no celular a aquarela sangra até as bordas e transborda um pouco: a arte
-   tem borda esfumada, então não existe corte reto para disfarçar e o que sai
-   da tela não faz falta. A seção tem overflow hidden, sem rolagem lateral. */
+/* No celular, a arte ocupa toda a largura e mantém as pontas das raízes. */
 @media (max-width: 759px) {
-  .aquarela { padding-top: clamp(1.8rem, 6vw, 3rem); }
   .aquarela .container { width: 100%; }
-  .aquarela figure { width: 106%; margin-left: -3%; }
-  .aquarela__dizeres { padding-inline: var(--gutter); margin-top: clamp(.8rem, 3vw, 1.4rem); }
+  .aquarela__grade { gap: .8rem; }
+  .aquarela__dizeres { padding-inline: var(--gutter); }
 }
 
 /* ============================================== 3. CONTAGEM REGRESSIVA */
