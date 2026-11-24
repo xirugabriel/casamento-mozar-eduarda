@@ -662,10 +662,9 @@ button { font: inherit; color: inherit; }
   font: 300 clamp(.62rem, 2.7vw, .7rem)/1.9 var(--sans);
   letter-spacing: .3em; color: var(--madeira); padding-left: .3em;
 }
-.rodape__frase { margin-top: clamp(1.4rem, 4.5vw, 2rem); }
 /* frase inteira, não mais um bordão curto: precisa de medida e entrelinha */
-.rodape__fecho {
-  max-width: 26rem; margin-inline: auto;
+.final__frase {
+  max-width: 26rem; margin: 0 auto clamp(1.4rem, 4.5vw, 2rem);
   font-size: clamp(1.2rem, 4.8vw, 1.65rem); line-height: 1.7;
   text-wrap: balance;
 }
