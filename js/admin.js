@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611241610';
-import * as DB from './db.js?v=202611241610';
+import { PRESENTES } from './data.js?v=202611241613';
+import * as DB from './db.js?v=202611241613';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));

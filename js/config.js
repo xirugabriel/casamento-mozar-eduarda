@@ -18,7 +18,7 @@ export const CASAMENTO = {
   /* Dizeres em versalete que aparecem nas laterais (como na arte aprovada) */
   dizeres: {
     abertura: ['Natureza', 'Encontros', 'Histórias', 'Para sempre'],
-    aquarela: ['Mesma', 'Essência', 'Novas', 'Histórias', 'Sempre juntos'],
+    aquarela: ['Mesma essência', 'Novas histórias', 'Sempre juntos'],
   },
 
   /* frase de fechamento do rodapé */
