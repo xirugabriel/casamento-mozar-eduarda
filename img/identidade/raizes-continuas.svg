@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 380" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="terra" x2=".24" y2="1">
+      <stop stop-color="#866343"/><stop offset=".32" stop-color="#a3835d"/>
+      <stop offset=".8" stop-color="#b39975"/><stop offset="1" stop-color="#c3ae8e"/>
+    </linearGradient>
+    <filter id="fibra" x="-5%" y="-3%" width="110%" height="106%">
+      <feTurbulence type="fractalNoise" baseFrequency=".15 .065" numOctaves="2" result="grao"/>
+      <feDisplacementMap in="SourceGraphic" in2="grao" scale="2.5"/>
+    </filter>
+  </defs>
+  <g filter="url(#fibra)" opacity=".84">
+    <!-- A raiz maior acompanha a margem; os veios afinam a cada bifurcação. -->
+    <g fill="url(#terra)">
+      <path d="M101 -2 C109 18 113 30 96 47 S65 66 64 85 C63 104 47 115 40 126 S41 150 32 173 C21 199 14 214 17 241 C19 256 12 272 13 289 C15 315 35 330 53 341 C77 356 115 357 146 369 C112 359 78 361 51 344 C28 330 12 315 11 289 C10 272 17 252 14 239 C10 213 21 188 29 170 C37 150 32 139 37 125 C43 110 60 102 60 84 C61 61 81 57 92 43 C105 28 99 16 95 1Z"/>
+      <path d="M85 54 C70 67 49 66 42 79 S34 107 18 119 C32 103 31 91 39 78 C50 60 68 68 85 50Z"/>
+      <path d="M39 130 C44 146 59 146 66 161 S76 181 88 187 C74 184 68 173 63 163 S45 150 38 140Z"/>
+      <path d="M15 248 C21 268 37 272 41 292 S57 310 72 322 C52 312 42 307 39 293 S24 271 16 262Z"/>
+      <path d="M539 21 C548 36 570 39 584 55 S590 86 606 102 C623 119 624 131 622 145 C617 170 636 185 640 208 S638 244 646 268 C653 294 642 319 619 336 C599 351 573 354 547 367 C571 352 598 349 617 334 C640 316 649 292 643 269 C635 244 642 228 637 208 S615 170 619 145 C623 125 613 114 603 104 C586 86 593 72 580 58 S549 43 534 24Z"/>
+    </g>
+    <g fill="none" stroke="#ab906e" stroke-linecap="round" stroke-width=".95">
+      <path d="M65 74 Q62 62 70 49 M43 79 Q34 78 27 86 M61 97 Q67 103 66 115 M35 157 Q23 159 17 173 T5 193 M23 192 Q30 205 26 224 M14 282 Q5 289 4 304 M51 342 Q60 353 63 365 M79 356 Q97 350 111 354 M64 160 Q74 163 80 174"/>
+      <path d="M579 52 Q596 59 604 55 T623 61 M600 99 Q597 107 599 117 M619 136 Q635 119 640 120 M622 168 Q610 173 603 189 T586 208 M640 225 Q648 216 651 203 M645 280 Q634 288 631 302 M609 343 Q603 354 591 364 M575 355 Q557 354 541 360"/>
+    </g>
+  </g>
+</svg>

@@ -294,7 +294,21 @@ button { font: inherit; color: inherit; }
 }
 .secao--claro { background: var(--marfim-claro); }
 
-.paisagem { background: linear-gradient(var(--marfim) 50%, var(--marfim-claro)); }
+.paisagem { position: relative; isolation: isolate; background: linear-gradient(var(--marfim) 50%, var(--marfim-claro)); }
+/* O recuo proporcional situa a primeira bifurcação no pé da árvore.
+   A ponta inferior acompanha a régua abaixo do relógio. */
+.paisagem__raizes {
+  position: absolute; pointer-events: none; inset: clamp(.85rem, 3vw, 2rem) 0 clamp(2.5rem, 8vw, 4rem);
+  width: min(calc(100% - 2 * var(--gutter)), 65rem); margin-inline: auto;
+  display: flex; flex-direction: column;
+}
+.paisagem__raizes::before { content: ''; flex: none; width: 100%; aspect-ratio: 660 / 292; }
+.paisagem__raizes::after {
+  content: ''; flex: 1; background: url('../img/identidade/raizes-continuas.svg') center / 100% 100% no-repeat;
+}
+@media (max-width: 759px) {
+  .paisagem__raizes { width: 100%; }
+}
 .aquarela { padding: clamp(.85rem, 3vw, 2rem) 0 0; background: transparent; }
 .aquarela__grade { display: grid; max-width: 65rem; margin-inline: auto; }
 .aquarela figure { margin: 0; }
