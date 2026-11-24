@@ -37,8 +37,8 @@ export const CASAMENTO = {
     titulo: 'Matriz Paróquia São Pedro Apóstolo',
     endereco: 'Bonito • MS',                       // TODO: endereço completo
     horarios: [
-      ['16h',   'chegada dos convidados'],
-      ['16h30', 'início da cerimônia, pontualmente'],
+      ['16h',   'chegada'],
+      ['16h30', 'cerimônia', 'pontualmente'],   // 3º item opcional: nota em destaque
     ],
     // Cole aqui o link do Google Maps do local (botão "Compartilhar" no Maps).
     // Se deixar vazio, o site busca pelo nome + endereço.

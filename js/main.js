@@ -1,10 +1,10 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611241613';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611241613';
-import { gerarPix, desenharQR } from './pix.js?v=202611241613';
-import * as DB from './db.js?v=202611241613';
+import { CASAMENTO } from './config.js?v=202611241806';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611241806';
+import { gerarPix, desenharQR } from './pix.js?v=202611241806';
+import * as DB from './db.js?v=202611241806';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -168,11 +168,8 @@ const mapsHref = (l) => l.mapsUrl
 
 function locais() {
   const c = CASAMENTO.cerimonia;
-  const relogio = '<svg class="horarios__ico" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
-    + ' stroke-width="1.6" stroke-linecap="round" aria-hidden="true">'
-    + '<circle cx="12" cy="12" r="9"/><path d="M12 7v5.3l3.4 2"/></svg>';
   $('#horarios-cerimonia').innerHTML = c.horarios
-    .map(([h, t]) => `<li><b>${relogio}${esc(h)}</b><span>${esc(t)}</span></li>`).join('');
+    .map(([h, t, nota]) => `<li><b>${esc(h)}</b><span>${esc(t)}</span>${nota ? `<em>${esc(nota)}</em>` : ''}</li>`).join('');
   $('#nome-cerimonia').textContent = c.titulo;
   $('#endereco-cerimonia').textContent = c.endereco;
   $('#maps-cerimonia').href = mapsHref(c);
