@@ -1,10 +1,10 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611241613';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611241613';
-import { gerarPix, desenharQR } from './pix.js?v=202611241613';
-import * as DB from './db.js?v=202611241613';
+import { CASAMENTO } from './config.js?v=202611241707';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611241707';
+import { gerarPix, desenharQR } from './pix.js?v=202611241707';
+import * as DB from './db.js?v=202611241707';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -32,52 +32,112 @@ const observador = new IntersectionObserver((entradas) => {
 
 const revelar = (raiz = document) => $$('.rv:not(.in)', raiz).forEach((el) => observador.observe(el));
 
-/* -------------------------------------------------------------------- nav */
-function nav() {
-  const barra = $('#nav');
-  new IntersectionObserver(([e]) => barra.classList.toggle('on', !e.isIntersecting),
-    { threshold: 0, rootMargin: '-72px 0px 0px 0px' }).observe($('#inicio'));
-
-  const links = $$('#nav a');
-  const secoes = links.map((a) => $(a.getAttribute('href'))).filter(Boolean);
-  const io = new IntersectionObserver((entradas) => {
-    entradas.forEach((e) => {
-      if (!e.isIntersecting) return;
-      links.forEach((a) => a.classList.toggle('ativo', a.getAttribute('href') === '#' + e.target.id));
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  secoes.forEach((s) => io.observe(s));
+/* --------------------------------------------- cartas e navegação do convite */
+function mostrarNaCarta(alvo, suave = false) {
+  const carta = alvo.closest('.carta');
+  const folha = carta.firstElementChild;
+  const rect = folha.getBoundingClientRect();
+  const local = (alvo.getBoundingClientRect().top - rect.top) * folha.offsetHeight / rect.height;
+  const inicio = window.scrollY + carta.getBoundingClientRect().top;
+  window.scrollTo({
+    top: inicio + local - $('#nav').offsetHeight - 12,
+    behavior: suave && matchMedia('(prefers-reduced-motion: no-preference)').matches ? 'smooth' : 'instant'
+  });
 }
 
-/* ------------------------------------------------------ barras do sistema */
-/* O Safari do iPhone pinta a faixa do notch e a da barra de endereço com a
-   cor de fundo da página, não com a theme-color declarada. Como o fundo é
-   marfim fixo, as barras ficavam marfim mesmo sobre a abertura verde. Aqui a
-   cor acompanha a seção que está no topo — e a theme-color vai junto, porque
-   em outros navegadores é ela que manda. */
-function barrasDoSistema() {
-  const meta = document.querySelector('meta[name="theme-color"]');
-  const hero = $('#inicio');
-  if (!hero) return;
-  const VERDE = '#1F3B2E';
-  const MARFIM = '#F6EFE7';
-  let atual = '';
+function cartasDoConvite() {
+  const convite = $('.convite');
+  const cartas = $$('.carta', convite);
+  const barra = $('#nav');
+  const links = $$('#nav a');
+  const tema = $('meta[name="theme-color"]');
+  const movimento = matchMedia('(prefers-reduced-motion: no-preference)');
+  let medidas = [];
+  let quadro = 0;
+  let alturaMenu = 0;
+  let corAtual;
 
-  function aplicar() {
-    const cor = window.scrollY < hero.offsetHeight - 4 ? VERDE : MARFIM;
-    if (cor === atual) return;
-    atual = cor;
-    if (meta) meta.setAttribute('content', cor);
-    /* o Safari tira a cor da faixa do <body>, não do <html>: com o body
-       marfim fixo a barra ficava clara e a hora saía em preto, mesmo com a
-       raiz já pintada de verde. As duas precisam mudar juntas. */
-    document.documentElement.style.backgroundColor = cor;
-    document.body.style.backgroundColor = cor;
+  cartas.slice(0, -1).forEach(carta => {
+    const sombra = document.createElement('span');
+    sombra.className = 'carta__sombra';
+    sombra.setAttribute('aria-hidden', 'true');
+    carta.firstElementChild.append(sombra);
+  });
+
+  function desenhar() {
+    quadro = 0;
+    const y = window.scrollY;
+    const foraDaCapa = y + alturaMenu >= medidas[1].inicio;
+    const cor = foraDaCapa ? '#F6EFE7' : '#1F3B2E';
+    if (cor !== corAtual) {
+      corAtual = cor;
+      barra.classList.toggle('on', foraDaCapa);
+      tema.content = cor;
+      document.documentElement.style.backgroundColor = cor;
+      document.body.style.backgroundColor = cor;
+    }
+
+    let ativa = medidas[0];
+    for (const m of medidas) {
+      if (m.inicio <= y + alturaMenu + 8 &&
+          (m.inicio > ativa.inicio || location.hash === '#' + m.carta.id)) ativa = m;
+      if (movimento.matches && m !== medidas.at(-1)) {
+        const cobertura = Math.min(1, Math.max(0, (y + m.pino - m.inicio) / m.percurso));
+        const escala = (1 - .048 * cobertura).toFixed(4);
+        if (escala !== m.escala) {
+          m.carta.style.setProperty('--escala', escala);
+          m.carta.style.setProperty('--sombra', (.10 * cobertura).toFixed(3));
+          m.escala = escala;
+        }
+      }
+    }
+    links.forEach(link => link.classList.toggle('ativo', link.hash === '#' + ativa.carta.id));
   }
 
-  aplicar();
-  window.addEventListener('scroll', aplicar, { passive: true });
-  window.addEventListener('resize', aplicar);
+  function agendar() {
+    if (!quadro) quadro = requestAnimationFrame(desenhar);
+  }
+
+  function medir() {
+    alturaMenu = barra.offsetHeight;
+    document.documentElement.style.scrollPaddingTop = (alturaMenu + 6) + 'px';
+    // Mede a posição no fluxo, que continua estável enquanto a folha está presa.
+    medidas = cartas.map(carta => {
+      const altura = carta.firstElementChild.offsetHeight;
+      const inicio = carta.getBoundingClientRect().top + window.scrollY;
+      // Uma carta longa só prende depois que o convidado consegue ler seu fim.
+      const espaco = window.innerHeight - altura;
+      const pino = carta.id === 'inicio' ? Math.min(0, espaco) : Math.min(alturaMenu + 5, espaco - 12);
+      const percurso = Math.max(1, Math.min(altura, window.innerHeight - alturaMenu));
+      return { carta, inicio, pino, percurso };
+    });
+    medidas.forEach(({ carta, pino, percurso }) => {
+      carta.style.setProperty('--pino', pino + 'px');
+      carta.style.setProperty('--percurso', percurso + 'px');
+    });
+    convite.classList.toggle('empilhar', movimento.matches);
+    agendar();
+  }
+
+  // Ao voltar pelo teclado, traz à frente o controle que ficou sob outra carta.
+  convite.addEventListener('focusin', ({ target }) => {
+    if (!movimento.matches || !target.matches(':focus-visible')) return;
+    const m = medidas.find(({ carta }) => carta.contains(target));
+    if (!m) return;
+    const rect = target.getBoundingClientRect();
+    const acima = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    if (acima && m.carta.contains(acima) && rect.top >= alturaMenu) return;
+    mostrarNaCarta(target);
+  });
+
+  const observer = new ResizeObserver(medir);
+  cartas.forEach(carta => observer.observe(carta.firstElementChild));
+  observer.observe(barra);
+  window.addEventListener('resize', medir);
+  window.addEventListener('scroll', agendar, { passive: true });
+  window.addEventListener('hashchange', agendar);
+  movimento.addEventListener('change', medir);
+  medir();
 }
 
 /* --------------------------------------------------------------- dizeres */
@@ -483,14 +543,13 @@ function rsvp() {
     }
     f.hidden = true;
     box.hidden = false;
-    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    mostrarNaCarta(box, true);
   });
 }
 
 /* ------------------------------------------------------------------ start */
 (async function iniciar() {
-  nav();
-  barrasDoSistema();
+  cartasDoConvite();
   dizeres();
   contagem();
   locais();
