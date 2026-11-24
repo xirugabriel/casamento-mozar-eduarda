@@ -310,6 +310,14 @@ button { font: inherit; color: inherit; }
   width: 100%;
   mask-image: linear-gradient(transparent, #000 6%, #000 90%, transparent);
 }
+/* revelação: a tinta desce da copa às raízes com borda molhada, uma vez só (o observador
+   desliga depois da primeira entrada). Máscara 2,5× mais alta que a figura: em 100% fica
+   toda abaixo dela (invisível), em 0 cobre tudo. */
+.aquarela figure.rv {
+  opacity: 1; transform: none;
+  mask: linear-gradient(#000 40%, transparent 60%) 0 100% / 100% 250% no-repeat;
+}
+.aquarela figure.rv.in { mask-position: 0 0; transition: mask-position .9s cubic-bezier(.45, 0, .25, 1); }
 .aquarela__dizeres { margin-top: -.35rem; padding-inline: var(--gutter); text-align: center; }
 .aquarela__dizeres li:nth-child(-n+2) { display: inline-block; }
 .aquarela__dizeres li:nth-child(2)::before { content: ' · '; }
@@ -747,6 +755,7 @@ button { font: inherit; color: inherit; }
   html { scroll-behavior: auto; }
   .trilho { scroll-behavior: auto; }
   .rv { opacity: 1; transform: none; }
+  .aquarela figure.rv { mask: none; }
   .hero__scroll svg, .hero__conteudo > * { animation: none; }
   .modal__caixa { animation: none; }
   *, *::before, *::after { transition-duration: .01ms !important; }
