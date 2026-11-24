@@ -369,11 +369,14 @@ button { font: inherit; color: inherit; }
 .locais__foto { margin: 0; }
 .locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; filter: saturate(.95); }
 .locais__texto {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  /* topo alinhado em vez de centrado: as duas colunas têm volumes diferentes de
+     texto, e centrar deixava título e botão em alturas diferentes lado a lado */
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
   text-align: center;
   padding: clamp(2.2rem, 8vw, 3.2rem) var(--gutter);
   background: var(--marfim);
 }
+.locais__texto .btn { margin-top: auto; }   /* botões "Como chegar" na mesma linha de base */
 .locais__icone { width: clamp(30px, 3.2vw, 40px); height: clamp(30px, 3.2vw, 40px); color: var(--madeira); margin-bottom: 1rem; }
 .locais__titulo { margin-bottom: clamp(1.2rem, 4vw, 1.6rem); }
 
