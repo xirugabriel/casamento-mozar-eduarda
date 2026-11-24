@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=capa-bordado-1">
+<link rel="stylesheet" href="css/style.css?v=envelope-1">
 </head>
 <body>
 
@@ -48,35 +48,25 @@
 
 <!-- ═══════════════════════════════════════════════ 1. ABERTURA -->
 <header class="hero" id="inicio">
-  <div class="hero__marca" aria-hidden="true"><span class="mono"></span></div>
-  <img class="folha folha--hero-se" src="img/flores/canto-flores.webp" alt="" aria-hidden="true">
-  <img class="folha folha--hero-d" src="img/flores/haste-branca.webp" alt="" aria-hidden="true">
-  <img class="folha folha--hero-ib" src="img/flores/ramo-cheio.webp" alt="" aria-hidden="true">
-  <img class="folha folha--hero-id" src="img/flores/cluster-creme.webp" alt="" aria-hidden="true">
+  <img class="folha folha--hero-se" src="img/flores/canto-flores.webp" alt="">
+  <img class="folha folha--hero-id" src="img/flores/cluster-creme.webp" alt="">
 
-  <div class="hero__conteudo">
-    <img class="mono-ouro hero__mono rv" src="img/monograma-bordado.webp"
-         width="462" height="288" alt="Monograma de Mozar e Eduarda">
-
-    <h1 class="hero__nomes rv" style="--d:.1s">Mozar <em>&amp;</em> Eduarda</h1>
-
-    <p class="hero__data rv" style="--d:.18s">02 • 10 • 2027</p>
-    <p class="hero__local rv" style="--d:.24s">Bonito • MS</p>
-
-    <blockquote class="hero__frase rv" style="--d:.38s">
-      <span>Que esse seja o nosso destino…</span>
-      <span>amar, viver e começar cada dia junto.</span>
-    </blockquote>
-    <p class="hero__creditofrase rv" style="--d:.48s" id="credito-frase"></p>
+  <div class="envelope">
+    <div class="carta-convite">
+      <img class="carta-convite__ramo" src="img/flores/ramo-horizontal.webp" alt="">
+      <h1 class="carta-convite__nomes">Mozar <em>&amp;</em> Eduarda</h1>
+      <blockquote class="carta-convite__frase">
+        Que esse seja o nosso destino…<br>amar, viver e começar cada dia junto.
+      </blockquote>
+      <p class="carta-convite__data">02 · 10 · 2027</p>
+      <p class="carta-convite__local">Bonito · MS</p>
+      <p class="carta-convite__credito" id="credito-frase"></p>
+    </div>
+    <a class="envelope__lacre" href="#aquarela">
+      <img src="img/identidade/lacre.webp" width="110" height="110" alt="">
+      <span>Abrir convite</span>
+    </a>
   </div>
-
-  <ul class="dizeres dizeres--claro hero__dizeres" id="dizeres-abertura"></ul>
-
-  <a class="hero__scroll" href="#aquarela" aria-label="Descer para a aquarela">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1" aria-hidden="true">
-      <path d="M12 5v14M6 13.5l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </a>
 </header>
 
 <!-- ═══════════════════════════════════════════════ 2. AQUARELA -->

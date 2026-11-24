@@ -217,56 +217,54 @@ button { font: inherit; color: inherit; }
   mix-blend-mode: soft-light;
   opacity: .8;
 }
-.hero__marca {
-  position: absolute; inset: 0; z-index: -1;
-  display: grid; place-items: center; pointer-events: none;
+.envelope {
+  position: relative; isolation: isolate; width: min(100%, 34rem);
+  padding: 0 clamp(.65rem, 2.6vw, 1.25rem) 4.7rem;
+  filter: drop-shadow(0 .8rem 1rem rgb(10 21 14 / .32));
 }
-.hero__marca .mono { width: min(86vw, 52vh, 40rem); background: #fff; opacity: .026; }
-.hero__conteudo { position: relative; max-width: 36rem; }
-
-.hero__mono { width: clamp(11rem, 49vw, 17.5rem); margin-bottom: clamp(.9rem, 3.5vw, 1.5rem); }
-.hero__nomes {
-  margin: 0 0 clamp(1rem, 3.5vw, 1.4rem);
-  font: 400 clamp(1.1rem, 5.2vw, 1.9rem)/1.45 var(--serif);
-  letter-spacing: .3em; text-transform: uppercase; padding-left: .3em;
-  color: var(--marfim);
+.envelope::before, .envelope::after {
+  content: ''; position: absolute; inset: auto 0 0; pointer-events: none;
 }
-.hero__nomes em { font-style: normal; color: var(--dourado); }
-.hero__data {
-  margin: 0 0 .7rem;
-  font: 400 clamp(.76rem, 3.3vw, .88rem)/1 var(--sans);
-  letter-spacing: .4em; padding-left: .4em; color: rgba(246, 239, 231, .92);
+.envelope::before {
+  height: 67%; z-index: -1; background: #303d30;
+  border: 1px solid #545943; border-radius: .25rem;
 }
-.hero__local {
-  margin: 0;
-  font: 400 clamp(.58rem, 2.6vw, .66rem)/1 var(--sans);
-  letter-spacing: .34em; text-transform: uppercase; padding-left: .34em;
-  color: rgba(212, 175, 124, .88);
+.envelope::after {
+  height: 37%; border-radius: 0 0 .25rem .25rem;
+  clip-path: polygon(0 0, 50% 66%, 100% 0, 100% 100%, 0 100%);
+  background:
+    linear-gradient(151deg, transparent 49.7%, #697059 50%, transparent 50.4%) left bottom / 50% 45% no-repeat,
+    linear-gradient(209deg, transparent 49.7%, #697059 50%, transparent 50.4%) right bottom / 50% 45% no-repeat,
+    linear-gradient(110deg, #414b37, #2c372a 53%, #3b4532);
 }
-.hero__frase {
-  margin: clamp(2rem, 7vw, 3rem) 0 0;
-  font: 400 clamp(1.22rem, 5.4vw, 1.8rem)/1.7 var(--script);
-  color: var(--dourado);
+.carta-convite {
+  position: relative; background: #eee5d6 url('../img/identidade/papel.webp') repeat;
+  color: #3b3328; padding: clamp(1.4rem, 4vw, 2.4rem) 1rem 2.7rem;
+  box-shadow: 0 .15rem .6rem #19201755;
 }
-.hero__frase span { display: block; }
-.hero__creditofrase {
-  margin: clamp(1.1rem, 4vw, 1.6rem) auto 0;
-  max-width: 34ch;
-  font: 400 clamp(.87rem, 3.45vw, 1.04rem)/1.65 var(--serif);
-  letter-spacing: .01em;
-  color: #dfd7c7;
-  text-wrap: balance;
+.carta-convite__ramo { width: 4rem; height: 2rem; object-fit: contain; margin: 0 auto .65rem; }
+.carta-convite__nomes {
+  margin: 0; font: 400 clamp(2.45rem, 9vw, 4rem)/1 var(--serif);
+  letter-spacing: .02em; text-transform: uppercase;
 }
-.hero__dizeres { display: none; }
-
-.hero__scroll {
-  position: absolute; left: 50%; z-index: 2;
-  bottom: calc(clamp(1.3rem, 4vw, 2.2rem) + env(safe-area-inset-bottom));
-  translate: -50% 0;
-  color: rgba(212, 175, 124, .8); text-decoration: none;
+.carta-convite__nomes em {
+  display: flex; justify-content: center; align-items: center; gap: .6rem;
+  font: 400 .52em/1.05 var(--script); color: #705436;
 }
-.hero__scroll svg { width: 20px; height: 20px; animation: descer 2.6s ease-in-out infinite; }
-@keyframes descer { 0%, 100% { transform: translateY(0); opacity: .7; } 50% { transform: translateY(7px); opacity: 1; } }
+.carta-convite__nomes em::before, .carta-convite__nomes em::after {
+  content: ''; width: 1.5rem; height: 1px; background: #af9877;
+}
+.carta-convite__frase { margin: 1rem 0; font: 400 clamp(1.25rem, 4.5vw, 1.65rem)/1.2 var(--script); color: #694c37; }
+.carta-convite__data { margin: 0; font: 400 1.1rem/1.4 var(--serif); letter-spacing: .24em; }
+.carta-convite__local { margin: .3rem 0 0; font: 400 .64rem/1.5 var(--sans); text-transform: uppercase; letter-spacing: .25em; }
+.carta-convite__credito { max-width: 31ch; margin: 1rem auto 0; font: 400 .86rem/1.55 var(--serif); text-wrap: balance; }
+.envelope__lacre {
+  position: absolute; z-index: 1; bottom: .5rem; left: 50%; translate: -50% 0;
+  display: grid; justify-items: center; gap: .26rem; text-decoration: none;
+  color: #f6ead6; font: 400 .63rem/1.4 var(--sans); letter-spacing: .16em; text-transform: uppercase;
+}
+.envelope__lacre img { width: 3.4rem; border-radius: 50%; box-shadow: 1px 3px 4px #111a12aa; }
+.envelope__lacre:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
 /* folhagens */
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
