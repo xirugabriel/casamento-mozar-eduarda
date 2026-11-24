@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=202611241707">
+<link rel="stylesheet" href="css/style.css?v=202611241613">
 </head>
 <body>
 
@@ -44,11 +44,10 @@
   </ul>
 </nav>
 
-<main class="convite">
+<main>
 
 <!-- ═══════════════════════════════════════════════ 1. ABERTURA -->
-<div class="carta carta--capa" id="inicio">
-<header class="hero">
+<header class="hero" id="inicio">
   <div class="hero__marca" aria-hidden="true"><span class="mono"></span></div>
   <img class="folha folha--hero-se" src="img/flores/canto-flores.webp" alt="" aria-hidden="true">
   <img class="folha folha--hero-d" src="img/flores/haste-branca.webp" alt="" aria-hidden="true">
@@ -56,7 +55,7 @@
   <img class="folha folha--hero-id" src="img/flores/cluster-creme.webp" alt="" aria-hidden="true">
 
   <div class="hero__conteudo">
-    <img class="mono-ouro hero__mono rv" src="img/monograma-ouro.svg?v=202611241707"
+    <img class="mono-ouro hero__mono rv" src="img/monograma-ouro.svg?v=202611241613"
          width="462" height="288" alt="Monograma de Mozar e Eduarda">
 
     <h1 class="hero__nomes rv" style="--d:.1s">Mozar <em>&amp;</em> Eduarda</h1>
@@ -79,12 +78,10 @@
     </svg>
   </a>
 </header>
-</div>
 
 <!-- ═══════════════════════════════════════════════ 2. AQUARELA -->
-<div class="carta" id="aquarela">
 <div class="paisagem">
-<section class="secao aquarela">
+<section class="secao aquarela" id="aquarela">
   <div class="container">
     <div class="aquarela__grade">
       <figure class="rv">
@@ -110,11 +107,10 @@
   </div>
 </section>
 </div>
-</div>
 
 <!-- ═════════════════════════════ 4 e 5. CERIMÔNIA E RECEPÇÃO -->
-<div class="carta carta--local" id="cerimonia">
-  <section class="locais">
+<section class="secao secao--faixa" id="cerimonia">
+  <div class="locais">
 
     <figure class="locais__foto rv">
       <img id="foto-cerimonia" src="img/identidade/igreja.webp" alt="Capela onde será a cerimônia." loading="lazy">
@@ -141,12 +137,7 @@
       </a>
     </div>
 
-  </section>
-</div>
-
-<div class="carta carta--local" id="recepcao">
-  <section class="locais">
-    <figure class="locais__foto rv">
+    <figure class="locais__foto rv" id="recepcao">
       <img id="foto-recepcao" src="img/identidade/recepcao.webp" alt="Espaço da recepção." loading="lazy">
     </figure>
 
@@ -176,12 +167,11 @@
       </a>
     </div>
 
-  </section>
-</div>
+  </div>
+</section>
 
 <!-- ═════════════════════════════════════ 6. LISTA DE PRESENTES -->
-<div class="carta" id="presentes">
-<section class="secao secao--claro">
+<section class="secao secao--claro" id="presentes">
   <img class="folha folha--pres" src="img/flores/canto-rosa.webp" alt="" aria-hidden="true" loading="lazy">
   <div class="container">
     <div class="centro">
@@ -214,11 +204,9 @@
     </p>
   </div>
 </section>
-</div>
 
 <!-- ═══════════════════════════════ 7. CONFIRMAÇÃO DE PRESENÇA -->
-<div class="carta" id="rsvp">
-<section class="rsvp">
+<section class="rsvp" id="rsvp">
   <img class="folha folha--rsvp" src="img/flores/ramo-fino.webp" alt="" aria-hidden="true" loading="lazy">
   <div class="rsvp__grade">
 
@@ -290,16 +278,13 @@
 
   </div>
 </section>
-</div>
 
 <!-- ═══════════════════════════════════════════════ 8. FINAL -->
-<div class="carta carta--fecho">
 <section class="final">
   <div class="container">
-    <img class="rv" src="img/identidade/cachorras.webp?v=202611241707" alt="Ilustração das nossas cachorras." loading="lazy">
+    <img class="rv" src="img/identidade/cachorras.webp?v=202611241613" alt="Ilustração das nossas cachorras." loading="lazy">
   </div>
 </section>
-</div>
 
 </main>
 
@@ -310,7 +295,7 @@
     <div class="rodape__grade">
       <div class="rodape__marca rv">
         <a href="#inicio" class="rodape__mono" aria-label="Voltar ao início">
-          <img class="mono-ouro" src="img/monograma-ouro.svg?v=202611241707" width="462" height="288" alt="" loading="lazy">
+          <img class="mono-ouro" src="img/monograma-ouro.svg?v=202611241613" width="462" height="288" alt="" loading="lazy">
         </a>
         <p class="rodape__nomes">Mozar &amp; Eduarda</p>
         <p class="rodape__data">02 • 10 • 2027 &nbsp;·&nbsp; Bonito • MS</p>
@@ -404,6 +389,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module" src="js/main.js?v=202611241707"></script>
+<script type="module" src="js/main.js?v=202611241613"></script>
 </body>
 </html>

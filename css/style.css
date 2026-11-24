@@ -185,43 +185,6 @@ button { font: inherit; color: inherit; }
 .nav.on a { color: var(--tinta-suave); }
 .nav.on a:hover, .nav.on a.ativo { color: var(--madeira); border-color: var(--dourado); }
 
-/* Cartas do convite. O verso prolonga o espaço de aderência, enquanto
-   a margem negativa deixa a próxima folha entrar por cima dele. */
-body:has(.convite) { overflow-x: clip; }
-.convite {
-  display: grid; grid-template-columns: minmax(0, 1fr);
-  isolation: isolate; background: var(--marfim-esc);
-  --borda-carta: clamp(.4rem, 1.4vw, 1.5rem);
-  --intervalo: clamp(1rem, 3vw, 2.5rem);
-}
-.carta {
-  grid-column: 1 / -1; min-width: 0; position: relative; isolation: isolate;
-  margin-inline: var(--borda-carta); margin-bottom: var(--intervalo);
-  pointer-events: none;
-}
-.carta > :first-child {
-  position: relative; pointer-events: auto; transform-origin: center top;
-  border-radius: clamp(.65rem, 1.4vw, 1.25rem); overflow: clip;
-  box-shadow: 0 0 0 1px var(--linha), 0 -.3rem 1.4rem rgba(44, 40, 25, .10);
-}
-.carta__sombra { display: none; }
-.carta--capa, .carta--fecho { margin-inline: 0; }
-.carta--capa > :first-child { border-radius: 0 0 var(--borda-carta) var(--borda-carta); }
-.carta--fecho { margin-bottom: 0; }
-.carta--fecho > :first-child { border-radius: var(--borda-carta) var(--borda-carta) 0 0; }
-@media (prefers-reduced-motion: no-preference) {
-  .empilhar .carta:not(:last-child) { margin-bottom: calc(var(--intervalo) - var(--percurso)); }
-  .empilhar .carta:not(:last-child)::after { content: ''; display: block; height: var(--percurso); }
-  .empilhar .carta__sombra {
-    display: block; position: absolute; inset: 0; z-index: 3;
-    background: var(--floresta-esc); opacity: var(--sombra, 0); pointer-events: none;
-  }
-  .empilhar .carta > :first-child {
-    position: sticky; top: var(--pino);
-    transform: scale(var(--escala, 1));
-  }
-}
-
 /* =================================================== 1. ABERTURA (verde) */
 .hero {
   position: relative; isolation: isolate;
@@ -715,14 +678,19 @@ body:has(.convite) { overflow-x: clip; }
 
 /* == 680px a 1039px: cerimônia e recepção lado a lado, cada uma numa coluna,
    com a própria foto em cima do próprio texto. */
-@media (min-width: 680px) {
-  .convite { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .carta--local { grid-column: span 1; }
+@media (min-width: 680px) and (max-width: 1039px) {
+  .locais { grid-template-columns: 1fr 1fr; }
+  .locais > *:nth-child(1) { grid-area: 1 / 1; }
+  .locais > *:nth-child(2) { grid-area: 2 / 1; }
+  .locais > *:nth-child(3) { grid-area: 1 / 2; }
+  .locais > *:nth-child(4) { grid-area: 2 / 2; border-left: 1px solid var(--linha); }
   .locais__foto img { aspect-ratio: 3 / 2; }
 }
 
+/* ============= >= 1040px: as quatro faixas da arte (foto, texto, foto, texto)
+   Abaixo disso as colunas de texto ficariam estreitas demais para o botão. */
 @media (min-width: 1040px) {
-  .locais { grid-template-columns: 1.4fr 1fr; }
+  .locais { grid-template-columns: 1.4fr 1fr 1.4fr 1fr; }
   .locais__texto { padding-inline: clamp(1rem, 2.3vw, 2rem); }
   .locais__foto img { height: 100%; aspect-ratio: auto; min-height: 26rem; }
 }
@@ -757,3 +725,6 @@ body:has(.convite) { overflow-x: clip; }
   .modal__caixa { animation: none; }
   *, *::before, *::after { transition-duration: .01ms !important; }
 }
+
+/* faixa que sangra até as bordas (locais) */
+.secao--faixa { padding: 0; }
