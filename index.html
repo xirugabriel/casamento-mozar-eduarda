@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=202611241829">
+<link rel="stylesheet" href="css/style.css?v=202611241834">
 </head>
 <body>
 
@@ -88,7 +88,7 @@
         <img src="img/identidade/aquarela-raizes.webp" width="1652" height="952"
              alt="Aquarela de Mozar e Eduarda com as cachorras, em frente à capela.">
       </figure>
-      <div class="aquarela__dizeres rv" style="--d:.15s">
+      <div class="aquarela__dizeres">
         <ul class="dizeres" id="dizeres-aquarela"></ul>
       </div>
     </div>
@@ -100,10 +100,10 @@
   <img class="folha folha--esq" src="img/flores/ramo-horizontal.webp" alt="" aria-hidden="true" loading="lazy">
   <img class="folha folha--dir" src="img/flores/ramo-horizontal.webp" alt="" aria-hidden="true" loading="lazy">
   <div class="container">
-    <p class="contagem__rotulo rv" id="contagem-rotulo">Faltam</p>
-    <p class="rotulo rotulo--suave contagem__sub rv" style="--d:.06s" id="contagem-sub"></p>
-    <div class="relogio rv" style="--d:.12s" id="relogio" aria-live="polite"></div>
-    <p class="regua rv" style="--d:.2s"><span>&#9825;</span></p>
+    <p class="contagem__rotulo" id="contagem-rotulo">Faltam</p>
+    <p class="rotulo rotulo--suave contagem__sub" id="contagem-sub"></p>
+    <div class="relogio" id="relogio" aria-live="polite"></div>
+    <p class="regua"><span>&#9825;</span></p>
   </div>
 </section>
 </div>
@@ -112,11 +112,11 @@
 <section class="secao secao--faixa" id="cerimonia">
   <div class="locais">
 
-    <figure class="locais__foto rv">
+    <figure class="locais__foto">
       <img id="foto-cerimonia" src="img/identidade/igreja.webp" alt="Capela onde será a cerimônia." loading="lazy">
     </figure>
 
-    <div class="locais__texto rv" style="--d:.08s">
+    <div class="locais__texto">
       <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor"
            stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M24 4v6M21.4 6.4h5.2"/>
@@ -137,11 +137,11 @@
       </a>
     </div>
 
-    <figure class="locais__foto rv" id="recepcao">
+    <figure class="locais__foto" id="recepcao">
       <img id="foto-recepcao" src="img/identidade/recepcao.webp" alt="Espaço da recepção." loading="lazy">
     </figure>
 
-    <div class="locais__texto rv" style="--d:.08s">
+    <div class="locais__texto">
       <svg class="locais__icone" viewBox="0 0 48 48" fill="none" stroke="currentColor"
            stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M24 4v3.4M18.8 6.2l1.6 2.4M29.2 6.2l-1.6 2.4" opacity=".6"/>
@@ -175,14 +175,14 @@
   <img class="folha folha--pres" src="img/flores/canto-rosa.webp" alt="" aria-hidden="true" loading="lazy">
   <div class="container">
     <div class="centro">
-      <h2 class="titulo rv">Nossa lista de presentes</h2>
-      <p class="texto presentes__intro rv" style="--d:.1s">
+      <h2 class="titulo">Nossa lista de presentes</h2>
+      <p class="texto presentes__intro">
         Mais do que presentes, queremos compartilhar o início dessa nova fase.
         Escolhemos algumas ideias para quem quiser fazer parte desse momento. ♡
       </p>
     </div>
 
-    <div class="filtros rv" style="--d:.16s" role="tablist" aria-label="Categorias de presentes" id="filtros"></div>
+    <div class="filtros" role="tablist" aria-label="Categorias de presentes" id="filtros"></div>
 
     <div class="carrossel" id="carrossel">
       <button class="seta seta--esq" type="button" id="seta-esq" aria-label="Ver presentes anteriores">
@@ -199,7 +199,7 @@
       <div class="pontos" id="pontos"></div>
     </div>
 
-    <p class="presentes__nota rv">
+    <p class="presentes__nota">
       Os presentes já escolhidos aparecem marcados, para que ninguém repita.
     </p>
   </div>
@@ -216,13 +216,13 @@
 
     <div class="rsvp__corpo">
       <div class="rsvp__conteudo">
-        <h2 class="titulo rv">Confirme sua presença</h2>
-        <p class="texto rsvp__intro rv" style="--d:.08s">
+        <h2 class="titulo">Confirme sua presença</h2>
+        <p class="texto rsvp__intro">
           Preencha os dados abaixo para confirmar sua presença.
           Pedimos a gentileza de responder até <strong id="prazo-rsvp"></strong>.
         </p>
 
-        <form class="form rv" id="form-rsvp" style="--d:.14s" novalidate>
+        <form class="form" id="form-rsvp" novalidate>
           <label class="campo">
             <span class="sr">Nome completo</span>
             <input type="text" name="nome" required autocomplete="name" placeholder="Nome completo *">
@@ -282,8 +282,8 @@
 <!-- ═══════════════════════════════════════════════ 8. FINAL -->
 <section class="final">
   <div class="container">
-    <p class="script final__frase rv" id="frase-final"></p>
-    <img class="rv" style="--d:.12s" src="img/identidade/cachorras.webp?v=202611241829" alt="Ilustração das nossas cachorras." loading="lazy">
+    <p class="script final__frase" id="frase-final"></p>
+    <img src="img/identidade/cachorras.webp?v=202611241834" alt="Ilustração das nossas cachorras." loading="lazy">
   </div>
 </section>
 
@@ -294,9 +294,9 @@
   <img class="folha folha--rod-d" src="img/flores/ramo-cheio.webp" alt="" aria-hidden="true" loading="lazy">
   <div class="container">
     <div class="rodape__grade">
-      <div class="rodape__marca rv">
+      <div class="rodape__marca">
         <a href="#inicio" class="rodape__mono" aria-label="Voltar ao início">
-          <img class="mono-ouro" src="img/monograma-ouro.svg?v=202611241829" width="462" height="288" alt="" loading="lazy">
+          <img class="mono-ouro" src="img/monograma-ouro.svg?v=202611241834" width="462" height="288" alt="" loading="lazy">
         </a>
         <p class="rodape__nomes">Mozar &amp; Eduarda</p>
         <p class="rodape__data">02 • 10 • 2027 &nbsp;·&nbsp; Bonito • MS</p>
@@ -386,6 +386,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module" src="js/main.js?v=202611241829"></script>
+<script type="module" src="js/main.js?v=202611241834"></script>
 </body>
 </html>

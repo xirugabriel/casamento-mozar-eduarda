@@ -312,9 +312,9 @@ button { font: inherit; color: inherit; }
 }
 /* revelação: a tinta desce da copa às raízes com borda molhada, uma vez só (o observador
    desliga depois da primeira entrada). Máscara 2,5× mais alta que a figura: em 100% fica
-   toda abaixo dela (invisível), em 0 cobre tudo. */
+   toda abaixo dela (invisível), em 0 cobre tudo. Só ela usa .rv: o movimento fica na
+   abertura, na aquarela e na confirmação; o resto já está lá quando chega à tela. */
 .aquarela figure.rv {
-  opacity: 1; transform: none;
   mask: linear-gradient(#000 40%, transparent 60%) 0 100% / 100% 250% no-repeat;
 }
 .aquarela figure.rv.in { mask-position: 0 0; transition: mask-position .9s cubic-bezier(.45, 0, .25, 1); }
@@ -691,14 +691,6 @@ button { font: inherit; color: inherit; }
 .folha--rod-e { bottom: env(safe-area-inset-bottom); left: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; }
 .folha--rod-d { bottom: env(safe-area-inset-bottom); right: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; transform: scaleX(-1); }
 
-/* ------------------------------------------------------------- revelação */
-.rv { opacity: 0; transform: translateY(16px); }
-.rv.in {
-  opacity: 1; transform: none;
-  transition: opacity .95s cubic-bezier(.22, 1, .36, 1) var(--d, 0s),
-              transform .95s cubic-bezier(.22, 1, .36, 1) var(--d, 0s);
-}
-
 /* ------------------------------------------------------------------ toast */
 .toast {
   position: fixed; left: 50%; bottom: 1.5rem; translate: -50% 0; z-index: 200;
@@ -754,7 +746,6 @@ button { font: inherit; color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .trilho { scroll-behavior: auto; }
-  .rv { opacity: 1; transform: none; }
   .aquarela figure.rv { mask: none; }
   .hero__scroll svg, .hero__conteudo > * { animation: none; }
   .modal__caixa { animation: none; }
