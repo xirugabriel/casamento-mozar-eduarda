@@ -200,14 +200,14 @@ button { font: inherit; color: inherit; }
   background: var(--floresta); color: var(--marfim);
   text-align: center; overflow: hidden;
 }
-.hero::after {
+.hero::after, .envelope::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
     radial-gradient(120% 82% at 50% 36%, rgba(255, 255, 255, .05), transparent 62%),
     radial-gradient(100% 100% at 50% 112%, rgba(0, 0, 0, .32), transparent 66%);
 }
 /* trama de tecido: dois fios cruzados mais o grão irregular do linho */
-.hero::before {
+.hero::before, .envelope::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 3px),
@@ -275,6 +275,56 @@ button { font: inherit; color: inherit; }
 .hero__mono { animation-duration: .5s; animation-delay: .05s; }
 .hero__frase, .hero__creditofrase { animation-delay: .95s; }
 @keyframes surgir { from { opacity: 0; transform: translateY(12px); } }
+
+/* envelope de abertura (primeira visita): cobre a tela até o toque. A capa fica
+   pausada por baixo e só começa a entrar quando o envelope esmaece. */
+.envelope { display: none; }
+html.com-envelope { overflow: hidden; }
+html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
+.com-envelope .envelope {
+  position: fixed; inset: 0; z-index: 200; isolation: isolate; overflow: hidden;
+  display: block; width: 100%; margin: 0; padding: 0; border: 0;
+  background: var(--floresta); color: var(--marfim); font: inherit; text-align: center;
+  cursor: pointer; perspective: 1400px; -webkit-tap-highlight-color: transparent;
+}
+.envelope:focus-visible { outline: 1px solid var(--dourado); outline-offset: -10px; }
+/* aba: triângulo do topo até o lacre; o filtro no pai desenha a sombra no recorte */
+.envelope__aba {
+  position: absolute; inset: 0 0 auto; height: 50%;
+  transform-origin: top; backface-visibility: hidden;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .38));
+}
+.envelope__aba span {
+  position: absolute; inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(170deg, #2a4a3a, #22402f 60%, #1d372a);
+}
+.envelope__miolo {
+  --lacre: clamp(6.8rem, 29vw, 10rem);
+  position: absolute; left: 0; right: 0; top: 50%;
+  display: flex; flex-direction: column; align-items: center;
+  margin-top: calc(var(--lacre) / -2);            /* centro do lacre na ponta da aba */
+}
+.envelope__lacre { width: var(--lacre); height: auto; filter: drop-shadow(1px 3px 3px #111d15aa); }
+.envelope__nomes {
+  margin-top: clamp(1.4rem, 5vw, 2rem);
+  font: 400 clamp(.95rem, 4.4vw, 1.4rem)/1.45 var(--serif);
+  letter-spacing: .3em; text-transform: uppercase; padding-left: .3em;
+}
+.envelope__nomes em { font-style: normal; color: var(--dourado); }
+.envelope__toque {
+  margin-top: clamp(1.6rem, 6vw, 2.4rem);
+  font: 400 clamp(.58rem, 2.6vw, .66rem)/1 var(--sans);
+  letter-spacing: .34em; text-transform: uppercase; padding-left: .34em;
+  color: rgba(212, 175, 124, .85);
+}
+.abrindo .envelope__lacre { animation: lacre-solta .45s ease-in forwards; }
+.abrindo .envelope__nomes, .abrindo .envelope__toque { animation: lacre-solta .35s ease-in forwards; }
+.abrindo .envelope__aba { animation: aba-abre .75s cubic-bezier(.55, 0, .3, 1) .12s forwards; }
+.aberto .envelope { pointer-events: none; animation: envelope-sai .6s ease forwards; }
+@keyframes lacre-solta { to { opacity: 0; transform: scale(1.1); } }
+@keyframes aba-abre { to { transform: rotateX(180deg); } }
+@keyframes envelope-sai { to { opacity: 0; } }
 
 /* folhagens */
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
@@ -747,6 +797,8 @@ button { font: inherit; color: inherit; }
   html { scroll-behavior: auto; }
   .trilho { scroll-behavior: auto; }
   .aquarela figure.rv { mask: none; }
+  .abrindo .envelope__lacre, .abrindo .envelope__nomes,
+  .abrindo .envelope__toque, .abrindo .envelope__aba { animation: none; }   /* só o esmaecer */
   .hero__scroll svg, .hero__conteudo > * { animation: none; }
   .modal__caixa { animation: none; }
   *, *::before, *::after { transition-duration: .01ms !important; }
