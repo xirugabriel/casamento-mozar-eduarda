@@ -157,6 +157,14 @@ button { font: inherit; color: inherit; }
   backdrop-filter: blur(12px);
   border-bottom-color: var(--linha);
 }
+/* O Safari pode estender a cor sólida do menu fixo à barra de status. */
+@media (hover: none) and (pointer: coarse) {
+  .nav { background: var(--floresta); }
+  .nav.on {
+    background: var(--marfim-claro);
+    backdrop-filter: none;
+  }
+}
 .nav ul {
   display: flex; justify-content: center; justify-content: safe center; align-items: center;
   gap: clamp(.72rem, 3.2vw, 2.6rem);
