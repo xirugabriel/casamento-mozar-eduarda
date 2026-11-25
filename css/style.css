@@ -410,9 +410,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .aquarela figure.rv.in { mask-position: 0 0; transition: mask-position .9s cubic-bezier(.45, 0, .25, 1); }
 .aquarela__dizeres { margin-top: -.35rem; padding-inline: var(--gutter); text-align: center; }
-.aquarela__dizeres li:nth-child(-n+2) { display: inline-block; }
-.aquarela__dizeres li:nth-child(2)::before { content: ' · '; }
-.aquarela__dizeres li:nth-child(3) {
+.aquarela__dizeres li:nth-child(2) {
   font: 400 clamp(1.8rem, 6vw, 2.6rem)/1.2 var(--script);
   letter-spacing: normal; text-transform: none; color: var(--madeira);
 }
