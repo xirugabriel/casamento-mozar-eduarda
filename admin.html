@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=202611251634">
+<link rel="stylesheet" href="css/style.css?v=202611251640">
 <style>
   body { background: var(--marfim); }
   .topo {
@@ -70,6 +70,42 @@
   .acoes { display: flex; flex-wrap: wrap; gap: .3rem; }
 
   .vazio { padding: 2.5rem 1rem; text-align: center; color: var(--tinta-suave); font: 300 .9rem/1.7 var(--sans); }
+  .barra input[type=search] { font-size: 1rem; }   /* 16px: o iPhone não dá zoom ao tocar */
+  .barra .texto { flex-basis: 100%; margin: 0; }
+
+  /* celular: cada linha da tabela vira um cartão; o rótulo de cada célula vem do
+     cabeçalho da coluna (data-rotulo, posto pelo admin.js) */
+  @media (max-width: 679px) {
+    .topo { padding: .9rem 0; }
+    .painel { padding-top: 1.2rem; }
+    .cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-bottom: 1.6rem; }
+    .kpi { padding: .7rem .8rem; }
+    .kpi b { font-size: 1.3rem; }
+    .kpi span { display: block; margin-top: .2rem; font-size: .54rem; line-height: 1.4; letter-spacing: .12em; }
+    .abas { gap: 0; margin-bottom: 1.1rem; }
+    .aba { flex: 1 1 0; padding: .9rem .3rem; letter-spacing: .08em; line-height: 1.3; white-space: normal; }
+    .barra input[type=search] { flex-basis: 100%; min-width: 0; }
+    .barra .mini { flex: 1; }
+    .mini { min-height: 2.75rem; padding: .7rem .8rem; text-align: center; }
+
+    .tabela-wrap { overflow: visible; border: 0; background: none; }
+    table { min-width: 0; }
+    table, tbody, tr, td { display: block; }
+    thead { display: none; }
+    tr { background: #fff; border: 1px solid rgba(139,94,60,.14); padding: .6rem .9rem .8rem; margin-bottom: .6rem; }
+    tr:last-child td { border-bottom: 0; }
+    td { border: 0; padding: .35rem 0; }
+    td[data-rotulo] { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: .7rem; align-items: baseline; }
+    td[data-rotulo]::before {
+      content: attr(data-rotulo); font: 400 .56rem/1.6 var(--sans);
+      letter-spacing: .14em; text-transform: uppercase; color: var(--madeira);
+    }
+    .msg { max-width: none; }
+    td[data-rotulo] > .tag { justify-self: start; }
+    .acoes { padding-top: .5rem; gap: .4rem; }
+    .acoes .mini { flex: 1 1 auto; }
+    td.vazio { padding: 2rem .5rem; }
+  }
 
   .login { min-height: 100svh; display: grid; place-items: center; padding: 2rem var(--gutter); background: var(--floresta); }
   .login__caixa { width: min(100%, 24rem); background: var(--marfim-claro); padding: clamp(1.8rem,6vw,2.6rem); text-align: center; }
@@ -148,8 +184,10 @@
       <!-- status da lista -->
       <section id="painel-lista" hidden>
         <div class="barra">
-          <p class="texto" style="margin:0">
-            Aqui você libera um presente de volta para a lista ou marca como recebido.
+          <input type="search" id="busca-lista" placeholder="Buscar presente…">
+          <p class="texto">
+            Exclua da lista os presentes que não quiserem (dá para restaurar depois), libere um
+            presente de volta ou marque como recebido.
           </p>
         </div>
         <div class="tabela-wrap"><table id="tab-lista"></table></div>
@@ -161,6 +199,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/admin.js?v=202611251634"></script>
+<script type="module" src="js/admin.js?v=202611251640"></script>
 </body>
 </html>

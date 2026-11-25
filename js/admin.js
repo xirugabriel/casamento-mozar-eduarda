@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251634';
-import * as DB from './db.js?v=202611251634';
+import { PRESENTES } from './data.js?v=202611251640';
+import * as DB from './db.js?v=202611251640';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -110,6 +110,15 @@ function kpis() {
   ].map(([rot, v]) => `<div class="kpi"><b>${esc(v)}</b><span>${esc(rot)}</span></div>`).join('');
 }
 
+/* No celular cada linha vira um cartão: cada célula leva o nome da sua coluna
+   (o CSS do admin.html mostra como rótulo). Coluna sem título (ações) fica sem. */
+function rotular(tabela) {
+  const cab = $$('thead th', tabela).map((th) => th.textContent.trim());
+  $$('tbody tr', tabela).forEach((tr) => [...tr.children].forEach((td, i) => {
+    if (cab[i]) td.dataset.rotulo = cab[i];
+  }));
+}
+
 /* -------------------------------------------------------- tabela presentes */
 const como = (r) => ({ pix: 'Pix', cartao: 'Cartão' })[r.metodo] || 'Loja';
 
@@ -166,6 +175,7 @@ function tabelaPresentes() {
         </div></td>
       </tr>`; }).join('')}</tbody>`
     : '<tbody><tr><td class="vazio">Nenhum presente registrado ainda.</td></tr></tbody>';
+  rotular($('#tab-presentes'));
 }
 
 /* ------------------------------------------------------------ tabela rsvps */
@@ -187,9 +197,10 @@ function tabelaRsvps() {
           : '<span class="tag tag--ok">Confirmado</span>'}</td>
         <td>${esc(r.acompanhantes || 0)}</td>
         <td class="msg">${esc(r.mensagem) || '—'}</td>
-        <td><button class="mini" data-excluir-rsvp="${esc(r.id)}">Excluir</button></td>
+        <td><div class="acoes"><button class="mini" data-excluir-rsvp="${esc(r.id)}">Excluir</button></div></td>
       </tr>`).join('')}</tbody>`
     : '<tbody><tr><td class="vazio">Nenhuma confirmação recebida ainda.</td></tr></tbody>';
+  rotular($('#tab-rsvps'));
 }
 
 /* ------------------------------------------------------------ tabela lista */
@@ -198,7 +209,8 @@ function tabelaRsvps() {
 const oculto = (p) => !!(estado.status[p.id] && estado.status[p.id].status === 'oculto');
 
 function tabelaLista() {
-  const linhas = PRESENTES.filter((p) => !p.multiplo).map((p) => {
+  const busca = ($('#busca-lista').value || '').toLowerCase();
+  const linhas = PRESENTES.filter((p) => !p.multiplo && (!busca || p.nome.toLowerCase().includes(busca))).map((p) => {
     const st = estado.status[p.id];
     const s = oculto(p) ? 'oculto'
       : DB.ocupado(st) ? st.status : 'disponivel';   // reserva vencida conta como disponível
@@ -224,6 +236,7 @@ function tabelaLista() {
           ${s === 'recebido' ? '' : `<button class="mini mini--forte" data-recebido="${esc(p.id)}">Marcar recebido</button>`}`}
         </div></td>
       </tr>`).join('')}</tbody>`;
+  rotular($('#tab-lista'));
 }
 
 /* ------------------------------------------------------------------- csv */
@@ -260,6 +273,7 @@ function eventos() {
 
   $('#busca-presentes').addEventListener('input', tabelaPresentes);
   $('#busca-rsvps').addEventListener('input', tabelaRsvps);
+  $('#busca-lista').addEventListener('input', tabelaLista);
   $('#recarregar').addEventListener('click', carregar);
   $$('[data-csv]').forEach((b) => b.addEventListener('click', () => csv(b.dataset.csv)));
 

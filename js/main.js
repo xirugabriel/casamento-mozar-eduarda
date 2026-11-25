@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251634';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251634';
-import * as DB from './db.js?v=202611251634';
+import { CASAMENTO } from './config.js?v=202611251640';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251640';
+import * as DB from './db.js?v=202611251640';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
