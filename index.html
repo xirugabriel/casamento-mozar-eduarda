@@ -34,15 +34,25 @@
 <script>
 (function () {
   var h = document.documentElement;
+  var navegacao = performance.getEntriesByType('navigation')[0];
+  var recarregou = navegacao && navegacao.type === 'reload';
+  if (recarregou) {
+    history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+  }
   h.classList.add('com-envelope');
   document.addEventListener('click', function abrir(ev) {
     if (!ev.target.closest('#envelope')) return;
     document.removeEventListener('click', abrir);
     var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     h.classList.add('abrindo');                       // lacre solta, aba abre
-    setTimeout(function () { h.classList.add('aberto'); }, calmo ? 0 : 700);   // envelope esmaece, capa entra
+    setTimeout(function () {
+      if (recarregou) window.scrollTo({ top: 0, behavior: 'instant' });
+      h.classList.add('aberto');                    // envelope esmaece, capa entra
+    }, calmo ? 0 : 700);
     setTimeout(function () {
       h.classList.remove('com-envelope', 'abrindo', 'aberto');
+      if (recarregou) window.scrollTo({ top: 0, behavior: 'instant' });
       document.getElementById('envelope').remove();
     }, calmo ? 600 : 1300);
   });
