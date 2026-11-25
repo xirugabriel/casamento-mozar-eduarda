@@ -1,10 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251301';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251301';
-import { gerarPix, desenharQR } from './pix.js?v=202611251301';
-import * as DB from './db.js?v=202611251301';
+import { CASAMENTO } from './config.js?v=202611251317';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251317';
+import * as DB from './db.js?v=202611251317';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -193,8 +192,7 @@ function locais() {
 /* ------------------------------------------------------------- presentes */
 const estado = { status: {}, filtro: 'todos', atual: null, dados: null };
 
-const ocupado = (p) => !p.multiplo && !!(estado.status[p.id] && estado.status[p.id].status
-  && estado.status[p.id].status !== 'disponivel');
+const ocupado = (p) => !p.multiplo && DB.ocupado(estado.status[p.id]);
 
 function cartao(p) {
   const off = ocupado(p);
@@ -289,7 +287,7 @@ function carrossel() {
 const dlg = () => $('#modal-presente');
 
 function passo(nome) {
-  ['dados', 'pix', 'loja', 'fim'].forEach((p) => { $('#passo-' + p).hidden = p !== nome; });
+  ['dados', 'fim'].forEach((p) => { $('#passo-' + p).hidden = p !== nome; });
   dlg().querySelector('.modal__caixa').scrollTop = 0;
 }
 
@@ -305,16 +303,10 @@ function abrirPresente(p) {
   campoValor.hidden = !livre;
   campoValor.querySelector('input').required = livre;
 
-  const temPix = !!CASAMENTO.pix.chave;
-  const temLoja = !!p.link;
-  $('#btn-pix').hidden = !temPix;
-  $('#btn-loja').hidden = !temLoja;
-  $('#ou-loja').hidden = !(temPix && temLoja);
-  $('#btn-pix').textContent = temLoja ? 'Presentear com Pix' : 'Presentear';
-  $('#erro-presente').textContent = temPix || temLoja
-    ? '' : 'Este presente ainda está sendo preparado. Volte em breve ♡';
-
   $('#form-presente').reset();
+  $('#btn-pagar').hidden = !CASAMENTO.checkout;
+  $('#erro-presente').textContent = CASAMENTO.checkout
+    ? '' : 'Este presente ainda está sendo preparado. Volte em breve ♡';
   passo('dados');
   dlg().showModal();
 }
@@ -333,53 +325,21 @@ function lerFormulario() {
   return { nome, mensagem, valor };
 }
 
-function fluxoPix(d) {
-  const p = estado.atual;
-  $('#pix-titulo').textContent = p.nome;
-  $('#pix-valor').textContent = brl(d.valor);
+/* Volta da InfinitePay: a URL traz order_nsu, transaction_nsu e slug. O servidor
+   confere com a InfinitePay antes de dar baixa; aqui só agradecemos. */
+async function voltaDoPagamento() {
+  const q = new URLSearchParams(location.search);
+  const dados = { order_nsu: q.get('order_nsu'), transaction_nsu: q.get('transaction_nsu'),
+    slug: q.get('slug'), receipt_url: q.get('receipt_url') };
+  if (!dados.order_nsu) return;
+  history.replaceState(null, '', location.pathname + '#presentes');
 
-  let codigo;
-  try {
-    codigo = gerarPix({
-      chave: CASAMENTO.pix.chave,
-      nome: CASAMENTO.pix.nome,
-      cidade: CASAMENTO.pix.cidade,
-      valor: d.valor,
-      txid: p.id.replace(/-/g, '').slice(0, 25),
-    });
-  } catch (e) {
-    $('#erro-presente').textContent = 'Pix ainda não configurado. Tente pela loja ou fale com os noivos.';
-    return;
-  }
-
-  $('#pix-codigo').value = codigo;
-  desenharQR($('#pix-qr'), codigo, 210);
-  passo('pix');
-}
-
-function fluxoLoja() {
-  const p = estado.atual;
-  $('#loja-titulo').textContent = p.nome;
-  $('#loja-link').href = p.link;
-  $('#loja-texto').textContent =
-    'Reservamos este presente no seu nome para que ninguém repita. É só abrir a loja, '
-    + 'concluir a compra e pedir a entrega no endereço dos noivos.';
-  passo('loja');
-}
-
-async function registrar(metodo) {
-  const p = estado.atual;
-  const d = estado.dados;
-  const r = await DB.reservar(p, { nome: d.nome, mensagem: d.mensagem, metodo, valor: d.valor });
-
-  if (!r.ok && r.motivo === 'ocupado') {
-    passo('dados');
-    $('#erro-presente').textContent = 'Este presente acabou de ser escolhido por outra pessoa. Escolha outro ♡';
-    toast('Alguém acabou de escolher este presente.');
-    return false;
-  }
-  if (!r.ok) { toast('Não conseguimos registrar agora. Tente de novo.'); return false; }
-  return true;
+  const r = await DB.confirmarPagamento(dados);
+  if (!r.pago) { toast('Assim que o pagamento for confirmado, ele aparece para os noivos ♡'); return; }
+  $('#modal-titulo').textContent = r.presente;
+  $('#fim-texto').textContent = 'Recebemos o seu presente. Obrigado, ' + String(r.nome).split(' ')[0] + '!';
+  passo('fim');
+  dlg().showModal();
 }
 
 function modal() {
@@ -395,49 +355,22 @@ function modal() {
   $$('[data-fechar]', d).forEach((b) => b.addEventListener('click', () => d.close()));
   d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
 
-  let metodoEscolhido = 'pix';
-  $$('#form-presente button[type=submit]').forEach((b) =>
-    b.addEventListener('click', () => { metodoEscolhido = b.dataset.metodo; }));
-
   $('#form-presente').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const metodo = (e.submitter && e.submitter.dataset.metodo) || metodoEscolhido;
     const dados = lerFormulario();
-    if (dados.erro) { $('#erro-presente').textContent = dados.erro; return; }
-    $('#erro-presente').textContent = '';
-    estado.dados = dados;
+    const erro = $('#erro-presente');
+    if (dados.erro) { erro.textContent = dados.erro; return; }
+    erro.textContent = '';
 
-    if (metodo === 'pix') {
-      fluxoPix(dados);                          // reserva só depois do "Já fiz o Pix"
-    } else if (await registrar('loja')) {       // loja: reserva ANTES de abrir o link
-      fluxoLoja();
-    }
-  });
+    const btn = $('#btn-pagar');
+    btn.disabled = true; btn.textContent = 'Abrindo o pagamento…';
+    const r = await DB.pagar(estado.atual, dados);
+    if (r.url) { location.href = r.url; return; }   // segue para a InfinitePay
 
-  $('#loja-pronto').addEventListener('click', () => {
-    $('#fim-texto').textContent =
-      'Já marcamos este presente como escolhido. Obrigado, ' + estado.dados.nome.split(' ')[0] + '!';
-    passo('fim');
-  });
-
-  $('#pix-pronto').addEventListener('click', async (e) => {
-    e.target.disabled = true;
-    if (await registrar('pix')) {
-      $('#fim-texto').textContent =
-        'Assim que o valor cair na conta, confirmamos por aqui. Obrigado, ' + estado.dados.nome.split(' ')[0] + '!';
-      passo('fim');
-    }
-    e.target.disabled = false;
-  });
-
-  $('#pix-copiar').addEventListener('click', async () => {
-    const campo = $('#pix-codigo');
-    try {
-      await navigator.clipboard.writeText(campo.value);
-    } catch (err) {
-      campo.select(); document.execCommand('copy');
-    }
-    toast('Código Pix copiado ♡');
+    btn.disabled = false; btn.textContent = 'Ir para o pagamento';
+    erro.textContent = r.erro === 'ocupado'
+      ? 'Este presente acabou de ser escolhido por outra pessoa. Escolha outro ♡'
+      : 'Não conseguimos abrir o pagamento agora. Tente de novo em instantes.';
   });
 }
 
@@ -493,6 +426,7 @@ function rsvp() {
   filtros();
   carrossel();
   modal();
+  voltaDoPagamento();
   rsvp();
   revelar();
   renderPresentes();

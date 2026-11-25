@@ -53,18 +53,11 @@ export const CASAMENTO = {
     imagem: 'img/identidade/recepcao-aquarela.webp',
   },
 
-  /* ---- PIX ------------------------------------------------------------
-     chave: CPF (só números), e-mail, telefone (+5567...) ou chave aleatória
-     nome:  como aparece no app do banco de quem paga (máx. 25 caracteres)
-     cidade: máx. 15 caracteres, sem acento
-     Atenção: o site é estático, então essa chave fica visível no código da
-     página. Prefira e-mail ou chave aleatória — evite CPF e telefone.
+  /* ---- LOJINHA ---------------------------------------------------------
+     Endereço das funções de pagamento (InfinitePay) no Firebase. Vazio = o
+     botão "Presentear" avisa que a lista ainda está sendo preparada.
      -------------------------------------------------------------------- */
-  pix: {
-    chave:  '',                 // TODO: chave Pix dos noivos
-    nome:   'MOZAR E EDUARDA',
-    cidade: 'BONITO',
-  },
+  checkout: '',   // depois do deploy: 'https://southamerica-east1-casamento-76063.cloudfunctions.net'
 
   contato: {
     whatsapp: '',               // TODO: ex. '5567999999999' (para dúvidas no rodapé)

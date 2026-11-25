@@ -701,22 +701,6 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .modal__valor { margin: 0 0 1.5rem; }
 .modal__passo { display: grid; gap: 1rem; }
 .modal__acoes { display: grid; gap: .6rem; margin-top: .4rem; }
-.modal__ou {
-  display: flex; align-items: center; gap: .8rem; margin: .1rem 0;
-  font: 400 .58rem/1 var(--sans); letter-spacing: .24em; text-transform: uppercase; color: var(--salvia);
-}
-.modal__ou::before, .modal__ou::after { content: ''; flex: 1; height: 1px; background: var(--linha); }
-
-.qr { display: grid; place-items: center; padding: 1rem; background: #fff; border: 1px solid var(--linha); }
-.qr-erro { font: 300 .8rem/1.7 var(--sans); color: var(--tinta-suave); margin: 0; }
-.copia { display: flex; gap: .5rem; align-items: stretch; }
-.copia input {
-  flex: 1; min-width: 0;
-  font: 300 .7rem/1.4 var(--sans); color: var(--tinta-suave);
-  padding: .7rem .8rem; background: #fff; border: 1px solid var(--linha);
-  text-overflow: ellipsis; border-radius: 2px;
-}
-.copia button { flex: none; padding: 0 1rem; min-height: 0; }
 .modal__dica { margin: 0; font: 300 clamp(.72rem, 3vw, .78rem)/1.75 var(--sans); color: var(--tinta-suave); }
 .modal__sucesso .script { margin-bottom: .6rem; }
 

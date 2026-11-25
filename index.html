@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=202611251301">
+<link rel="stylesheet" href="css/style.css?v=202611251317">
 <!-- Mostra o envelope a cada carregamento, antes da primeira pintura da capa. -->
 <script>
 (function () {
@@ -331,7 +331,7 @@
 <section class="final">
   <div class="container">
     <p class="script final__frase" id="frase-final"></p>
-    <img src="img/identidade/cachorras.webp?v=202611251301" alt="Ilustração das nossas cachorras." loading="lazy">
+    <img src="img/identidade/cachorras.webp?v=202611251317" alt="Ilustração das nossas cachorras." loading="lazy">
   </div>
 </section>
 
@@ -386,43 +386,13 @@
         <p class="form__erro" id="erro-presente" role="alert"></p>
 
         <div class="modal__acoes">
-          <button class="btn btn--madeira btn--bloco" type="submit" data-metodo="pix" id="btn-pix">Presentear com Pix</button>
-          <p class="modal__ou" id="ou-loja" hidden>ou</p>
-          <button class="btn btn--ghost btn--bloco" type="submit" data-metodo="loja" id="btn-loja" hidden>
-            Comprar na loja
-          </button>
+          <button class="btn btn--madeira btn--bloco" type="submit" id="btn-pagar">Ir para o pagamento</button>
+          <p class="modal__dica">Pix ou cartão, na página segura da InfinitePay.</p>
         </div>
       </form>
     </div>
 
-    <!-- passo 2 · pix -->
-    <div class="modal__passo" id="passo-pix" hidden>
-      <div>
-        <p class="rotulo">Pix</p>
-        <h3 class="modal__titulo" id="pix-titulo"></h3>
-        <p class="rotulo modal__valor" id="pix-valor"></p>
-      </div>
-      <div class="qr" id="pix-qr"></div>
-      <p class="modal__dica">Abra o app do seu banco, escolha <strong>Pix &gt; Ler QR Code</strong> — ou use o código abaixo.</p>
-      <div class="copia">
-        <input type="text" id="pix-codigo" readonly aria-label="Código Pix copia e cola">
-        <button class="btn btn--madeira" type="button" id="pix-copiar">Copiar</button>
-      </div>
-      <button class="btn btn--bloco" type="button" id="pix-pronto">Já fiz o Pix</button>
-    </div>
-
-    <!-- passo 2 · loja -->
-    <div class="modal__passo" id="passo-loja" hidden>
-      <div>
-        <p class="rotulo">Loja</p>
-        <h3 class="modal__titulo" id="loja-titulo"></h3>
-      </div>
-      <p class="modal__dica" id="loja-texto"></p>
-      <a class="btn btn--madeira btn--bloco" id="loja-link" href="#" target="_blank" rel="noopener">Abrir a loja</a>
-      <button class="btn btn--ghost btn--bloco" type="button" id="loja-pronto">Já comprei este presente</button>
-    </div>
-
-    <!-- passo 3 · agradecimento -->
+    <!-- passo 2 · agradecimento (na volta do pagamento) -->
     <div class="modal__passo modal__sucesso" id="passo-fim" hidden>
       <p class="script">Obrigado por fazer parte desse dia tão especial.</p>
       <p class="modal__dica" id="fim-texto"></p>
@@ -434,6 +404,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module" src="js/main.js?v=202611251301"></script>
+<script type="module" src="js/main.js?v=202611251317"></script>
 </body>
 </html>

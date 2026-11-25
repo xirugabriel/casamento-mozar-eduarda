@@ -7,3 +7,10 @@ desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# firebase functions
+functions/node_modules/
+functions/data.js
+functions/.env.local
+.firebase/
+firebase-debug.log

@@ -1,0 +1,10 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "functions": {
+    "source": "functions",
+    "ignore": ["node_modules", ".env.local", "*.test.js"],
+    "predeploy": ["node -e \"require('fs').copyFileSync('js/data.js','functions/data.js')\""]
+  }
+}

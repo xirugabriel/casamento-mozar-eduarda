@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251301';
-import * as DB from './db.js?v=202611251301';
+import { PRESENTES } from './data.js?v=202611251317';
+import * as DB from './db.js?v=202611251317';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -73,22 +73,24 @@ function render() {
 function kpis() {
   const sim = estado.rsvps.filter((r) => r.presenca !== 'nao');
   const pessoas = sim.reduce((t, r) => t + 1 + (Number(r.acompanhantes) || 0), 0);
-  const escolhidos = Object.values(estado.status).filter((s) => s.status && s.status !== 'disponivel').length;
-  const pix = estado.registros.filter((r) => r.metodo === 'pix');
-  const pixTotal = pix.reduce((t, r) => t + (Number(r.valor) || 0), 0);
-  const pixConfirmado = pix.filter((r) => r.status === 'recebido').reduce((t, r) => t + (Number(r.valor) || 0), 0);
+  const escolhidos = Object.values(estado.status).filter(DB.ocupado).length;
+  const soma = (l) => l.reduce((t, r) => t + (Number(r.valor) || 0), 0);
+  const pixTotal = soma(estado.registros.filter((r) => r.metodo === 'pix' && r.status === 'recebido'));
+  const pixConfirmado = soma(estado.registros.filter((r) => r.status === 'recebido'));
 
   $('#kpis').innerHTML = [
     ['Confirmações', sim.length],
     ['Pessoas esperadas', pessoas],
     ['Não poderão ir', estado.rsvps.length - sim.length],
     ['Presentes escolhidos', escolhidos + ' / ' + PRESENTES.filter((p) => !p.multiplo).length],
-    ['Pix anunciado', brl(pixTotal)],
-    ['Pix confirmado', brl(pixConfirmado)],
+    ['Recebido no Pix', brl(pixTotal)],
+    ['Recebido no total', brl(pixConfirmado)],
   ].map(([rot, v]) => `<div class="kpi"><b>${esc(v)}</b><span>${esc(rot)}</span></div>`).join('');
 }
 
 /* -------------------------------------------------------- tabela presentes */
+const como = (r) => ({ pix: 'Pix', cartao: 'Cartão' })[r.metodo] || 'Loja';
+
 const marcaStatus = (r) => r.status === 'recebido'
   ? '<span class="tag tag--ok">Confirmado</span>'
   : (r.metodo === 'pix'
@@ -111,7 +113,7 @@ function tabelaPresentes() {
         <td class="nome">${esc(r.presenteNome)}</td>
         <td class="nome">${esc(r.nome)}</td>
         <td class="msg">${esc(r.mensagem) || '—'}</td>
-        <td>${r.metodo === 'pix' ? 'Pix' : 'Loja'}</td>
+        <td>${esc(como(r))}</td>
         <td>${esc(brl(r.valor))}</td>
         <td>${marcaStatus(r)}</td>
         <td><div class="acoes">
@@ -151,7 +153,8 @@ function tabelaRsvps() {
 /* ------------------------------------------------------------ tabela lista */
 function tabelaLista() {
   const linhas = PRESENTES.filter((p) => !p.multiplo).map((p) => {
-    const s = (estado.status[p.id] && estado.status[p.id].status) || 'disponivel';
+    const st = estado.status[p.id];
+    const s = DB.ocupado(st) ? st.status : 'disponivel';   // reserva vencida conta como disponível
     const quem = estado.registros.filter((r) => r.presenteId === p.id).map((r) => r.nome).join(', ');
     return { p, s, quem };
   });
@@ -164,7 +167,7 @@ function tabelaLista() {
         <td>${esc(brl(p.preco))}</td>
         <td>${s === 'disponivel' ? '<span class="tag tag--espera">Disponível</span>'
           : s === 'recebido' ? '<span class="tag tag--ok">Recebido</span>'
-          : '<span class="tag tag--espera">Escolhido</span>'}</td>
+          : '<span class="tag tag--espera">Aguardando pagamento</span>'}</td>
         <td>${esc(quem) || '—'}</td>
         <td><div class="acoes">
           ${s === 'disponivel' ? '' : `<button class="mini" data-liberar="${esc(p.id)}">Liberar</button>`}
@@ -185,7 +188,7 @@ function csv(qual) {
     nome = 'presentes';
     cab = ['Quando', 'Presente', 'Quem presenteou', 'Mensagem', 'Como', 'Valor', 'Situação'];
     linhas = estado.registros.map((r) => [data(r.em), r.presenteNome, r.nome, r.mensagem,
-      r.metodo === 'pix' ? 'Pix' : 'Loja', String(r.valor || 0).replace('.', ','),
+      como(r), String(r.valor || 0).replace('.', ','),
       r.status === 'recebido' ? 'Confirmado' : 'A conferir']);
   }
   const campo = (v) => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';

@@ -7,7 +7,7 @@
    Nome, mensagem e valor de quem presenteou ficam em `registros`, que apenas
    o admin autenticado consegue ler.
    ============================================================= */
-import { FIREBASE } from './config.js?v=202611251301';
+import { FIREBASE, CASAMENTO } from './config.js?v=202611251317';
 
 const V = '10.12.5';
 const U = 'https://www.gstatic.com/firebasejs/' + V;
@@ -56,54 +56,34 @@ export function observarPresentes(cb) {
   }, function (err) { console.warn('[presentes]', err); cb({}); });
 }
 
-/* ------------------------------------------------------- presentes/gravar */
-/** Reserva um presente e registra quem presenteou. */
-export async function reservar(presente, dados) {
-  const registro = {
-    presenteId: presente.id,
-    presenteNome: presente.nome,
-    nome: dados.nome,
-    mensagem: dados.mensagem || '',
-    metodo: dados.metodo,                       // 'loja' | 'pix'
-    valor: Number(dados.valor) || 0,
-    status: dados.metodo === 'pix' ? 'aguardando' : 'reservado',
-  };
+/** Presente indisponível: pago/recebido, ou reservado com a reserva ainda valendo.
+    Mesma regra do servidor (functions/index.js · ocupado). */
+export const ocupado = (st) => !!st && (st.status === 'recebido'
+  || (st.status === 'reservado' && (!st.ate || !st.ate.toMillis || st.ate.toMillis() > Date.now())));
 
-  if (MODO === 'local') {
-    if (!presente.multiplo) {
-      const p = LS.get('presentes', {});
-      if (p[presente.id] && p[presente.id].status && p[presente.id].status !== 'disponivel') {
-        return { ok: false, motivo: 'ocupado' };
-      }
-      p[presente.id] = { status: 'reservado', metodo: registro.metodo, em: new Date().toISOString() };
-      LS.set('presentes', p);
-    }
-    const regs = LS.get('registros', []);
-    regs.unshift(Object.assign({ id: uid(), em: new Date().toISOString() }, registro));
-    LS.set('registros', regs);
-    avisar();
-    return { ok: true };
-  }
+/* ---------------------------------------------------- presentes/pagamento */
+// A reserva e a baixa acontecem no servidor (functions/), nunca no navegador.
+async function chamar(funcao, corpo) {
+  const r = await fetch(CASAMENTO.checkout + '/' + funcao, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(corpo),
+  });
+  return r.json().catch(() => ({ erro: 'resposta' }));
+}
 
-  const fs = fb.fs;
+/** Segura o presente e devolve { url } do pagamento, ou { erro: 'ocupado' | ... }. */
+export async function pagar(presente, dados) {
+  if (!CASAMENTO.checkout) return { erro: 'indisponivel' };
   try {
-    if (!presente.multiplo) {
-      await fs.runTransaction(fb.db, async function (tx) {
-        const ref = fs.doc(fb.db, 'presentes', presente.id);
-        const snap = await tx.get(ref);
-        const st = snap.exists() ? snap.data().status : null;
-        if (st && st !== 'disponivel') throw new Error('ocupado');
-        tx.set(ref, { status: 'reservado', metodo: registro.metodo, em: fs.serverTimestamp() });
-      });
-    }
-    await fs.addDoc(fs.collection(fb.db, 'registros'),
-      Object.assign({}, registro, { em: fs.serverTimestamp() }));
-    return { ok: true };
-  } catch (e) {
-    if (String(e && e.message).indexOf('ocupado') > -1) return { ok: false, motivo: 'ocupado' };
-    console.error(e);
-    return { ok: false, motivo: 'erro' };
-  }
+    return await chamar('pagar', {
+      presenteId: presente.id, nome: dados.nome, mensagem: dados.mensagem, valor: dados.valor,
+      volta: location.origin + location.pathname,
+    });
+  } catch (e) { console.error(e); return { erro: 'rede' }; }
+}
+
+/** Na volta da InfinitePay: confere o pagamento pelos dados da URL. */
+export async function confirmarPagamento(dados) {
+  try { return await chamar('confirmar', dados); } catch (e) { return { pago: false }; }
 }
 
 /* -------------------------------------------------------------------- rsvp */
