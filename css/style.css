@@ -892,11 +892,13 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   .folha--rod-e { left: -1.5rem; }
   .folha--rod-d { right: -1.5rem; }
 
+  /* à esquerda, no vão entre o buquê de cima e o ramo de baixo: à direita a
+     haste de flores ocupa a altura inteira e cobria a frase */
   .hero__dizeres {
     display: block; position: absolute;
-    top: 50%; right: clamp(1.5rem, 5vw, 4rem); translate: 0 -50%;
-    padding-left: 1.6rem; border-left: 1px solid rgba(212, 175, 124, .35);
-    text-align: left;
+    top: 50%; left: clamp(1.5rem, 5vw, 4rem); translate: 0 -50%;
+    padding-right: 1.6rem; border-right: 1px solid rgba(212, 175, 124, .35);
+    text-align: right;
   }
 
 }
