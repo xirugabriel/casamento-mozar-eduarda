@@ -159,12 +159,14 @@ button { font: inherit; color: inherit; }
 }
 /* O Safari pode estender a cor sólida do menu fixo à barra de status. */
 @media (hover: none) and (pointer: coarse) {
-  html { overscroll-behavior-y: none; }
   .nav { background: var(--floresta); }
   .nav.on {
     background: var(--marfim-claro);
     backdrop-filter: none;
   }
+}
+@media (any-pointer: coarse) {
+  html, body { overscroll-behavior-y: none; }
 }
 .nav ul {
   display: flex; justify-content: center; justify-content: safe center; align-items: center;
@@ -752,12 +754,17 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .rodape {
   position: relative; isolation: isolate; overflow: hidden;
   background: var(--marfim); color: var(--tinta);
-  padding: clamp(2rem, 6vw, 3rem) 0
-           calc(clamp(4.5rem, 15vw, 6.5rem) + env(safe-area-inset-bottom));
+  padding: clamp(2rem, 6vw, 3rem) 0 clamp(4.5rem, 15vw, 6.5rem);
   text-align: center;
 }
+@media (any-pointer: coarse) {
+  /* Reserva fixa para a barra inferior, inclusive quando o Safari a recolhe. */
+  .rodape {
+    padding-bottom: calc(clamp(4.5rem, 15vw, 6.5rem) + max(2rem, env(safe-area-max-inset-bottom, 0px)));
+  }
+}
 .rodape__grade { position: relative; display: grid; gap: clamp(1.4rem, 5vw, 2rem); justify-items: center; }
-.rodape__mono { display: block; width: clamp(7.5rem, 30vw, 10.5rem); margin-inline: auto; }
+.rodape__mono { display: block; width: clamp(3.8rem, 16vw, 5.25rem); margin-inline: auto; }
 .rodape__nomes {
   margin: 1.1rem 0 .6rem;
   font: 400 clamp(.82rem, 3.6vw, .98rem)/1.5 var(--serif);
@@ -776,10 +783,13 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .rodape__duvidas { margin: 1.2rem 0 0; font: 300 .72rem/1.9 var(--sans); color: var(--tinta-suave); }
 .rodape__duvidas a { color: var(--madeira); }
-/* assentadas na borda de baixo, inteiras: antes transbordavam 14% e o
-   overflow do rodapé cortava as folhas ao meio */
-.folha--rod-e { bottom: env(safe-area-inset-bottom); left: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; }
-.folha--rod-d { bottom: env(safe-area-inset-bottom); right: -9%; width: clamp(150px, 38vw, 380px); opacity: .5; transform: scaleX(-1); }
+/* Os ramos ficam ancorados ao rodapé, que reserva espaço para as barras. */
+.folha--rod-e, .folha--rod-d { bottom: 1rem; width: clamp(150px, 38vw, 380px); opacity: .5; }
+.folha--rod-e { left: -9%; }
+.folha--rod-d { right: -9%; transform: scaleX(-1); }
+@media (any-pointer: coarse) {
+  .folha--rod-e, .folha--rod-d { bottom: max(2rem, env(safe-area-max-inset-bottom, 0px)); }
+}
 
 /* ------------------------------------------------------------------ toast */
 .toast {
