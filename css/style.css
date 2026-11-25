@@ -318,6 +318,48 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   letter-spacing: .34em; text-transform: uppercase; padding-left: .34em;
   color: rgba(212, 175, 124, .85);
 }
+.envelope__papel { display: contents; }
+
+@media (max-width: 759px), (pointer: coarse) and (max-height: 600px) {
+  html.com-envelope, html.com-envelope body { background-color: var(--floresta) !important; }
+  .com-envelope .envelope {
+    appearance: none; border-radius: 0; height: 100%; height: 100dvh;
+    display: grid; place-items: center;
+    padding: env(safe-area-inset-top) max(1.4rem, env(safe-area-inset-right))
+             env(safe-area-inset-bottom) max(1.4rem, env(safe-area-inset-left));
+  }
+  .envelope::after { background: radial-gradient(ellipse closest-side, #344e3c88, transparent); }
+  .envelope::before, .envelope > .folha {
+    mask-image: linear-gradient(transparent, #000 17%, #000 78%, transparent);
+  }
+  .envelope > .folha { bottom: max(1.25rem, env(safe-area-inset-bottom)); opacity: .3; }
+  .envelope__papel {
+    display: block; position: relative; isolation: isolate; perspective: 900px;
+    width: min(100%, 26rem, 91svh); aspect-ratio: 1.46;
+    border: 1px solid #74765a; border-radius: 3px;
+    background:
+      linear-gradient(34deg, transparent 49.5%, #7d81635c 50%, transparent 51%) left bottom / 50% 52% no-repeat,
+      linear-gradient(-34deg, transparent 49.5%, #7d81635c 50%, transparent 51%) right bottom / 50% 52% no-repeat,
+      linear-gradient(115deg, #42503c, #344431 62%, #414b37);
+    box-shadow: 0 1rem 2rem -.75rem #07150eb0, inset 0 0 1px #c4be94;
+  }
+  .envelope__aba { height: 60%; filter: drop-shadow(0 2px 2px #152215b0); }
+  .envelope__aba span {
+    clip-path: polygon(0 0, 100% 0, 54% 94%, 50% 99%, 46% 94%);
+    background: linear-gradient(165deg, #54604a, #3c4d38 72%, #414e39);
+  }
+  .envelope__miolo { --lacre: clamp(3.4rem, 17vw, 4.8rem); top: 58%; }
+  .envelope__nomes { margin-top: .5rem; font-size: clamp(.76rem, 3.1vw, 1rem); letter-spacing: .18em; }
+  .envelope__toque {
+    position: absolute; top: calc(50% + min(28vw, 7.8rem)); margin: 0;
+    color: #e1cba9; white-space: nowrap;
+  }
+}
+@media (pointer: coarse) and (max-height: 480px) {
+  .envelope__papel { width: min(100%, 75svh); }
+  .envelope__miolo { --lacre: 2.8rem; }
+  .envelope__toque { top: calc(50% + 19svh); }
+}
 .abrindo .envelope__lacre { animation: lacre-solta .45s ease-in forwards; }
 .abrindo .envelope__nomes, .abrindo .envelope__toque { animation: lacre-solta .35s ease-in forwards; }
 .abrindo .envelope__aba { animation: aba-abre .75s cubic-bezier(.55, 0, .3, 1) .12s forwards; }
