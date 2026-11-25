@@ -297,7 +297,10 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .envelope__aba span {
   position: absolute; inset: 0;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  background: linear-gradient(170deg, #2a4a3a, #22402f 60%, #1d372a);
+  background:
+    url('../img/identidade/fibra-aba.webp') center / 18rem auto repeat,
+    linear-gradient(160deg, #3d5845, #2d4836 55%, #233a2c);
+  background-blend-mode: soft-light;
 }
 .envelope__miolo {
   --lacre: clamp(6.8rem, 29vw, 10rem);
@@ -322,43 +325,13 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 
 @media (max-width: 759px), (pointer: coarse) and (max-height: 600px) {
   html.com-envelope, html.com-envelope body { background-color: var(--floresta) !important; }
-  .com-envelope .envelope {
-    appearance: none; border-radius: 0; height: 100%; height: 100dvh;
-    display: grid; place-items: center;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right)
-             env(safe-area-inset-bottom) env(safe-area-inset-left);
-  }
-  .envelope::before {
-    inset: -1rem; opacity: .72; mix-blend-mode: normal;
-    background: url('../img/identidade/envelope-linho.webp') center / cover;
-    filter: blur(12px); mask-image: linear-gradient(transparent, #000 18%, #000 80%, transparent);
-  }
-  .envelope::after, .envelope > .folha,
-  .envelope__aba, .envelope__lacre { display: none; }
-  .envelope__papel {
-    display: block; position: relative; height: 100%; width: 100%;
-    container-type: size;
-  }
-  .envelope__papel::before {
-    content: ''; position: absolute; left: 50%; top: 50%; translate: -50% -50%;
-    width: min(100%, 66.6667cqh); aspect-ratio: 2 / 3;
-    background: url('../img/identidade/envelope-linho.webp') center / contain no-repeat;
-    mask-image: linear-gradient(transparent, #000 10%, #000 86%, transparent);
-  }
-  .envelope__miolo {
-    top: calc(50% + min(41cqw, 27.333cqh)); margin: 0;
-    padding-inline: 1rem; text-shadow: 0 1px 3px #151608;
-  }
-  .envelope__nomes {
-    margin: 0; color: #f7efdc; font-size: clamp(.93rem, 4vw, 1.25rem);
-    letter-spacing: .2em;
-  }
-  .envelope__toque { margin-top: .75rem; color: #e2cfac; letter-spacing: .24em; }
+  .com-envelope .envelope { appearance: none; border-radius: 0; height: 100%; height: 100dvh; }
+  .envelope__miolo { padding-inline: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right)); }
 }
-@media (prefers-reduced-motion: no-preference) and (max-width: 759px) {
-  .abrindo .envelope__papel::before { animation: aproximar-papel .9s ease-out both; }
+@media (pointer: coarse) and (max-height: 480px) {
+  .envelope__miolo { --lacre: clamp(3rem, 17dvh, 5rem); }
+  .envelope__nomes, .envelope__toque { margin-top: .65rem; }
 }
-@keyframes aproximar-papel { to { scale: 1.055; } }
 .abrindo .envelope__lacre { animation: lacre-solta .45s ease-in forwards; }
 .abrindo .envelope__nomes, .abrindo .envelope__toque { animation: lacre-solta .35s ease-in forwards; }
 .abrindo .envelope__aba { animation: aba-abre .75s cubic-bezier(.55, 0, .3, 1) .12s forwards; }
