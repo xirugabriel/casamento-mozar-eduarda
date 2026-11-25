@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251627';
-import * as DB from './db.js?v=202611251627';
+import { PRESENTES } from './data.js?v=202611251634';
+import * as DB from './db.js?v=202611251634';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -22,7 +22,7 @@ const estado = { registros: [], rsvps: [], status: {} };
 
 /* ------------------------------------------------------------------ login */
 async function login() {
-  await DB.init();
+  await DB.init(true);
   const local = DB.MODO === 'local';
   $('#aviso-local').hidden = !local;
   $('#campo-email').hidden = local;

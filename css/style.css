@@ -198,6 +198,9 @@ button { font: inherit; color: inherit; }
   transition: color .3s, border-color .3s;
 }
 .nav a:hover { color: var(--dourado); }
+/* área de toque de ~44px sem mudar o desenho do menu (o texto tem só 16px) */
+.nav a { position: relative; }
+.nav a::before { content: ''; position: absolute; inset: -14px -6px; }
 .nav.on a { color: var(--tinta-suave); }
 .nav.on a:hover, .nav.on a.ativo { color: var(--madeira); border-color: var(--dourado); }
 
@@ -282,6 +285,7 @@ button { font: inherit; color: inherit; }
   translate: -50% 0;
   color: rgba(212, 175, 124, .8); text-decoration: none;
 }
+.hero__scroll::before { content: ''; position: absolute; inset: -12px -14px; }   /* toque de 44px */
 .hero__scroll svg { width: 20px; height: 20px; animation: descer 2.6s ease-in-out infinite; }
 @keyframes descer { 0%, 100% { transform: translateY(0); opacity: .7; } 50% { transform: translateY(7px); opacity: 1; } }
 
@@ -577,7 +581,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .filtros::-webkit-scrollbar { display: none; }
 .filtro {
-  flex: none; background: none; border: 0; cursor: pointer;
+  flex: none; background: none; border: 0; cursor: pointer; min-height: 2.75rem;
   padding: .5rem clamp(.7rem, 2.6vw, 1.1rem);
   font: 400 clamp(.58rem, 2.5vw, .65rem)/1.6 var(--sans);
   letter-spacing: .18em; text-transform: uppercase; white-space: nowrap;

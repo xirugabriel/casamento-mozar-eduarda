@@ -7,7 +7,7 @@
    Nome, mensagem e valor de quem presenteou ficam em `registros`, que apenas
    o admin autenticado consegue ler.
    ============================================================= */
-import { FIREBASE, CASAMENTO } from './config.js?v=202611251627';
+import { FIREBASE, CASAMENTO } from './config.js?v=202611251634';
 
 const V = '10.12.5';
 const U = 'https://www.gstatic.com/firebasejs/' + V;
@@ -26,16 +26,22 @@ const avisar = () => { const p = LS.get('presentes', {}); ouvintes.forEach(f => 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
 /* --------------------------------------------------------------- firebase */
-export async function init() {
+/** comLogin: só o painel precisa do Firebase Auth — no convite ele baixaria
+    o módulo e ainda abriria um iframe do Google à toa. */
+export async function init(comLogin = false) {
   if (MODO === 'local') return 'local';
-  if (fb) return 'firebase';
-  const [appMod, fs, au] = await Promise.all([
-    import(U + '/firebase-app.js'),
-    import(U + '/firebase-firestore.js'),
-    import(U + '/firebase-auth.js'),
-  ]);
-  const app = appMod.initializeApp(FIREBASE);
-  fb = { app, db: fs.getFirestore(app), auth: au.getAuth(app), fs, au };
+  if (!fb) {
+    const [appMod, fs] = await Promise.all([
+      import(U + '/firebase-app.js'),
+      import(U + '/firebase-firestore.js'),
+    ]);
+    const app = appMod.initializeApp(FIREBASE);
+    fb = { app, db: fs.getFirestore(app), fs };
+  }
+  if (comLogin && !fb.au) {
+    fb.au = await import(U + '/firebase-auth.js');
+    fb.auth = fb.au.getAuth(fb.app);
+  }
   return 'firebase';
 }
 
