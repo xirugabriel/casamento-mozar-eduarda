@@ -195,7 +195,7 @@ function locais() {
 }
 
 /* ------------------------------------------------------------- presentes */
-const estado = { status: {}, filtro: 'todos', atual: null, dados: null, grade: false };
+const estado = { status: {}, filtro: 'todos', atual: null, grade: false, vitrine: '' };
 
 const ocupado = (p) => !p.multiplo && DB.ocupado(estado.status[p.id]);
 
@@ -218,35 +218,48 @@ function cartao(p) {
     </article>`;
 }
 
-function renderPresentes() {
+function renderPresentes(voltarAoInicio = false) {
   const trilho = $('#trilho-presentes');
   const lista = PRESENTES
     .filter((p) => estado.filtro === 'todos' || p.categoria === estado.filtro)
     .filter((p) => !(estado.status[p.id] && estado.status[p.id].status === 'oculto'))   // excluídos no painel
     .sort((a, b) => Number(ocupado(a)) - Number(ocupado(b)));   // disponíveis primeiro
 
-  trilho.innerHTML = lista.length
+  const vitrine = lista.length
     ? lista.map(cartao).join('')
     : '<p class="presentes__nota">Nenhum presente nesta categoria.</p>';
-  trilho.scrollLeft = 0;
+  if (estado.vitrine !== vitrine) {
+    const esquerda = trilho.scrollLeft;
+    trilho.innerHTML = vitrine;
+    trilho.scrollTo({ left: esquerda, behavior: 'instant' });
+    estado.vitrine = vitrine;
+  }
+  if (voltarAoInicio) trilho.scrollTo({ left: 0, behavior: 'instant' });
   carrosselAtualizar();
 }
 
 function filtros() {
   $('#filtros').innerHTML = CATEGORIAS.map((c) => `
-    <button class="filtro" type="button" role="tab" data-cat="${c.id}"
-            aria-selected="${c.id === 'todos'}">${esc(c.label)}</button>`).join('');
+    <button class="filtro" type="button" data-cat="${c.id}"
+            aria-pressed="${c.id === 'todos'}">${esc(c.label)}</button>`).join('');
 
   $('#filtros').addEventListener('click', (e) => {
     const b = e.target.closest('.filtro');
     if (!b) return;
     estado.filtro = b.dataset.cat;
-    $$('#filtros .filtro').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-    renderPresentes();
+    $$('#filtros .filtro').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    renderPresentes(true);
   });
 }
 
 /* ---------------------------------------------------------------- carrossel */
+function paginacao(trilho) {
+  const largura = Math.max(1, trilho.clientWidth);
+  const limite = Math.max(0, trilho.scrollWidth - largura);
+  const paginas = limite > 4 ? Math.ceil(limite / largura) + 1 : 1;
+  return { limite, paginas, passo: paginas > 1 ? limite / (paginas - 1) : 0 };
+}
+
 function carrosselAtualizar() {
   const trilho = $('#trilho-presentes');
   const pontos = $('#pontos');
@@ -259,13 +272,14 @@ function carrosselAtualizar() {
     return;
   }
 
-  const paginas = Math.max(1, Math.ceil(trilho.scrollWidth / Math.max(1, trilho.clientWidth) - 0.02));
-  const atual = Math.round(trilho.scrollLeft / Math.max(1, trilho.clientWidth));
+  const { limite, paginas, passo } = paginacao(trilho);
+  const atual = passo ? Math.min(paginas - 1, Math.max(0, Math.round(trilho.scrollLeft / passo))) : 0;
 
   $('#seta-esq').disabled = trilho.scrollLeft <= 4;
-  $('#seta-dir').disabled = trilho.scrollLeft >= trilho.scrollWidth - trilho.clientWidth - 4;
+  $('#seta-dir').disabled = trilho.scrollLeft >= limite - 4;
 
   pontos.hidden = paginas < 2 || paginas > 12;   // lista longa: setas e deslizar bastam
+  if (pontos.hidden) return;
   if (pontos.childElementCount !== paginas) {
     pontos.innerHTML = Array.from({ length: paginas }, (_, i) =>
       `<button class="ponto" type="button" data-pagina="${i}" aria-label="Página ${i + 1}"></button>`).join('');
@@ -282,6 +296,7 @@ function carrossel() {
   verTodos.addEventListener('click', () => {
     estado.grade = !estado.grade;
     verTodos.textContent = estado.grade ? 'Mostrar menos' : 'Ver todos os presentes';
+    verTodos.setAttribute('aria-expanded', String(estado.grade));
     carrosselAtualizar();
     if (!estado.grade) $('#presentes').scrollIntoView({ block: 'start' });   // volta ao começo da lista
   });
@@ -290,7 +305,7 @@ function carrossel() {
   $('#seta-dir').addEventListener('click', () => trilho.scrollBy({ left: passo() }));
   $('#pontos').addEventListener('click', (e) => {
     const b = e.target.closest('.ponto');
-    if (b) trilho.scrollTo({ left: Number(b.dataset.pagina) * trilho.clientWidth });
+    if (b) trilho.scrollTo({ left: Number(b.dataset.pagina) * paginacao(trilho).passo });
   });
 
   let t;
@@ -308,7 +323,6 @@ function passo(nome) {
 
 function abrirPresente(p) {
   estado.atual = p;
-  estado.dados = null;
 
   $('#modal-titulo').textContent = p.nome;
   $('#modal-valor').textContent = p.tipo === 'livre' ? 'Valor à sua escolha' : brl(p.preco);
@@ -335,7 +349,9 @@ function lerFormulario() {
   if (nome.length < 2) return { erro: 'Escreva seu nome para que possamos agradecer.' };
 
   const valor = p.tipo === 'livre' ? Number(f.valor.value) : Number(p.preco) || 0;
-  if (p.tipo === 'livre' && (!valor || valor < 10)) return { erro: 'Escolha um valor a partir de R$ 10.' };
+  if (p.tipo === 'livre' && (!Number.isFinite(valor) || f.valor.validity.stepMismatch || valor < 10 || valor > 10000)) {
+    return { erro: 'Escolha um valor entre R$ 10 e R$ 10.000, com até duas casas decimais.' };
+  }
 
   const whatsapp = f.whatsapp.value.trim();
   if (whatsapp && !comDDD(whatsapp)) return { erro: 'Coloque o WhatsApp com DDD, ex.: (67) 99999-9999.' };
@@ -356,11 +372,13 @@ async function voltaDoPagamento() {
   const q = new URLSearchParams(location.search);
   const dados = { order_nsu: q.get('order_nsu'), transaction_nsu: q.get('transaction_nsu'),
     slug: q.get('slug'), receipt_url: q.get('receipt_url') };
-  if (!dados.order_nsu) return;
-  history.replaceState(null, '', location.pathname + '#presentes');
+  if (!dados.order_nsu || !dados.transaction_nsu || !dados.slug) return;
 
   const r = await DB.confirmarPagamento(dados);
-  if (!r.pago) { toast('Assim que o pagamento for confirmado, ele aparece para os noivos ♡'); return; }
+  if (!r?.pago) { toast('Assim que o pagamento for confirmado, ele aparece para os noivos ♡'); return; }
+  history.replaceState(null, '', location.pathname + '#presentes');
+  if (dlg().open) { toast('Recebemos o seu presente. Obrigado! ♡'); return; }
+  $('#presentes').scrollIntoView({ block: 'start', behavior: 'instant' });
   $('#modal-titulo').textContent = r.presente;
   $('#fim-texto').textContent = 'Recebemos o seu presente. Obrigado, ' + String(r.nome).split(' ')[0] + '!';
   passo('fim');
@@ -369,6 +387,7 @@ async function voltaDoPagamento() {
 
 function modal() {
   const d = dlg();
+  const btn = $('#btn-pagar');
 
   $('#trilho-presentes').addEventListener('click', (e) => {
     const b = e.target.closest('[data-presentear]');
@@ -377,23 +396,25 @@ function modal() {
     if (p) abrirPresente(p);
   });
 
-  $$('[data-fechar]', d).forEach((b) => b.addEventListener('click', () => d.close()));
-  d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+  const fechar = () => { if (!btn.disabled) d.close(); };
+  $$('[data-fechar]', d).forEach((b) => b.addEventListener('click', fechar));
+  d.addEventListener('click', (e) => { if (e.target === d) fechar(); });
+  d.addEventListener('cancel', (e) => { if (btn.disabled) e.preventDefault(); });
 
   $('#form-presente').addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (btn.disabled || !CASAMENTO.checkout) return;
     const dados = lerFormulario();
     const erro = $('#erro-presente');
     if (dados.erro) { erro.textContent = dados.erro; return; }
     erro.textContent = '';
 
-    const btn = $('#btn-pagar');
     btn.disabled = true; btn.textContent = 'Abrindo o pagamento…';
     const r = await DB.pagar(estado.atual, dados);
-    if (r.url) { location.href = r.url; return; }   // segue para a InfinitePay
+    if (r?.url) { location.href = r.url; return; }   // segue para a InfinitePay
 
     btn.disabled = false; btn.textContent = 'Ir para o pagamento';
-    erro.textContent = r.erro === 'ocupado'
+    erro.textContent = r?.erro === 'ocupado'
       ? 'Este presente acabou de ser escolhido por outra pessoa. Escolha outro ♡'
       : 'Não conseguimos abrir o pagamento agora. Tente de novo em instantes.';
   });
@@ -433,6 +454,10 @@ function rsvp() {
     const s = salvo || {};
     f.nome.value = s.nome || '';
     f.contato.value = s.contato || '';
+    f.presenca.value = s.presenca === 'nao' ? 'nao' : 'sim';
+    f.acompanhantes.value = String(s.acompanhantes ?? 0);
+    f.mensagem.value = s.mensagem || '';
+    campoAcomp.hidden = f.presenca.value === 'nao';
     $('#sucesso-rsvp').hidden = true;
     f.hidden = false;
     f.nome.focus();
@@ -449,6 +474,9 @@ function rsvp() {
 
     if (nome.length < 3) { erro.textContent = 'Escreva seu nome completo.'; f.nome.focus(); return; }
     if (contato.length < 6) { erro.textContent = 'Deixe um WhatsApp ou e-mail para contato.'; f.contato.focus(); return; }
+    if (contato.includes('@') && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contato)) {
+      erro.textContent = 'Confira o endereço de e-mail.'; f.contato.focus(); return;
+    }
     if (!contato.includes('@') && !comDDD(contato)) {
       erro.textContent = 'Coloque o WhatsApp com DDD, ex.: (67) 99999-9999.'; f.contato.focus(); return;
     }
@@ -457,20 +485,21 @@ function rsvp() {
     const btn = f.querySelector('button[type=submit]');
     btn.disabled = true; btn.textContent = 'Enviando…';
 
-    const r = await DB.enviarRsvp({
+    const resposta = {
       nome, contato,
       presenca: f.presenca.value,
-      acompanhantes: f.presenca.value === 'nao' ? 0 : f.acompanhantes.value,
+      acompanhantes: f.presenca.value === 'nao' ? 0 : Number(f.acompanhantes.value),
       mensagem: f.mensagem.value.trim(),
-    });
+    };
+    const r = await DB.enviarRsvp(resposta).catch(() => ({ ok: false }));
 
     btn.disabled = false; btn.textContent = 'Enviar confirmação';
     if (!r.ok) { erro.textContent = 'Não conseguimos enviar agora. Tente novamente em instantes.'; return; }
 
-    salvo = { nome, contato, presenca: f.presenca.value };
+    salvo = resposta;
     try { localStorage.setItem(RSVP_SALVO, JSON.stringify(salvo)); } catch (err) { /* só não lembra */ }
     mostrarResposta(salvo, false);
-    $('#sucesso-rsvp').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    $('#sucesso-rsvp').scrollIntoView({ block: 'center' });
   });
 }
 

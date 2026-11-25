@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=locais-mobile-1">
+<link rel="stylesheet" href="css/style.css?v=revisao-1">
 <!-- o envelope é a primeira coisa na tela: a textura (fundo do CSS) só seria
      descoberta depois do CSS; pedida aqui, chega junto com o envelope -->
 <link rel="preload" as="image" href="img/identidade/fibra-aba.webp" fetchpriority="high">
@@ -42,6 +42,8 @@
 <!-- Mostra o envelope a cada carregamento, antes da primeira pintura da capa. -->
 <script>
 (function () {
+  var pagamento = new URLSearchParams(location.search);
+  if (pagamento.has('order_nsu') && pagamento.has('transaction_nsu') && pagamento.has('slug')) return;
   var h = document.documentElement;
   var navegacao = performance.getEntriesByType('navigation')[0];
   var recarregou = navegacao && navegacao.type === 'reload';
@@ -239,7 +241,7 @@
       </p>
     </div>
 
-    <div class="filtros" role="tablist" aria-label="Categorias de presentes" id="filtros"></div>
+    <div class="filtros" role="group" aria-label="Categorias de presentes" id="filtros"></div>
 
     <div class="carrossel" id="carrossel">
       <button class="seta seta--esq" type="button" id="seta-esq" aria-label="Ver presentes anteriores">
@@ -256,7 +258,7 @@
       <div class="pontos" id="pontos"></div>
     </div>
 
-    <button class="btn btn--ghost presentes__vertodos" type="button" id="ver-todos">Ver todos os presentes</button>
+    <button class="btn btn--ghost presentes__vertodos" type="button" id="ver-todos" aria-expanded="false" aria-controls="trilho-presentes">Ver todos os presentes</button>
 
     <p class="presentes__nota">
       Os presentes já escolhidos aparecem marcados, para que ninguém repita.
@@ -288,12 +290,12 @@
         <form class="form" id="form-rsvp" novalidate>
           <label class="campo">
             <span class="sr">Nome completo</span>
-            <input type="text" name="nome" required autocomplete="name" placeholder="Nome completo *">
+            <input type="text" name="nome" required maxlength="120" autocomplete="name" placeholder="Nome completo *">
           </label>
 
           <label class="campo">
             <span class="sr">WhatsApp ou e-mail</span>
-            <input type="text" name="contato" required autocomplete="tel" placeholder="WhatsApp com DDD ou e-mail *">
+            <input type="text" name="contato" required maxlength="160" placeholder="WhatsApp com DDD ou e-mail *">
           </label>
 
           <fieldset class="campo" style="border:0;margin:0;padding:0">
@@ -323,7 +325,7 @@
 
           <label class="campo">
             <span class="sr">Mensagem para nós</span>
-            <textarea name="mensagem" rows="3" placeholder="Mensagem para nós (opcional)"></textarea>
+            <textarea name="mensagem" rows="3" maxlength="600" placeholder="Mensagem para nós (opcional)"></textarea>
           </label>
 
           <p class="form__erro" id="erro-rsvp" role="alert"></p>
@@ -399,7 +401,7 @@
 
         <label class="campo" id="campo-valor-livre" hidden>
           <span>Valor (R$) *</span>
-          <input type="number" name="valor" min="10" step="10" placeholder="100">
+          <input type="number" name="valor" min="10" max="10000" step=".01" inputmode="decimal" placeholder="100">
         </label>
 
         <label class="campo">
@@ -427,6 +429,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/main.js?v=locais-mobile-1"></script>
+<script type="module" src="js/main.js?v=revisao-1"></script>
 </body>
 </html>

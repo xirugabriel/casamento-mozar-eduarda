@@ -62,12 +62,25 @@ function mostrarPainel() {
 
 /* ------------------------------------------------------------------ dados */
 async function carregar() {
-  const [registros, rsvps] = await Promise.all([
-    DB.listarRegistros().catch(() => []),
-    DB.listarRsvps().catch(() => []),
+  const botao = $('#recarregar');
+  if (botao.disabled) return;
+  botao.disabled = true;
+  botao.textContent = 'Atualizando…';
+  const aviso = $('#erro-atualizar');
+  aviso.hidden = true;
+  const [registros, rsvps] = await Promise.allSettled([
+    DB.listarRegistros(),
+    DB.listarRsvps(),
   ]);
-  estado.registros = registros;
-  estado.rsvps = marcarSubstituidas(rsvps);
+  if (registros.status === 'fulfilled') estado.registros = registros.value;
+  if (rsvps.status === 'fulfilled') estado.rsvps = marcarSubstituidas(rsvps.value);
+  const falhas = [registros.status === 'rejected' && 'presentes', rsvps.status === 'rejected' && 'presenças'].filter(Boolean);
+  if (falhas.length) {
+    aviso.textContent = 'Não foi possível atualizar ' + falhas.join(' e ') + '. Toque em Atualizar para tentar novamente.';
+    aviso.hidden = false;
+  }
+  botao.disabled = false;
+  botao.textContent = 'Atualizar';
   render();
 }
 
@@ -318,40 +331,48 @@ function eventos() {
   document.addEventListener('click', async (e) => {
     const b = e.target.closest('button[data-confirmar], button[data-excluir-registro], button[data-excluir-rsvp], button[data-liberar], button[data-recebido], button[data-ocultar]');
     if (!b) return;
+    if (b.disabled) return;
+    b.disabled = true;
     const d = b.dataset;
-
-    if (d.confirmar) {
-      await DB.atualizarRegistro(d.confirmar, { status: 'recebido' });
-      const r = estado.registros.find((x) => x.id === d.confirmar);
-      if (r) { r.status = 'recebido'; await DB.definirStatus(r.presenteId, 'recebido'); }
-      toast('Presente confirmado ♡');
+    try {
+      if (d.confirmar) {
+        await DB.atualizarRegistro(d.confirmar, { status: 'recebido' });
+        const r = estado.registros.find((x) => x.id === d.confirmar);
+        if (r) { r.status = 'recebido'; await DB.definirStatus(r.presenteId, 'recebido'); }
+        toast('Presente confirmado ♡');
+      }
+      else if (d.excluirRegistro) {
+        if (!confirm('Excluir este registro? O presente continua com o status atual.')) return;
+        await DB.excluir('registros', d.excluirRegistro);
+        estado.registros = estado.registros.filter((x) => x.id !== d.excluirRegistro);
+        toast('Registro excluído.');
+      }
+      else if (d.excluirRsvp) {
+        if (!confirm('Excluir esta confirmação de presença?')) return;
+        await DB.excluir('rsvps', d.excluirRsvp);
+        estado.rsvps = marcarSubstituidas(estado.rsvps.filter((x) => x.id !== d.excluirRsvp));
+        toast('Confirmação excluída.');
+      }
+      else if (d.liberar) {
+        if (!confirm('Devolver este presente para a lista? Ele volta a aparecer para os convidados.')) return;
+        await DB.definirStatus(d.liberar, 'disponivel');
+        toast('Presente liberado.');
+      }
+      else if (d.recebido) {
+        await DB.definirStatus(d.recebido, 'recebido');
+        toast('Marcado como recebido ♡');
+      }
+      else if (d.ocultar) {
+        await DB.definirStatus(d.ocultar, 'oculto');
+        toast('Presente excluído do site. Dá para restaurar no fim da lista.');
+      }
+      render();
+    } catch (erro) {
+      console.error('Falha ao salvar a alteração:', erro);
+      toast('Não foi possível salvar a alteração. Atualize o painel e tente novamente.');
+    } finally {
+      b.disabled = false;
     }
-    else if (d.excluirRegistro) {
-      if (!confirm('Excluir este registro? O presente continua com o status atual.')) return;
-      await DB.excluir('registros', d.excluirRegistro);
-      estado.registros = estado.registros.filter((x) => x.id !== d.excluirRegistro);
-      toast('Registro excluído.');
-    }
-    else if (d.excluirRsvp) {
-      if (!confirm('Excluir esta confirmação de presença?')) return;
-      await DB.excluir('rsvps', d.excluirRsvp);
-      estado.rsvps = estado.rsvps.filter((x) => x.id !== d.excluirRsvp);
-      toast('Confirmação excluída.');
-    }
-    else if (d.liberar) {
-      if (!confirm('Devolver este presente para a lista? Ele volta a aparecer para os convidados.')) return;
-      await DB.definirStatus(d.liberar, 'disponivel');
-      toast('Presente liberado.');
-    }
-    else if (d.recebido) {
-      await DB.definirStatus(d.recebido, 'recebido');
-      toast('Marcado como recebido ♡');
-    }
-    else if (d.ocultar) {
-      await DB.definirStatus(d.ocultar, 'oculto');
-      toast('Presente excluído do site. Dá para restaurar no fim da lista.');
-    }
-    render();
   });
 }
 

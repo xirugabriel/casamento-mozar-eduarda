@@ -214,17 +214,17 @@ button { font: inherit; color: inherit; }
   list-style: none; overflow-x: auto; scrollbar-width: none;
 }
 .nav ul::-webkit-scrollbar { display: none; }
-/* celulares de 320px: aperta o menu para os cinco itens caberem sem rolar */
-@media (max-width: 340px) {
-  .nav ul { gap: .4rem; padding-inline: .7rem; }
-  .nav a { letter-spacing: .06em; }
-}
 .nav a {
   font: 400 clamp(.55rem, 2.4vw, .63rem)/1 var(--sans);
   letter-spacing: .18em; text-transform: uppercase; text-decoration: none;
   color: rgba(246, 239, 231, .82); white-space: nowrap;
   padding-bottom: 4px; border-bottom: 1px solid transparent;
   transition: color .3s, border-color .3s;
+}
+/* celulares de 320px: aperta o menu para os cinco itens caberem sem rolar */
+@media (max-width: 340px) {
+  .nav ul { gap: .4rem; padding-inline: .7rem; }
+  .nav a { letter-spacing: .06em; }
 }
 .nav a:hover { color: var(--dourado); }
 /* área de toque de ~44px sem mudar o desenho do menu (o texto tem só 16px) */
@@ -333,6 +333,7 @@ button { font: inherit; color: inherit; }
   --papel-envelope: url('../img/identidade/fibra-aba.webp') left top / 18rem auto repeat var(--floresta);
 }
 html.com-envelope { overflow: hidden; }
+html.com-envelope:not(.aberto) :is(.nav, main, .rodape) { visibility: hidden; }
 html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
 .com-envelope .envelope {
   position: fixed; inset: 0; z-index: 200; isolation: isolate; overflow: hidden;
@@ -639,7 +640,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .filtro + .filtro { border-left: 1px solid var(--linha); }
 .filtro:hover { color: var(--madeira); }
-.filtro[aria-selected='true'] { color: var(--floresta); border-bottom-color: var(--madeira); }
+.filtro[aria-pressed='true'] { color: var(--floresta); border-bottom-color: var(--madeira); }
 
 /* carrossel */
 .carrossel { position: relative; }
@@ -744,8 +745,10 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .modal__caixa {
   position: relative;
   width: min(100%, 30rem); max-height: 92svh; overflow-y: auto;
+  overscroll-behavior-y: contain;
   background: var(--marfim-claro);
   padding: clamp(1.6rem, 6vw, 2.4rem) clamp(1.3rem, 5vw, 2.2rem) clamp(1.8rem, 6vw, 2.4rem);
+  padding-bottom: calc(clamp(1.8rem, 6vw, 2.4rem) + env(safe-area-inset-bottom, 0px));
   border-top: 2px solid var(--dourado);
   animation: subir .45s cubic-bezier(.22, 1, .36, 1);
   text-align: center;
