@@ -27,8 +27,10 @@ const HANDLE = defineString('INFINITEPAY_HANDLE');
 const API = 'https://api.checkout.infinitepay.io';
 const REGIAO = 'southamerica-east1';
 const RESERVA_MIN = 20;
-const ORIGENS = [/^https:\/\/xirugabriel\.github\.io$/, /^http:\/\/localhost(:\d+)?$/];
-const SITE = 'https://xirugabriel.github.io/casamento-mozar-eduarda/';
+// o github.io continua aceito: redireciona para o domínio, mas pode haver aba aberta nele
+const ORIGENS = [/^https:\/\/(www\.)?mozareeduarda\.life$/, /^https:\/\/xirugabriel\.github\.io$/,
+  /^http:\/\/localhost(:\d+)?$/];
+const SITE = 'https://mozareeduarda.life/';
 
 const opcoes = { region: REGIAO, secrets: [CHAVE], maxInstances: 5 };
 
