@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251615';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251615';
-import * as DB from './db.js?v=202611251615';
+import { CASAMENTO } from './config.js?v=202611251625';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251625';
+import * as DB from './db.js?v=202611251625';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -190,7 +190,7 @@ function locais() {
 }
 
 /* ------------------------------------------------------------- presentes */
-const estado = { status: {}, filtro: 'todos', atual: null, dados: null };
+const estado = { status: {}, filtro: 'todos', atual: null, dados: null, grade: false };
 
 const ocupado = (p) => !p.multiplo && DB.ocupado(estado.status[p.id]);
 
@@ -245,7 +245,7 @@ function filtros() {
 function carrosselAtualizar() {
   const trilho = $('#trilho-presentes');
   const pontos = $('#pontos');
-  const grade = CASAMENTO.layoutPresentes === 'grade';
+  const grade = estado.grade || CASAMENTO.layoutPresentes === 'grade';
 
   $('#carrossel').classList.toggle('carrossel--grade', grade);
   if (grade) {
@@ -271,6 +271,15 @@ function carrosselAtualizar() {
 function carrossel() {
   const trilho = $('#trilho-presentes');
   const passo = () => trilho.clientWidth * 0.86;
+
+  const verTodos = $('#ver-todos');
+  verTodos.hidden = CASAMENTO.layoutPresentes === 'grade';
+  verTodos.addEventListener('click', () => {
+    estado.grade = !estado.grade;
+    verTodos.textContent = estado.grade ? 'Mostrar menos' : 'Ver todos os presentes';
+    carrosselAtualizar();
+    if (!estado.grade) $('#presentes').scrollIntoView({ block: 'start' });   // volta ao começo da lista
+  });
 
   $('#seta-esq').addEventListener('click', () => trilho.scrollBy({ left: -passo() }));
   $('#seta-dir').addEventListener('click', () => trilho.scrollBy({ left: passo() }));

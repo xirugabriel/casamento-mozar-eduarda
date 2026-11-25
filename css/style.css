@@ -597,7 +597,14 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .trilho::-webkit-scrollbar { display: none; }
 .trilho > * { scroll-snap-align: start; }
-.carrossel--grade .trilho { flex-wrap: wrap; overflow: visible; }
+/* "Ver todos": vitrine em grade, um embaixo do outro — 2 colunas no celular */
+.carrossel--grade .trilho {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(150px, 40vw), 1fr));
+  overflow: visible;
+}
+.carrossel--grade .presente { width: auto; }
+.presentes__vertodos { display: flex; width: fit-content; margin: clamp(1.4rem, 4.5vw, 2rem) auto 0; }
+.presentes__vertodos[hidden] { display: none; }
 
 .presente {
   flex: 0 0 auto; width: clamp(148px, 43vw, 212px);
