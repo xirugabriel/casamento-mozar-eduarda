@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251602';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251602';
-import * as DB from './db.js?v=202611251602';
+import { CASAMENTO } from './config.js?v=202611251605';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251605';
+import * as DB from './db.js?v=202611251605';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -322,7 +322,17 @@ function lerFormulario() {
   const valor = p.tipo === 'livre' ? Number(f.valor.value) : Number(p.preco) || 0;
   if (p.tipo === 'livre' && (!valor || valor < 10)) return { erro: 'Escolha um valor a partir de R$ 10.' };
 
-  return { nome, mensagem, valor, whatsapp: f.whatsapp.value.trim() };
+  const whatsapp = f.whatsapp.value.trim();
+  if (whatsapp && !comDDD(whatsapp)) return { erro: 'Coloque o WhatsApp com DDD, ex.: (67) 99999-9999.' };
+
+  return { nome, mensagem, valor, whatsapp };
+}
+
+/* Telefone com DDD (10 ou 11 dígitos), com ou sem +55: é o que o painel precisa
+   para abrir o WhatsApp de agradecimento e juntar respostas da mesma pessoa. */
+function comDDD(v) {
+  const d = v.replace(/\D/g, '');
+  return d.length === 10 || d.length === 11 || ((d.length === 12 || d.length === 13) && d.startsWith('55'));
 }
 
 /* Volta da InfinitePay: a URL traz order_nsu, transaction_nsu e slug. O servidor
@@ -424,6 +434,9 @@ function rsvp() {
 
     if (nome.length < 3) { erro.textContent = 'Escreva seu nome completo.'; f.nome.focus(); return; }
     if (contato.length < 6) { erro.textContent = 'Deixe um WhatsApp ou e-mail para contato.'; f.contato.focus(); return; }
+    if (!contato.includes('@') && !comDDD(contato)) {
+      erro.textContent = 'Coloque o WhatsApp com DDD, ex.: (67) 99999-9999.'; f.contato.focus(); return;
+    }
     erro.textContent = '';
 
     const btn = f.querySelector('button[type=submit]');
