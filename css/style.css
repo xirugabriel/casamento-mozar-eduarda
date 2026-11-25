@@ -600,6 +600,26 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 .locais__texto .texto { margin-bottom: clamp(1.2rem, 4vw, 1.7rem); max-width: 19rem; }
 
+@media (max-width: 679px) {
+  .convite-page {
+    scroll-padding-top: calc(var(--altura-menu, 4rem + env(safe-area-inset-top, 0px)) + .35rem);
+  }
+  .locais__foto { margin: .5rem max(.75rem, env(safe-area-inset-left), env(safe-area-inset-right)) 0; }
+  .locais__foto { overflow: hidden; border-radius: .6rem; }
+  .locais__texto {
+    padding-block: 1.15rem 1.65rem;
+  }
+  .locais__texto + .locais__foto { margin-top: .85rem; }
+  .locais__icone { width: 1.55rem; height: 1.55rem; margin-bottom: .45rem; }
+  .locais__titulo { margin-bottom: .8rem; }
+  .horarios { margin-bottom: .95rem; }
+  .horarios span { margin-top: .25rem; letter-spacing: .15em; }
+  .locais__nome { max-width: 30ch; text-wrap: balance; }
+  .locais__endereco { margin-bottom: .85rem; }
+  .locais__texto .texto { margin-bottom: .9rem; text-wrap: balance; }
+  .locais__texto .btn { min-height: 44px; }
+}
+
 /* ==================================================== 6. LISTA DE PRESENTES */
 .presentes__intro { max-width: 34rem; margin: clamp(1.2rem, 4vw, 1.7rem) auto 0; }
 

@@ -34,6 +34,9 @@ const revelar = (raiz = document) => $$('.rv:not(.in)', raiz).forEach((el) => ob
 /* -------------------------------------------------------------------- nav */
 function nav() {
   const barra = $('#nav');
+  const medir = () => document.documentElement.style.setProperty('--altura-menu', barra.offsetHeight + 'px');
+  medir();
+  new ResizeObserver(medir).observe(barra);
   new IntersectionObserver(([e]) => barra.classList.toggle('on', !e.isIntersecting),
     { threshold: 0, rootMargin: '-72px 0px 0px 0px' }).observe($('#inicio'));
 
