@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251359';
-import * as DB from './db.js?v=202611251359';
+import { PRESENTES } from './data.js?v=202611251400';
+import * as DB from './db.js?v=202611251400';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -68,8 +68,9 @@ async function carregar() {
 export function chaveContato(c) {
   const s = String(c || '').trim().toLowerCase();
   if (s.includes('@')) return s;
-  const d = s.replace(/\D/g, '');
-  return d.length >= 12 && d.startsWith('55') ? d.slice(2) : d;   // +55 opcional
+  // celular sem DDD e sem +55: "992737789", "(69) 99273-7789" e "+55 69…" são a mesma pessoa.
+  // shortcut: mesmo número em DDDs diferentes vira uma pessoa só; numa lista de casamento, aceitável
+  return s.replace(/\D/g, '').slice(-9);
 }
 
 function marcarSubstituidas(lista) {
