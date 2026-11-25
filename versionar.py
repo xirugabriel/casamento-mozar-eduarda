@@ -30,6 +30,7 @@ MODULOS = sorted(p.name for p in (AQUI / 'js').glob('*.js'))
 # cada convidado rebaixar o site inteiro a cada deploy.
 IMAGENS_VERSIONADAS = [
     'img/identidade/aquarela.webp',
+    'img/identidade/aquarela-raizes.webp',
     'img/identidade/cachorras.webp',
     'img/monograma-ouro.svg',
 ]
