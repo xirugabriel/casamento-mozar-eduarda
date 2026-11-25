@@ -287,6 +287,9 @@ button { font: inherit; color: inherit; }
 }
 html.com-envelope { overflow: hidden; }
 html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
+.com-envelope .hero__conteudo > * { animation-delay: .16s; }
+.com-envelope .hero__mono { animation-delay: 0s; }
+.com-envelope .hero__frase, .com-envelope .hero__creditofrase { animation-delay: .42s; }
 .com-envelope .envelope {
   position: fixed; inset: 0; z-index: 200; isolation: isolate; overflow: hidden;
   display: block; width: 100%; margin: 0; padding: 0; border: 0;
@@ -369,6 +372,13 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 @keyframes lacre-solta { to { opacity: 0; transform: scale(1.1); } }
 @keyframes aba-abre { to { transform: rotateX(180deg); } }
 @keyframes envelope-sai { to { opacity: 0; } }
+@media (prefers-reduced-motion: no-preference) {
+  .aberto .envelope { animation-name: envelope-revela; }
+  @keyframes envelope-revela {
+    to { opacity: 0; clip-path: inset(0 0 18%); transform: translateY(-1.5rem); }
+  }
+  .aberto .envelope { clip-path: inset(0); }
+}
 
 /* folhagens */
 .folha { position: absolute; pointer-events: none; user-select: none; z-index: -1; }
@@ -397,7 +407,11 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .secao--claro { background: var(--marfim-claro); }
 
 .paisagem { background: linear-gradient(var(--marfim) 50%, var(--marfim-claro)); }
-.aquarela { padding: clamp(.85rem, 3vw, 2rem) 0 0; background: transparent; }
+.aquarela {
+  --passagem: clamp(1.25rem, 3vw, 2.25rem);
+  padding: calc(var(--passagem) + .4rem) 0 0;
+  background: linear-gradient(var(--floresta-esc), transparent var(--passagem));
+}
 .aquarela__grade { display: grid; max-width: 65rem; margin-inline: auto; }
 .aquarela figure { margin: 0; }
 .aquarela img {
@@ -476,6 +490,25 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .locais { display: grid; background: var(--marfim); }
 .locais__foto { margin: 0; display: grid; place-items: center; }
 .locais__foto img { width: 100%; height: auto; }
+.recepcao__arte { position: relative; width: 100%; }
+.recepcao__luzes {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background:
+    radial-gradient(ellipse 3% 4% at 23.4% 9.3%, #fff2bc9c, transparent),
+    radial-gradient(ellipse 3% 4% at 35.3% 16.1%, #fff2bcaa, transparent),
+    radial-gradient(ellipse 3.5% 4.7% at 50.8% 21%, #ffda77b3, transparent),
+    radial-gradient(ellipse 3% 4% at 65.6% 23.3%, #fff2bcaa, transparent),
+    radial-gradient(ellipse 3.5% 4.7% at 80.4% 21.5%, #ffd27eb3, transparent),
+    radial-gradient(ellipse 3% 4% at 86.5% 31.7%, #fff2bcaa, transparent);
+  mix-blend-mode: screen;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .recepcao__luzes.in { animation: brilho-da-recepcao 3.4s ease-in-out; }
+}
+@keyframes brilho-da-recepcao {
+  0%, 100% { opacity: 0; }
+  45%, 60% { opacity: .85; }
+}
 .locais__texto {
   /* topo alinhado em vez de centrado: as duas colunas têm volumes diferentes de
      texto, e centrar deixava título e botão em alturas diferentes lado a lado */
@@ -741,7 +774,11 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .rsvp { position: relative; isolation: isolate; padding: 0; overflow: hidden; background: var(--marfim); }
 .rsvp__grade { display: grid; }
 .rsvp__foto { margin: 0; display: grid; place-items: center; }
-.rsvp__foto picture { display: block; width: min(100%, 38rem); }
+.rsvp__foto picture { display: block; position: relative; width: min(100%, 38rem); }
+.rsvp__foto picture::after {
+  content: ''; position: absolute; inset: .45rem; pointer-events: none;
+  border: 1px solid rgb(212 175 124 / .5);
+}
 .rsvp__foto img { width: 100%; height: auto; }
 .rsvp__corpo { padding: clamp(2.8rem, 10vw, 5rem) var(--gutter); background: var(--marfim-claro); }
 .rsvp__conteudo { width: min(100%, 30rem); margin-inline: auto; }
@@ -781,7 +818,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 }
 /* frase inteira, não mais um bordão curto: precisa de medida e entrelinha */
 .final__frase {
-  max-width: 26rem; margin: 0 auto clamp(1.4rem, 4.5vw, 2rem);
+  max-width: 26rem; margin: 0 auto clamp(.9rem, 3vw, 1.4rem);
   font-size: clamp(1.2rem, 4.8vw, 1.65rem); line-height: 1.7;
   text-wrap: balance;
 }
