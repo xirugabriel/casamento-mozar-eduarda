@@ -30,7 +30,16 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 4rem; }
+html {
+  scroll-behavior: smooth; scroll-padding-top: 4rem;
+  scrollbar-gutter: stable;
+  -webkit-text-size-adjust: 100%;
+}
+@media (max-width: 759px), (hover: none) and (pointer: coarse) {
+  html { scrollbar-gutter: auto; }
+  html, body { scrollbar-width: none; }
+  html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; }
+}
 
 body {
   margin: 0;
