@@ -79,10 +79,10 @@ export const CASAMENTO = {
    Passo a passo: veja README.md
    --------------------------------------------------------------------- */
 export const FIREBASE = {
-  apiKey: '',
-  authDomain: '',
-  projectId: '',
-  storageBucket: '',
-  messagingSenderId: '',
-  appId: '',
+  apiKey: 'AIzaSyBhSOrYCsXXNQuP7XYeLZJ0g-2pvHNXK_8',
+  authDomain: 'casamento-76063.firebaseapp.com',
+  projectId: 'casamento-76063',
+  storageBucket: 'casamento-76063.firebasestorage.app',
+  messagingSenderId: '230034678847',
+  appId: '1:230034678847:web:3a52de6bcc7f167513c48a',
 };
