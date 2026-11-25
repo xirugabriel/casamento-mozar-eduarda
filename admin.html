@@ -16,12 +16,19 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&family=Allura&display=swap">
 <link rel="stylesheet" href="css/style.css?v=altura-estavel-1">
-<link rel="stylesheet" href="css/admin.css?v=altura-estavel-1">
+<link rel="stylesheet" href="css/admin.css?v=sessao-painel-1">
 </head>
 <body>
 
+<div class="login" id="tela-sessao">
+  <div class="sessao__estado">
+    <p id="mensagem-sessao" role="status">Verificando sua sessão…</p>
+    <a class="mini" id="tentar-sessao" href="admin.html" hidden>Tentar novamente</a>
+  </div>
+</div>
+
 <!-- ------------------------------------------------------------- login -->
-<div class="login" id="tela-login">
+<div class="login" id="tela-login" hidden>
   <div class="login__caixa">
     <img class="login__lacre" src="img/lacre-me-bronze.webp" width="640" height="640" alt="">
     <h1 class="login__titulo">Painel dos noivos</h1>
@@ -115,6 +122,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/admin.js?v=admin-mobile-1"></script>
+<script type="module" src="js/admin.js?v=sessao-painel-1"></script>
 </body>
 </html>

@@ -110,6 +110,9 @@ tr:last-child td { border-bottom: 0; }
            calc(1.25rem + var(--admin-safe-bottom)) max(var(--gutter), env(safe-area-inset-left, 0px));
   background: radial-gradient(ellipse at center, #324f40, var(--floresta) 72%);
 }
+.sessao__estado { text-align: center; color: var(--marfim); font: 400 .9rem/1.5 var(--sans); }
+.sessao__estado p { margin: 0; }
+.sessao__estado .mini { margin-top: .9rem; }
 .login__caixa {
   width: min(100%, 26rem); background: var(--marfim-claro); padding: clamp(1.3rem, 6vw, 2.6rem);
   text-align: center; border: 1px solid var(--dourado); border-radius: 1.1rem;

@@ -41,7 +41,16 @@ async function login() {
     if (local) mostrarPainel();
   });
 
-  DB.observarAuth((u) => { if (u) mostrarPainel(); });
+  DB.observarAuth((usuario) => {
+    $('#tela-sessao').hidden = true;
+    if (usuario) {
+      mostrarPainel();
+    } else {
+      $('#tela-painel').hidden = true;
+      $('#form-login').reset();
+      $('#tela-login').hidden = false;
+    }
+  });
   $('#sair').addEventListener('click', () => DB.sair());
 }
 
@@ -349,6 +358,13 @@ function eventos() {
 /* ------------------------------------------------------------------ start */
 (async function iniciar() {
   eventos();
-  await login();
+  try {
+    await login();
+  } catch (erro) {
+    console.error('Falha ao iniciar a sessão do painel:', erro);
+    $('#mensagem-sessao').textContent = 'Não foi possível verificar sua sessão.';
+    $('#tentar-sessao').hidden = false;
+    return;
+  }
   DB.observarPresentes((mapa) => { estado.status = mapa; if (!$('#tela-painel').hidden) render(); });
 })();
