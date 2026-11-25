@@ -35,6 +35,22 @@ html {
   scrollbar-gutter: stable;
   -webkit-text-size-adjust: 100%;
 }
+/* barra de rolagem do computador: fina, polegar dourado → madeira, trilho
+   transparente (acompanha o fundo: verde na capa, marfim no resto) */
+@media (hover: hover) and (pointer: fine) {
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--dourado), var(--madeira)) padding-box;
+    border: 3px solid transparent; border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #E0BE8C, var(--madeira-esc)) padding-box; border-width: 2px; }
+  ::-webkit-scrollbar-corner { background: transparent; }
+  /* Firefox não tem os seletores acima; no Chrome, scrollbar-color anularia o desenho */
+  @supports (-moz-appearance: none) {
+    html { scrollbar-color: var(--madeira) transparent; scrollbar-width: thin; }
+  }
+}
 @media (max-width: 759px), (hover: none) and (pointer: coarse) {
   html { scrollbar-gutter: auto; }
   html, body { scrollbar-width: none; }
