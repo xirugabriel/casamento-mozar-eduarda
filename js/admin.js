@@ -114,7 +114,10 @@ function kpis() {
    (o CSS do admin.html mostra como rótulo). Coluna sem título (ações) fica sem. */
 function rotular(tabela) {
   const cab = $$('thead th', tabela).map((th) => th.textContent.trim());
+  $$('thead, tbody', tabela).forEach((grupo) => grupo.setAttribute('role', 'rowgroup'));
+  $$('tr', tabela).forEach((linha) => linha.setAttribute('role', 'row'));
   $$('tbody tr', tabela).forEach((tr) => [...tr.children].forEach((td, i) => {
+    td.setAttribute('role', 'cell');
     if (cab[i]) td.dataset.rotulo = cab[i];
   }));
 }
@@ -174,7 +177,7 @@ function tabelaPresentes() {
           <button class="mini" data-excluir-registro="${esc(r.id)}">Excluir</button>
         </div></td>
       </tr>`; }).join('')}</tbody>`
-    : '<tbody><tr><td class="vazio">Nenhum presente registrado ainda.</td></tr></tbody>';
+    : `<tbody><tr><td class="vazio">${busca ? 'Nenhum presente encontrado.' : 'Nenhum presente registrado ainda.'}</td></tr></tbody>`;
   rotular($('#tab-presentes'));
 }
 
@@ -199,7 +202,7 @@ function tabelaRsvps() {
         <td class="msg">${esc(r.mensagem) || '—'}</td>
         <td><div class="acoes"><button class="mini" data-excluir-rsvp="${esc(r.id)}">Excluir</button></div></td>
       </tr>`).join('')}</tbody>`
-    : '<tbody><tr><td class="vazio">Nenhuma confirmação recebida ainda.</td></tr></tbody>';
+    : `<tbody><tr><td class="vazio">${busca ? 'Nenhum convidado encontrado.' : 'Nenhuma confirmação recebida ainda.'}</td></tr></tbody>`;
   rotular($('#tab-rsvps'));
 }
 
@@ -218,7 +221,7 @@ function tabelaLista() {
     return { p, s, quem };
   }).sort((a, b) => Number(a.s === 'oculto') - Number(b.s === 'oculto'));   // excluídos no fim
 
-  $('#tab-lista').innerHTML = `
+  $('#tab-lista').innerHTML = linhas.length ? `
     <thead><tr><th>Presente</th><th>Valor</th><th>Situação</th><th>Quem escolheu</th><th></th></tr></thead>
     <tbody>${linhas.map(({ p, s, quem }) => `
       <tr>
@@ -235,7 +238,8 @@ function tabelaLista() {
               : `<button class="mini" data-liberar="${esc(p.id)}">Liberar</button>`}
           ${s === 'recebido' ? '' : `<button class="mini mini--forte" data-recebido="${esc(p.id)}">Marcar recebido</button>`}`}
         </div></td>
-      </tr>`).join('')}</tbody>`;
+      </tr>`).join('')}</tbody>`
+    : '<tbody><tr><td class="vazio">Nenhum presente encontrado.</td></tr></tbody>';
   rotular($('#tab-lista'));
 }
 
@@ -266,10 +270,35 @@ function csv(qual) {
 
 /* ---------------------------------------------------------------- eventos */
 function eventos() {
-  $$('.aba').forEach((b) => b.addEventListener('click', () => {
-    $$('.aba').forEach((x) => x.setAttribute('aria-selected', String(x === b)));
-    ['presentes', 'rsvps', 'lista'].forEach((n) => { $('#painel-' + n).hidden = n !== b.dataset.aba; });
-  }));
+  const abas = $$('.aba');
+  const barraAbas = $('.abas');
+  function selecionar(aba) {
+    abas.forEach((botao) => {
+      const ativo = botao === aba;
+      botao.setAttribute('aria-selected', String(ativo));
+      botao.tabIndex = ativo ? 0 : -1;
+      document.getElementById(botao.getAttribute('aria-controls')).hidden = !ativo;
+    });
+    const painel = document.getElementById(aba.getAttribute('aria-controls'));
+    if (painel.getBoundingClientRect().top < barraAbas.getBoundingClientRect().bottom) {
+      painel.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
+  }
+  abas.forEach((aba) => aba.addEventListener('click', () => selecionar(aba)));
+  barraAbas.addEventListener('keydown', (e) => {
+    const atual = abas.indexOf(e.target);
+    const destinos = {
+      ArrowLeft: (atual + abas.length - 1) % abas.length,
+      ArrowRight: (atual + 1) % abas.length,
+      Home: 0,
+      End: abas.length - 1,
+    };
+    const destino = destinos[e.key];
+    if (atual < 0 || !Number.isInteger(destino)) return;
+    e.preventDefault();
+    abas[destino].focus({ preventScroll: true });
+    selecionar(abas[destino]);
+  });
 
   $('#busca-presentes').addEventListener('input', tabelaPresentes);
   $('#busca-rsvps').addEventListener('input', tabelaRsvps);

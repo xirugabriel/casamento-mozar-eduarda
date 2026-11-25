@@ -1,8 +1,13 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="admin-page">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1F3B2E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Painel dos noivos">
 <title>Painel · Mozar &amp; Eduarda</title>
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
 <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
@@ -11,116 +16,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&family=Allura&display=swap">
 <link rel="stylesheet" href="css/style.css?v=202611251641">
-<style>
-  body { background: var(--marfim); }
-  .topo {
-    background: var(--floresta); color: var(--marfim);
-    padding: 1.4rem 0; position: sticky; top: 0; z-index: 20;
-  }
-  .topo .container { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-  .topo h1 {
-    margin: 0; font: 400 clamp(.82rem, 3.4vw, .95rem)/1.4 var(--serif);
-    letter-spacing: .22em; text-transform: uppercase;
-  }
-  .topo button { background: none; border: 1px solid rgba(212,175,124,.5); color: var(--dourado);
-    font: 400 .62rem/1 var(--sans); letter-spacing: .18em; text-transform: uppercase;
-    padding: .7rem 1rem; cursor: pointer; border-radius: 2px; }
-  .topo button:hover { background: rgba(212,175,124,.12); }
-
-  .painel { padding: clamp(2rem, 6vw, 3.5rem) 0 5rem; }
-
-  .cartoes { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); margin-bottom: 2.5rem; }
-  .kpi { background: #fff; border: 1px solid rgba(139,94,60,.14); padding: 1.1rem 1.2rem; }
-  .kpi b { display: block; font: 400 clamp(1.5rem,6vw,2rem)/1.2 var(--serif); color: var(--floresta); }
-  .kpi span { font: 400 .6rem/1.5 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--madeira); }
-
-  .abas { display: flex; gap: .3rem; border-bottom: 1px solid rgba(139,94,60,.18); margin-bottom: 1.6rem; overflow-x: auto; scrollbar-width: none; }
-  .abas::-webkit-scrollbar { display: none; }
-  .aba { flex: none; background: none; border: 0; border-bottom: 2px solid transparent; cursor: pointer;
-    padding: .8rem 1rem; font: 400 .66rem/1 var(--sans); letter-spacing: .18em;
-    text-transform: uppercase; color: var(--tinta-suave); }
-  .aba[aria-selected="true"] { color: var(--floresta); border-color: var(--dourado); }
-
-  .barra { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: 1.2rem; }
-  .barra input[type=search] {
-    flex: 1; min-width: 180px; padding: .7rem .9rem; background: #fff;
-    border: 1px solid rgba(139,94,60,.2); font: 300 .85rem/1.4 var(--sans); color: var(--tinta);
-  }
-  .mini { background: none; border: 1px solid rgba(139,94,60,.3); color: var(--madeira); cursor: pointer;
-    padding: .65rem .9rem; font: 400 .6rem/1 var(--sans); letter-spacing: .14em; text-transform: uppercase; }
-  .mini:hover { background: rgba(139,94,60,.07); }
-  a.mini { display: inline-block; text-decoration: none; }
-  .mini--forte { background: var(--floresta); border-color: var(--floresta); color: var(--marfim); }
-  .mini--forte:hover { background: var(--floresta-esc); }
-
-  .tabela-wrap { overflow-x: auto; border: 1px solid rgba(139,94,60,.14); background: #fff; }
-  table { width: 100%; border-collapse: collapse; min-width: 640px; }
-  th, td { text-align: left; padding: .85rem .9rem; border-bottom: 1px solid rgba(139,94,60,.1); vertical-align: top; }
-  th { font: 400 .6rem/1.4 var(--sans); letter-spacing: .16em; text-transform: uppercase; color: var(--madeira); white-space: nowrap; }
-  td { font: 300 .85rem/1.6 var(--sans); color: var(--tinta); }
-  td.nome { font-weight: 400; }
-  tr:last-child td { border-bottom: 0; }
-  .msg { color: var(--tinta-suave); font-style: italic; max-width: 22rem; }
-
-  .tag { display: inline-block; padding: .25rem .55rem; font: 400 .58rem/1.4 var(--sans);
-    letter-spacing: .12em; text-transform: uppercase; border: 1px solid; border-radius: 2px; white-space: nowrap; }
-  .tag--ok    { color: #2F6B45; border-color: #9DC4AC; background: #EDF5F0; }
-  .tag--espera{ color: #8B5E3C; border-color: #DCC2A4; background: #FAF2E9; }
-  .tag--nao   { color: #A23A63; border-color: #E3B9CC; background: #FBEFF4; }
-  .acoes { display: flex; flex-wrap: wrap; gap: .3rem; }
-
-  .vazio { padding: 2.5rem 1rem; text-align: center; color: var(--tinta-suave); font: 300 .9rem/1.7 var(--sans); }
-  .barra input[type=search] { font-size: 1rem; }   /* 16px: o iPhone não dá zoom ao tocar */
-  .barra .texto { flex-basis: 100%; margin: 0; }
-
-  /* celular: cada linha da tabela vira um cartão; o rótulo de cada célula vem do
-     cabeçalho da coluna (data-rotulo, posto pelo admin.js) */
-  @media (max-width: 679px) {
-    .topo { padding: .9rem 0; }
-    .painel { padding-top: 1.2rem; }
-    .cartoes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; margin-bottom: 1.6rem; }
-    .kpi { padding: .7rem .8rem; }
-    .kpi b { font-size: 1.3rem; }
-    .kpi span { display: block; margin-top: .2rem; font-size: .54rem; line-height: 1.4; letter-spacing: .12em; }
-    .abas { gap: 0; margin-bottom: 1.1rem; }
-    .aba { flex: 1 1 0; padding: .9rem .3rem; letter-spacing: .08em; line-height: 1.3; white-space: normal; }
-    .barra input[type=search] { flex-basis: 100%; min-width: 0; }
-    .barra .mini { flex: 1; }
-    .mini { min-height: 2.75rem; padding: .7rem .8rem; text-align: center; }
-
-    .tabela-wrap { overflow: visible; border: 0; background: none; }
-    table { min-width: 0; }
-    table, tbody, tr, td { display: block; }
-    thead { display: none; }
-    tr { background: #fff; border: 1px solid rgba(139,94,60,.14); padding: .6rem .9rem .8rem; margin-bottom: .6rem; }
-    tr:last-child td { border-bottom: 0; }
-    td { border: 0; padding: .35rem 0; }
-    td[data-rotulo] { display: grid; grid-template-columns: 6.6rem minmax(0, 1fr); gap: .7rem; align-items: baseline; }
-    td[data-rotulo]::before {
-      content: attr(data-rotulo); font: 400 .56rem/1.6 var(--sans);
-      letter-spacing: .14em; text-transform: uppercase; color: var(--madeira);
-    }
-    .msg { max-width: none; }
-    td[data-rotulo] > .tag { justify-self: start; }
-    .acoes { padding-top: .5rem; gap: .4rem; }
-    .acoes .mini { flex: 1 1 auto; }
-    td.vazio { padding: 2rem .5rem; }
-  }
-
-  .login { min-height: 100svh; display: grid; place-items: center; padding: 2rem var(--gutter); background: var(--floresta); }
-  .login__caixa { width: min(100%, 24rem); background: var(--marfim-claro); padding: clamp(1.8rem,6vw,2.6rem); text-align: center; }
-  .aviso-modo { margin: 0 0 1.6rem; padding: .8rem 1rem; background: #FAF2E9; border: 1px solid #DCC2A4;
-    font: 300 .78rem/1.6 var(--sans); color: var(--madeira); }
-</style>
+<link rel="stylesheet" href="css/admin.css?v=admin-mobile-1">
 </head>
 <body>
 
 <!-- ------------------------------------------------------------- login -->
 <div class="login" id="tela-login">
   <div class="login__caixa">
-    <span class="mono mono--madeira" style="width:7.5rem" role="img" aria-label="Monograma de Mozar e Eduarda"></span>
-    <h1 class="titulo" style="font-size:1rem;margin:1rem 0 .4rem">Painel dos noivos</h1>
-    <p class="texto" style="margin-bottom:1.8rem">Mozar &amp; Eduarda · 02 · 10 · 2027</p>
+    <img class="login__lacre" src="img/lacre-me-bronze.webp" width="640" height="640" alt="">
+    <h1 class="login__titulo">Painel dos noivos</h1>
+    <p class="texto login__data">Mozar &amp; Eduarda · 02 · 10 · 2027</p>
 
     <p class="aviso-modo" id="aviso-local" hidden>
       Modo local: os dados estão só neste navegador. Configure o Firebase em
@@ -146,7 +51,13 @@
 <div id="tela-painel" hidden>
   <header class="topo">
     <div class="container">
-      <h1>Painel · Mozar &amp; Eduarda</h1>
+      <div class="topo__marca">
+        <img src="img/lacre-me-bronze.webp" width="640" height="640" alt="">
+        <div>
+          <h1>Painel dos noivos</h1>
+          <p>Mozar &amp; Eduarda</p>
+        </div>
+      </div>
       <button type="button" id="sair">Sair</button>
     </div>
   </header>
@@ -154,43 +65,48 @@
   <main class="painel">
     <div class="container">
 
-      <div class="cartoes" id="kpis"></div>
+      <section aria-labelledby="titulo-resumo">
+        <div class="resumo__topo">
+          <h2 id="titulo-resumo">Resumo</h2>
+          <button class="mini" type="button" id="recarregar">Atualizar</button>
+        </div>
+        <div class="cartoes" id="kpis"></div>
+      </section>
 
-      <div class="abas" role="tablist">
-        <button class="aba" role="tab" data-aba="presentes" aria-selected="true">Presentes</button>
-        <button class="aba" role="tab" data-aba="rsvps" aria-selected="false">Confirmações</button>
-        <button class="aba" role="tab" data-aba="lista" aria-selected="false">Status da lista</button>
+      <div class="abas" role="tablist" aria-label="Seções do painel">
+        <button class="aba" id="aba-presentes" type="button" role="tab" data-aba="presentes" aria-controls="painel-presentes" aria-selected="true" tabindex="0">Presentes</button>
+        <button class="aba" id="aba-rsvps" type="button" role="tab" data-aba="rsvps" aria-controls="painel-rsvps" aria-selected="false" tabindex="-1">Presenças</button>
+        <button class="aba" id="aba-lista" type="button" role="tab" data-aba="lista" aria-controls="painel-lista" aria-selected="false" tabindex="-1">Lista de presentes</button>
       </div>
 
       <!-- presentes recebidos -->
-      <section id="painel-presentes">
+      <section id="painel-presentes" role="tabpanel" aria-labelledby="aba-presentes">
         <div class="barra">
-          <input type="search" id="busca-presentes" placeholder="Buscar por convidado ou presente…">
+          <input type="search" id="busca-presentes" aria-label="Buscar por convidado ou presente" placeholder="Buscar por convidado ou presente…">
           <button class="mini" type="button" data-csv="presentes">Baixar CSV</button>
-          <button class="mini" type="button" id="recarregar">Atualizar</button>
         </div>
-        <div class="tabela-wrap"><table id="tab-presentes"></table></div>
+        <div class="tabela-wrap"><table id="tab-presentes" role="table"></table></div>
       </section>
 
       <!-- rsvps -->
-      <section id="painel-rsvps" hidden>
+      <section id="painel-rsvps" role="tabpanel" aria-labelledby="aba-rsvps" hidden>
         <div class="barra">
-          <input type="search" id="busca-rsvps" placeholder="Buscar convidado…">
+          <input type="search" id="busca-rsvps" aria-label="Buscar convidado" placeholder="Buscar convidado…">
           <button class="mini" type="button" data-csv="rsvps">Baixar CSV</button>
         </div>
-        <div class="tabela-wrap"><table id="tab-rsvps"></table></div>
+        <div class="tabela-wrap"><table id="tab-rsvps" role="table"></table></div>
       </section>
 
       <!-- status da lista -->
-      <section id="painel-lista" hidden>
+      <section id="painel-lista" role="tabpanel" aria-labelledby="aba-lista" hidden>
         <div class="barra">
-          <input type="search" id="busca-lista" placeholder="Buscar presente…">
+          <input type="search" id="busca-lista" aria-label="Buscar presente" placeholder="Buscar presente…">
           <p class="texto">
             Exclua da lista os presentes que não quiserem (dá para restaurar depois), libere um
             presente de volta ou marque como recebido.
           </p>
         </div>
-        <div class="tabela-wrap"><table id="tab-lista"></table></div>
+        <div class="tabela-wrap"><table id="tab-lista" role="table"></table></div>
       </section>
 
     </div>
@@ -199,6 +115,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/admin.js?v=202611251641"></script>
+<script type="module" src="js/admin.js?v=admin-mobile-1"></script>
 </body>
 </html>
