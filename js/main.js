@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251317';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251317';
-import * as DB from './db.js?v=202611251317';
+import { CASAMENTO } from './config.js?v=202611251351';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251351';
+import * as DB from './db.js?v=202611251351';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -375,9 +375,40 @@ function modal() {
 }
 
 /* ------------------------------------------------------------------- rsvp */
+/* O aparelho lembra a última resposta: quem volta ao convite vê o agradecimento
+   em vez de um formulário em branco, e pode mudar a resposta com nome e contato
+   já preenchidos — o mesmo contato é o que o painel usa para juntar os envios. */
+const RSVP_SALVO = 'me:rsvp';
+
+function mostrarResposta(r, jaEnviada) {
+  const box = $('#sucesso-rsvp');
+  const nome = String(r.nome || '').split(' ')[0];
+  box.querySelector('.script').textContent = r.presenca === 'nao'
+    ? (jaEnviada ? 'Você já nos avisou.' : 'Vamos sentir sua falta.')
+    : (jaEnviada ? 'Presença já confirmada.' : 'Presença confirmada.');
+  box.querySelector('.texto').textContent = r.presenca === 'nao'
+    ? 'Obrigado por avisar' + (nome ? ', ' + nome : '') + '. Você estará com a gente de outro jeito. ♡'
+    : 'Esperamos você' + (nome ? ', ' + nome + ',' : '') + ' para celebrar esse dia com a gente. ♡';
+  $('#form-rsvp').hidden = true;
+  box.hidden = false;
+}
+
 function rsvp() {
   const f = $('#form-rsvp');
   const campoAcomp = $('#campo-acompanhantes');
+
+  let salvo = null;
+  try { salvo = JSON.parse(localStorage.getItem(RSVP_SALVO)); } catch (e) { /* sem armazenamento: formulário normal */ }
+  if (salvo && salvo.nome) mostrarResposta(salvo, true);
+
+  $('#rsvp-mudar').addEventListener('click', () => {
+    const s = salvo || {};
+    f.nome.value = s.nome || '';
+    f.contato.value = s.contato || '';
+    $('#sucesso-rsvp').hidden = true;
+    f.hidden = false;
+    f.nome.focus();
+  });
 
   $$('input[name=presenca]', f).forEach((r) =>
     r.addEventListener('change', () => { campoAcomp.hidden = f.presenca.value === 'nao'; }));
@@ -405,14 +436,10 @@ function rsvp() {
     btn.disabled = false; btn.textContent = 'Enviar confirmação';
     if (!r.ok) { erro.textContent = 'Não conseguimos enviar agora. Tente novamente em instantes.'; return; }
 
-    const box = $('#sucesso-rsvp');
-    if (f.presenca.value === 'nao') {
-      box.querySelector('.script').textContent = 'Vamos sentir sua falta.';
-      box.querySelector('.texto').textContent = 'Obrigado por avisar. Você estará com a gente de outro jeito. ♡';
-    }
-    f.hidden = true;
-    box.hidden = false;
-    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    salvo = { nome, contato, presenca: f.presenca.value };
+    try { localStorage.setItem(RSVP_SALVO, JSON.stringify(salvo)); } catch (err) { /* só não lembra */ }
+    mostrarResposta(salvo, false);
+    $('#sucesso-rsvp').scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 }
 

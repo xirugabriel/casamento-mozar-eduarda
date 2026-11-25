@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251317';
-import * as DB from './db.js?v=202611251317';
+import { PRESENTES } from './data.js?v=202611251351';
+import * as DB from './db.js?v=202611251351';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -58,9 +58,30 @@ async function carregar() {
     DB.listarRsvps().catch(() => []),
   ]);
   estado.registros = registros;
-  estado.rsvps = rsvps;
+  estado.rsvps = marcarSubstituidas(rsvps);
   render();
 }
+
+/* Mesmo contato = mesma pessoa: vale a resposta mais recente, as anteriores ficam
+   à vista como "Substituída" e saem das contas e do CSV. A lista chega da mais
+   nova para a mais antiga. */
+export function chaveContato(c) {
+  const s = String(c || '').trim().toLowerCase();
+  if (s.includes('@')) return s;
+  const d = s.replace(/\D/g, '');
+  return d.length >= 12 && d.startsWith('55') ? d.slice(2) : d;   // +55 opcional
+}
+
+function marcarSubstituidas(lista) {
+  const vistos = new Set();
+  return lista.map((r) => {
+    const k = chaveContato(r.contato);
+    const substituida = !!k && vistos.has(k);
+    vistos.add(k);
+    return Object.assign({}, r, { substituida });
+  });
+}
+const validas = () => estado.rsvps.filter((r) => !r.substituida);
 
 function render() {
   kpis();
@@ -71,7 +92,7 @@ function render() {
 
 /* -------------------------------------------------------------------- kpi */
 function kpis() {
-  const sim = estado.rsvps.filter((r) => r.presenca !== 'nao');
+  const sim = validas().filter((r) => r.presenca !== 'nao');
   const pessoas = sim.reduce((t, r) => t + 1 + (Number(r.acompanhantes) || 0), 0);
   const escolhidos = Object.values(estado.status).filter(DB.ocupado).length;
   const soma = (l) => l.reduce((t, r) => t + (Number(r.valor) || 0), 0);
@@ -81,7 +102,7 @@ function kpis() {
   $('#kpis').innerHTML = [
     ['Confirmações', sim.length],
     ['Pessoas esperadas', pessoas],
-    ['Não poderão ir', estado.rsvps.length - sim.length],
+    ['Não poderão ir', validas().length - sim.length],
     ['Presentes escolhidos', escolhidos + ' / ' + PRESENTES.filter((p) => !p.multiplo).length],
     ['Recebido no Pix', brl(pixTotal)],
     ['Recebido no total', brl(pixConfirmado)],
@@ -140,8 +161,8 @@ function tabelaRsvps() {
         <td>${esc(data(r.em))}</td>
         <td class="nome">${esc(r.nome)}</td>
         <td>${esc(r.contato)}</td>
-        <td>${r.presenca === 'nao'
-          ? '<span class="tag tag--nao">Não vai</span>'
+        <td>${r.substituida ? '<span class="tag tag--espera">Substituída</span>'
+          : r.presenca === 'nao' ? '<span class="tag tag--nao">Não vai</span>'
           : '<span class="tag tag--ok">Confirmado</span>'}</td>
         <td>${esc(r.acompanhantes || 0)}</td>
         <td class="msg">${esc(r.mensagem) || '—'}</td>
@@ -182,7 +203,7 @@ function csv(qual) {
   if (qual === 'rsvps') {
     nome = 'confirmacoes';
     cab = ['Quando', 'Convidado', 'Contato', 'Vai', 'Acompanhantes', 'Mensagem'];
-    linhas = estado.rsvps.map((r) => [data(r.em), r.nome, r.contato,
+    linhas = validas().map((r) => [data(r.em), r.nome, r.contato,
       r.presenca === 'nao' ? 'Não' : 'Sim', r.acompanhantes || 0, r.mensagem]);
   } else {
     nome = 'presentes';
