@@ -835,7 +835,8 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 
 /* =========================================================== >= 1000px */
 @media (min-width: 1000px) {
-  .folha--hero-se { top: 2.6rem; left: -2.5rem; width: clamp(380px, 39vw, 680px); }
+  /* A borda reta do recorte encosta no topo da capa, atrás do menu. */
+  .folha--hero-se { top: 0; left: -2.5rem; width: clamp(360px, 36vw, 620px); }
   .folha--hero-d { top: 12%; right: -1.5rem; width: clamp(200px, 20vw, 330px); opacity: .76; }
   .folha--hero-ib { left: -2rem; bottom: 0; width: clamp(260px, 29vw, 490px); opacity: .7; }
   .folha--hero-id { right: -2rem; bottom: 0; width: clamp(220px, 24vw, 420px); opacity: .64; }
