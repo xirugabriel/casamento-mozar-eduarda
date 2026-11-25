@@ -811,8 +811,9 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 
 /* ============================================================ >= 680px */
 @media (min-width: 680px) {
-  .rsvp__grade { grid-template-columns: .9fr 1.1fr; align-items: stretch; }
-  .rsvp__corpo { text-align: left; }
+  .rsvp__grade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rsvp__foto picture { width: 100%; }
+  .rsvp__corpo { display: grid; align-content: center; text-align: left; }
   .seta { display: grid; }
   .seta--esq { left: -1.2rem; }
   .seta--dir { right: -1.2rem; }
