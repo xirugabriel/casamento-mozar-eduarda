@@ -1,7 +1,7 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=dizeres-1';
+import { CASAMENTO } from './config.js?v=artes-locais-1';
 import { PRESENTES, CATEGORIAS } from './data.js?v=202611241839';
 import { gerarPix, desenharQR } from './pix.js?v=202611241839';
 import * as DB from './db.js?v=202611241839';

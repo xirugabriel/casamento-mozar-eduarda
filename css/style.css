@@ -471,8 +471,8 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 /* no celular, cerimônia e recepção ficam uma embaixo da outra;
    a partir de 1040px viram as quatro faixas da arte aprovada. */
 .locais { display: grid; background: var(--marfim); }
-.locais__foto { margin: 0; }
-.locais__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; filter: saturate(.95); }
+.locais__foto { margin: 0; display: grid; place-items: center; }
+.locais__foto img { width: 100%; height: auto; }
 .locais__texto {
   /* topo alinhado em vez de centrado: as duas colunas têm volumes diferentes de
      texto, e centrar deixava título e botão em alturas diferentes lado a lado */
@@ -737,8 +737,9 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 /* ------------------------------------------------------------------ RSVP */
 .rsvp { position: relative; isolation: isolate; padding: 0; overflow: hidden; background: var(--marfim); }
 .rsvp__grade { display: grid; }
-.rsvp__foto { margin: 0; }
-.rsvp__foto img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 5 / 3; }
+.rsvp__foto { margin: 0; display: grid; place-items: center; }
+.rsvp__foto picture { display: block; width: min(100%, 38rem); }
+.rsvp__foto img { width: 100%; height: auto; }
 .rsvp__corpo { padding: clamp(2.8rem, 10vw, 5rem) var(--gutter); background: var(--marfim-claro); }
 .rsvp__conteudo { width: min(100%, 30rem); margin-inline: auto; }
 .rsvp__intro { margin: 1rem 0 clamp(1.5rem, 5vw, 2rem); }
@@ -799,7 +800,6 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   .locais > *:nth-child(2) { grid-area: 2 / 1; }
   .locais > *:nth-child(3) { grid-area: 1 / 2; }
   .locais > *:nth-child(4) { grid-area: 2 / 2; border-left: 1px solid var(--linha); }
-  .locais__foto img { aspect-ratio: 3 / 2; }
 }
 
 /* ============= >= 1040px: as quatro faixas da arte (foto, texto, foto, texto)
@@ -807,13 +807,11 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 @media (min-width: 1040px) {
   .locais { grid-template-columns: 1.4fr 1fr 1.4fr 1fr; }
   .locais__texto { padding-inline: clamp(1rem, 2.3vw, 2rem); }
-  .locais__foto img { height: 100%; aspect-ratio: auto; min-height: 26rem; }
 }
 
 /* ============================================================ >= 680px */
 @media (min-width: 680px) {
   .rsvp__grade { grid-template-columns: .9fr 1.1fr; align-items: stretch; }
-  .rsvp__foto img { aspect-ratio: auto; min-height: 100%; }
   .rsvp__corpo { text-align: left; }
   .seta { display: grid; }
   .seta--esq { left: -1.2rem; }

@@ -29,7 +29,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=dizeres-1">
+<link rel="stylesheet" href="css/style.css?v=artes-locais-1">
 <!-- envelope de abertura: decidido aqui, antes da primeira pintura, para a capa não
      piscar por baixo. Só na primeira visita — quem volta para o Pix ou o RSVP entra
      direto. Sem localStorage, ou sem este script, o convite abre sem envelope. -->
@@ -148,7 +148,7 @@
   <div class="locais">
 
     <figure class="locais__foto">
-      <img id="foto-cerimonia" src="img/identidade/igreja.webp" alt="Capela onde será a cerimônia." loading="lazy">
+      <img id="foto-cerimonia" src="img/identidade/cerimonia-aquarela.webp" width="1448" height="1086" alt="Aquarela da Matriz Paróquia São Pedro Apóstolo." loading="lazy">
     </figure>
 
     <div class="locais__texto">
@@ -173,7 +173,7 @@
     </div>
 
     <figure class="locais__foto" id="recepcao">
-      <img id="foto-recepcao" src="img/identidade/recepcao.webp" alt="Espaço da recepção." loading="lazy">
+      <img id="foto-recepcao" src="img/identidade/recepcao-aquarela.webp" width="1448" height="1086" alt="Aquarela do espaço da recepção, com luzes entre as árvores." loading="lazy">
     </figure>
 
     <div class="locais__texto">
@@ -246,7 +246,11 @@
   <div class="rsvp__grade">
 
     <figure class="rsvp__foto">
-      <img src="img/identidade/rsvp.webp" alt="Cartão de confirmação de presença." loading="lazy">
+      <picture>
+        <source media="(max-width: 679px)" srcset="img/identidade/rsvp-horizontal.webp" width="1200" height="800">
+        <img src="img/identidade/rsvp-vertical.webp" width="900" height="1200"
+             alt="Confirme sua presença. Sua presença torna tudo mais especial." loading="lazy">
+      </picture>
     </figure>
 
     <div class="rsvp__corpo">
@@ -421,6 +425,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script type="module" src="js/main.js?v=dizeres-1"></script>
+<script type="module" src="js/main.js?v=artes-locais-1"></script>
 </body>
 </html>
