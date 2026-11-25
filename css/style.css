@@ -325,7 +325,24 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 
 @media (max-width: 759px), (pointer: coarse) and (max-height: 600px) {
   html.com-envelope, html.com-envelope body { background-color: var(--floresta) !important; }
-  .com-envelope .envelope { appearance: none; border-radius: 0; height: 100%; height: 100dvh; }
+  .com-envelope .envelope { appearance: none; border-radius: 0; }
+  /* O Safari pode compor as barras fora do conteúdo. Faça a arte chegar
+     ao mesmo verde sólido da página antes de encontrar as barras. */
+  .envelope::before, .envelope::after {
+    mask-image: linear-gradient(
+      transparent, #000 calc(env(safe-area-inset-top, 0px) + 3rem),
+      #000 calc(100% - env(safe-area-inset-bottom, 0px) - 3rem), transparent
+    );
+  }
+  .envelope__aba {
+    top: calc(-1 * env(safe-area-inset-top, 0px));
+    height: calc(50% + env(safe-area-inset-top, 0px));
+    mask-image: linear-gradient(transparent, #000 calc(env(safe-area-inset-top, 0px) + 3rem));
+  }
+  .envelope > .folha {
+    bottom: calc(env(safe-area-inset-bottom, 0px) + .75rem);
+    mask-image: linear-gradient(#000 65%, transparent);
+  }
   .envelope__miolo { padding-inline: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right)); }
 }
 @media (pointer: coarse) and (max-height: 480px) {
