@@ -13,7 +13,6 @@ export const CASAMENTO = {
 
   // A frase do casamento dos pais do Mozar. Duas linhas.
   frase: ['Que esse seja o nosso destino...', 'amar, viver e começar cada dia junto.'],
-  fraseCredito: 'A mesma frase que marcou o início da história dos nossos pais agora acompanha o início da nossa…',
 
   /* Dizeres em versalete que aparecem nas laterais (como na arte aprovada) */
   dizeres: {

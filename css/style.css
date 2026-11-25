@@ -274,9 +274,9 @@ button { font: inherit; color: inherit; }
 /* abertura: entra por CSS no carregamento, sem esperar o JS — o convite aparece
    mesmo em conexão lenta e a rolagem fica livre desde o primeiro instante.
    Lacre em ~0,5s, depois nomes, data e cidade juntos, depois a frase inteira. */
-.hero__conteudo > * { animation: surgir .7s cubic-bezier(.22, 1, .36, 1) .45s both; }
-.hero__mono { animation-duration: .5s; animation-delay: .05s; }
-.hero__frase, .hero__creditofrase { animation-delay: .95s; }
+.hero__conteudo > * { animation: surgir .7s cubic-bezier(.22, 1, .36, 1) .16s both; }
+.hero__mono { animation-duration: .5s; animation-delay: 0s; }
+.hero__frase, .hero__creditofrase { animation-delay: .42s; }
 @keyframes surgir { from { opacity: 0; transform: translateY(12px); } }
 
 /* envelope de abertura (primeira visita): cobre a tela até o toque. A capa fica
@@ -287,9 +287,6 @@ button { font: inherit; color: inherit; }
 }
 html.com-envelope { overflow: hidden; }
 html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
-.com-envelope .hero__conteudo > * { animation-delay: .16s; }
-.com-envelope .hero__mono { animation-delay: 0s; }
-.com-envelope .hero__frase, .com-envelope .hero__creditofrase { animation-delay: .42s; }
 .com-envelope .envelope {
   position: fixed; inset: 0; z-index: 200; isolation: isolate; overflow: hidden;
   display: block; width: 100%; margin: 0; padding: 0; border: 0;
