@@ -32,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Lato:wght@300;400;700&family=Allura&display=swap">
-<link rel="stylesheet" href="css/style.css?v=202611251641">
+<link rel="stylesheet" href="css/style.css?v=altura-estavel-1">
 <!-- o envelope é a primeira coisa na tela: a textura (fundo do CSS) só seria
      descoberta depois do CSS; pedida aqui, chega junto com o envelope -->
 <link rel="preload" as="image" href="img/identidade/fibra-aba.webp" fetchpriority="high">
@@ -49,6 +49,10 @@
     history.scrollRestoration = 'manual';
     if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
   }
+  function voltarAoTopo() {
+    document.body.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
   h.classList.add('com-envelope');
   document.addEventListener('click', function abrir(ev) {
     if (!ev.target.closest('#envelope')) return;
@@ -56,12 +60,12 @@
     var calmo = matchMedia('(prefers-reduced-motion: reduce)').matches;
     h.classList.add('abrindo');                       // lacre solta, aba abre
     setTimeout(function () {
-      if (recarregou) window.scrollTo({ top: 0, behavior: 'instant' });
+      if (recarregou) voltarAoTopo();
       h.classList.add('aberto');                    // envelope esmaece, capa entra
     }, calmo ? 0 : 700);
     setTimeout(function () {
       h.classList.remove('com-envelope', 'abrindo', 'aberto');
-      if (recarregou) window.scrollTo({ top: 0, behavior: 'instant' });
+      if (recarregou) voltarAoTopo();
       document.getElementById('envelope').remove();
     }, calmo ? 600 : 1300);
   });
@@ -423,6 +427,6 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/main.js?v=202611251641"></script>
+<script type="module" src="js/main.js?v=altura-estavel-1"></script>
 </body>
 </html>

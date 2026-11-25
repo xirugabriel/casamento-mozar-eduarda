@@ -66,6 +66,19 @@ body {
   overflow-x: hidden;
 }
 
+/* No iPhone, a rolagem do conteúdo usa a altura com as barras abertas.
+   Assim, a barra do navegador não recalcula o fim da página durante o gesto. */
+@supports (-webkit-touch-callout: none) and (height: 100svh) {
+  @media (hover: none) and (pointer: coarse) {
+    html, html body { height: 100svh; overflow: hidden; }
+    html body {
+      overflow-y: auto; overscroll-behavior-y: none;
+      scroll-behavior: inherit; scroll-padding-top: inherit;
+    }
+    html.com-envelope body { overflow-y: hidden; }
+  }
+}
+
 img { max-width: 100%; height: auto; display: block; }
 [hidden] { display: none !important; }
 a { color: inherit; }
@@ -231,7 +244,7 @@ button { font: inherit; color: inherit; }
   /* viewport-fit=cover pinta até as bordas; o recuo tira o conteúdo de baixo
      do notch sem tirar o verde de lá */
   padding: calc(clamp(6rem, 18vw, 8rem) + env(safe-area-inset-top)) var(--gutter)
-           calc(clamp(4.5rem, 12vw, 6rem) + env(safe-area-inset-bottom));
+           calc(clamp(4.5rem, 12vw, 6rem) + env(safe-area-max-inset-bottom, 0px));
   background: var(--floresta); color: var(--marfim);
   text-align: center; overflow: hidden;
 }
@@ -297,7 +310,7 @@ button { font: inherit; color: inherit; }
 
 .hero__scroll {
   position: absolute; left: 50%; z-index: 2;
-  bottom: calc(clamp(1.3rem, 4vw, 2.2rem) + env(safe-area-inset-bottom));
+  bottom: calc(clamp(1.3rem, 4vw, 2.2rem) + env(safe-area-max-inset-bottom, 0px));
   translate: -50% 0;
   color: rgba(212, 175, 124, .8); text-decoration: none;
 }

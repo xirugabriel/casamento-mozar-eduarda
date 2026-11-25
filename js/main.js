@@ -63,7 +63,8 @@ function barrasDoSistema() {
   let atual = '';
 
   function aplicar() {
-    const cor = window.scrollY < hero.offsetHeight - 4 ? VERDE : MARFIM;
+    const posicao = window.scrollY || document.body.scrollTop;
+    const cor = posicao < hero.offsetHeight - 4 ? VERDE : MARFIM;
     if (cor === atual) return;
     atual = cor;
     if (meta) meta.setAttribute('content', cor);
@@ -76,6 +77,7 @@ function barrasDoSistema() {
 
   aplicar();
   window.addEventListener('scroll', aplicar, { passive: true });
+  document.body.addEventListener('scroll', aplicar, { passive: true });
   window.addEventListener('resize', aplicar);
 }
 
