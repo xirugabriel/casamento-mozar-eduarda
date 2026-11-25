@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251605';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251605';
-import * as DB from './db.js?v=202611251605';
+import { CASAMENTO } from './config.js?v=202611251615';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251615';
+import * as DB from './db.js?v=202611251615';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -217,6 +217,7 @@ function renderPresentes() {
   const trilho = $('#trilho-presentes');
   const lista = PRESENTES
     .filter((p) => estado.filtro === 'todos' || p.categoria === estado.filtro)
+    .filter((p) => !(estado.status[p.id] && estado.status[p.id].status === 'oculto'))   // excluídos no painel
     .sort((a, b) => Number(ocupado(a)) - Number(ocupado(b)));   // disponíveis primeiro
 
   trilho.innerHTML = lista.length
@@ -259,7 +260,7 @@ function carrosselAtualizar() {
   $('#seta-esq').disabled = trilho.scrollLeft <= 4;
   $('#seta-dir').disabled = trilho.scrollLeft >= trilho.scrollWidth - trilho.clientWidth - 4;
 
-  pontos.hidden = paginas < 2;
+  pontos.hidden = paginas < 2 || paginas > 12;   // lista longa: setas e deslizar bastam
   if (pontos.childElementCount !== paginas) {
     pontos.innerHTML = Array.from({ length: paginas }, (_, i) =>
       `<button class="ponto" type="button" data-pagina="${i}" aria-label="Página ${i + 1}"></button>`).join('');

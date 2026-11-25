@@ -74,8 +74,9 @@ export const pagar = onRequest({ ...opcoes, cors: ORIGENS }, async (req, res) =>
   try {
     await db.runTransaction(async (tx) => {
       const ref = db.doc('presentes/' + p.id);
+      const st = (await tx.get(ref)).data();
+      if (st && st.status === 'oculto') throw new Error('ocupado');   // excluído da lista no painel
       if (!p.multiplo) {
-        const st = (await tx.get(ref)).data();
         if (ocupado(st)) throw new Error('ocupado');
         tx.set(ref, { status: 'reservado', ate, pedido: pedido.id });
       }

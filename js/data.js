@@ -1,32 +1,133 @@
 /* =============================================================
    LISTA DE PRESENTES
-   tipo: 'fisico' (loja + Pix) | 'cota' (só Pix) | 'livre' (valor aberto)
-   categoria: 'casa' | 'lua-de-mel' | 'experiencias' | 'livre'
-   link: URL do produto na loja (Mercado Livre, Amazon...)
-   img:  foto do presente em img/presentes/  (enquanto não houver, usa o placeholder)
+   Todos são contribuições em dinheiro pagas pela lojinha (InfinitePay).
+   O id sai do nome: renomear um presente muda o id — faça isso antes de
+   alguém presentear. Para tirar um presente do site sem apagar daqui, use
+   "Excluir da lista" no painel.
+   img: foto em img/presentes/ (enquanto não houver, usa o placeholder)
+   Este arquivo também vai para o servidor a cada deploy (preço conferido lá).
    ============================================================= */
 
 const PH = 'img/presentes/_placeholder.svg';
 
+const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
+  .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const lista = (categoria, itens) => itens.map(([nome, preco]) =>
+  ({ id: slug(nome), nome, categoria, tipo: 'cota', preco, img: PH }));
+
 export const PRESENTES = [
-  // ---------- CASA ----------
-  { id: 'jogo-panelas',  nome: 'Jogo de panelas',       categoria: 'casa', tipo: 'fisico', preco: 699.00, img: PH, link: '' },
-  { id: 'cafeteira',     nome: 'Cafeteira',             categoria: 'casa', tipo: 'fisico', preco: 399.00, img: PH, link: '' },
-  { id: 'jogo-cama',     nome: 'Jogo de cama',          categoria: 'casa', tipo: 'fisico', preco: 350.00, img: PH, link: '' },
-  { id: 'jogo-jantar',   nome: 'Aparelho de jantar',    categoria: 'casa', tipo: 'fisico', preco: 480.00, img: PH, link: '' },
-  { id: 'liquidificador',nome: 'Liquidificador',        categoria: 'casa', tipo: 'fisico', preco: 260.00, img: PH, link: '' },
-  { id: 'toalhas',       nome: 'Jogo de toalhas',       categoria: 'casa', tipo: 'fisico', preco: 220.00, img: PH, link: '' },
+  ...lista('casa', [
+    ['Geladeira frost free', 3000],
+    ['Lava-louças', 2900],
+    ['Smart TV para a sala', 2800],
+    ['Ar-condicionado do quarto', 2600],
+    ['Máquina de lavar roupa', 2500],
+    ['Ajuda no colchão novo', 2400],
+    ['Ajuda no sofá novo', 2000],
+    ['Fogão de 5 bocas', 1800],
+    ['Aspirador robô', 1500],
+    ['Adega climatizada', 1300],
+    ['Cafeteira expresso', 900],
+    ['Tapete da sala', 900],
+    ['Purificador de água', 800],
+    ['Micro-ondas', 700],
+    ['Jogo de panelas antiaderente', 700],
+    ['Aspirador vertical', 650],
+    ['Batedeira planetária', 600],
+    ['Cortinas da sala', 600],
+    ['Caixa de som para a casa', 600],
+    ['Aparelho de jantar completo', 550],
+    ['Panela de pressão elétrica', 500],
+    ['Air fryer', 450],
+    ['Processador de alimentos', 450],
+    ['Jogo de cama queen', 450],
+    ['Faqueiro inox', 400],
+    ['Roupões do casal', 400],
+    ['Edredom para o inverno', 380],
+    ['Jogo de facas do chef', 350],
+    ['Luminária de chão', 350],
+    ['Travesseiros de pluma (o par)', 320],
+    ['Taças de cristal', 300],
+    ['Kit de ferramentas da casa', 300],
+    ['Mesa posta completa', 280],
+    ['Liquidificador', 250],
+    ['Jogo de toalhas de banho', 250],
+    ['Ferro a vapor', 220],
+    ['Sanduicheira e grill', 200],
+    ['Potes herméticos para a despensa', 180],
+    ['Chaleira elétrica', 180],
+    ['Torradeira', 160],
+  ]),
 
-  // ---------- LUA DE MEL ----------
-  { id: 'passeio-lua',   nome: 'Um passeio na lua de mel',        categoria: 'lua-de-mel', tipo: 'cota', preco: 250.00, img: PH },
-  { id: 'jantar-viagem', nome: 'Um jantar especial na viagem',    categoria: 'lua-de-mel', tipo: 'cota', preco: 200.00, img: PH },
-  { id: 'diaria-hotel',  nome: 'Uma diária no hotel',             categoria: 'lua-de-mel', tipo: 'cota', preco: 600.00, img: PH },
-  { id: 'cafe-manha',    nome: 'Um café da manhã com vista',      categoria: 'lua-de-mel', tipo: 'cota', preco: 120.00, img: PH },
+  ...lista('lua-de-mel', [
+    ['Passagens da lua de mel', 3000],
+    ['Passeio de helicóptero', 2500],
+    ['Voo de balão ao amanhecer', 1800],
+    ['Upgrade para o quarto com vista', 1200],
+    ['Ensaio fotográfico na viagem', 1000],
+    ['Noite em cabana na montanha', 900],
+    ['Uma diária no hotel', 800],
+    ['Mergulho com cilindro', 700],
+    ['Day use em resort', 700],
+    ['Mala de viagem nova', 650],
+    ['Passeio de barco', 600],
+    ['Ingressos para um show na viagem', 600],
+    ['Tour por uma vinícola', 550],
+    ['Massagem para dois', 500],
+    ['Jantar romântico à beira-mar', 450],
+    ['Seguro viagem', 400],
+    ['Aula de culinária local', 350],
+    ['Aluguel de carro por um dia', 300],
+    ['Piquenique ao pôr do sol', 250],
+    ['Transfer do aeroporto', 200],
+    ['Drinks na beira da piscina', 180],
+    ['Café da manhã na cama', 150],
+    ['Lembrancinhas da viagem', 150],
+    ['Passeio de bicicleta', 120],
+    ['Sorvete todos os dias da viagem', 100],
+  ]),
 
-  // ---------- EXPERIÊNCIAS ----------
-  { id: 'flutuacao',     nome: 'Uma flutuação em Bonito',         categoria: 'experiencias', tipo: 'cota', preco: 300.00, img: PH },
-  { id: 'dia-spa',       nome: 'Um dia de spa para os dois',      categoria: 'experiencias', tipo: 'cota', preco: 450.00, img: PH },
-  { id: 'brinde',        nome: 'Um brinde por nós',               categoria: 'experiencias', tipo: 'cota', preco:  80.00, img: PH },
+  ...lista('experiencias', [
+    ['Abismo Anhumas em Bonito', 1600],
+    ['Fim de semana em uma pousada', 1500],
+    ['Curso de dança a dois', 800],
+    ['Show da nossa banda favorita', 700],
+    ['Churrasco para os amigos', 700],
+    ['Spa day para os dois', 600],
+    ['Jantar de um ano de casados', 600],
+    ['Cinema com pipoca (10 sessões)', 500],
+    ['Streaming por um ano', 450],
+    ['Flutuação no Rio da Prata', 400],
+    ['Jantar no nosso restaurante preferido', 400],
+    ['Degustação de vinhos', 400],
+    ['Cachoeiras da Estância Mimosa', 350],
+    ['Garrafa de vinho especial', 300],
+    ['Passeio a cavalo', 300],
+    ['Boia-cross no Rio Formoso', 250],
+    ['Rodízio de sushi a dois', 250],
+    ['Noite de fondue', 220],
+    ['Gruta do Lago Azul', 200],
+    ['Brunch de domingo', 180],
+  ]),
+
+  ...lista('divertidos', [
+    ['Fundo para a primeira reforma', 3000],
+    ['Viagem de um ano de casados', 2000],
+    ['Primeiro mercado da casa nova', 800],
+    ['Ração e petiscos das cachorras (3 meses)', 600],
+    ['Ajuda para o primeiro boleto', 500],
+    ['Café das segundas-feiras por um ano', 500],
+    ['Pizza de domingo por um mês', 400],
+    ['Conserto do primeiro cano que vazar', 350],
+    ['Conta de luz do ar-condicionado', 300],
+    ['Aulas de culinária para o noivo', 300],
+    ['Fundo da geladeira vazia', 250],
+    ['Plantas para a casa nova', 220],
+    ['Banho e tosa das cachorras', 200],
+    ['Kit sobrevivência da primeira briga', 150],
+    ['A noiva escolhe o filme da semana', 100],
+  ]),
 
   // ---------- PRESENTE LIVRE ----------
   { id: 'presente-livre', nome: 'Presente livre', categoria: 'livre', tipo: 'livre', multiplo: true, img: PH,
@@ -38,5 +139,6 @@ export const CATEGORIAS = [
   { id: 'casa',         label: 'Casa' },
   { id: 'lua-de-mel',   label: 'Lua de mel' },
   { id: 'experiencias', label: 'Experiências' },
+  { id: 'divertidos',   label: 'Divertidos' },
   { id: 'livre',        label: 'Presente livre' },
 ];

@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251605';
-import * as DB from './db.js?v=202611251605';
+import { PRESENTES } from './data.js?v=202611251615';
+import * as DB from './db.js?v=202611251615';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -104,7 +104,7 @@ function kpis() {
     ['Confirmações', sim.length],
     ['Pessoas esperadas', pessoas],
     ['Não poderão ir', validas().length - sim.length],
-    ['Presentes escolhidos', escolhidos + ' / ' + PRESENTES.filter((p) => !p.multiplo).length],
+    ['Presentes escolhidos', escolhidos + ' / ' + PRESENTES.filter((p) => !p.multiplo && !oculto(p)).length],
     ['Recebido no Pix', brl(pixTotal)],
     ['Recebido no total', brl(pixConfirmado)],
   ].map(([rot, v]) => `<div class="kpi"><b>${esc(v)}</b><span>${esc(rot)}</span></div>`).join('');
@@ -193,13 +193,18 @@ function tabelaRsvps() {
 }
 
 /* ------------------------------------------------------------ tabela lista */
+/* "Excluir da lista" não apaga o presente de js/data.js: marca como oculto no banco,
+   o site deixa de mostrar e o servidor recusa pagamento. "Restaurar" desfaz. */
+const oculto = (p) => !!(estado.status[p.id] && estado.status[p.id].status === 'oculto');
+
 function tabelaLista() {
   const linhas = PRESENTES.filter((p) => !p.multiplo).map((p) => {
     const st = estado.status[p.id];
-    const s = DB.ocupado(st) ? st.status : 'disponivel';   // reserva vencida conta como disponível
+    const s = oculto(p) ? 'oculto'
+      : DB.ocupado(st) ? st.status : 'disponivel';   // reserva vencida conta como disponível
     const quem = estado.registros.filter((r) => r.presenteId === p.id).map((r) => r.nome).join(', ');
     return { p, s, quem };
-  });
+  }).sort((a, b) => Number(a.s === 'oculto') - Number(b.s === 'oculto'));   // excluídos no fim
 
   $('#tab-lista').innerHTML = `
     <thead><tr><th>Presente</th><th>Valor</th><th>Situação</th><th>Quem escolheu</th><th></th></tr></thead>
@@ -207,13 +212,16 @@ function tabelaLista() {
       <tr>
         <td class="nome">${esc(p.nome)}</td>
         <td>${esc(brl(p.preco))}</td>
-        <td>${s === 'disponivel' ? '<span class="tag tag--espera">Disponível</span>'
+        <td>${s === 'oculto' ? '<span class="tag tag--nao">Excluído do site</span>'
+          : s === 'disponivel' ? '<span class="tag tag--espera">Disponível</span>'
           : s === 'recebido' ? '<span class="tag tag--ok">Recebido</span>'
           : '<span class="tag tag--espera">Aguardando pagamento</span>'}</td>
         <td>${esc(quem) || '—'}</td>
-        <td><div class="acoes">
-          ${s === 'disponivel' ? '' : `<button class="mini" data-liberar="${esc(p.id)}">Liberar</button>`}
-          ${s === 'recebido' ? '' : `<button class="mini mini--forte" data-recebido="${esc(p.id)}">Marcar recebido</button>`}
+        <td><div class="acoes">${s === 'oculto'
+          ? `<button class="mini" data-liberar="${esc(p.id)}">Restaurar</button>`
+          : `${s === 'disponivel' ? `<button class="mini" data-ocultar="${esc(p.id)}">Excluir da lista</button>`
+              : `<button class="mini" data-liberar="${esc(p.id)}">Liberar</button>`}
+          ${s === 'recebido' ? '' : `<button class="mini mini--forte" data-recebido="${esc(p.id)}">Marcar recebido</button>`}`}
         </div></td>
       </tr>`).join('')}</tbody>`;
 }
@@ -256,7 +264,7 @@ function eventos() {
   $$('[data-csv]').forEach((b) => b.addEventListener('click', () => csv(b.dataset.csv)));
 
   document.addEventListener('click', async (e) => {
-    const b = e.target.closest('button[data-confirmar], button[data-excluir-registro], button[data-excluir-rsvp], button[data-liberar], button[data-recebido]');
+    const b = e.target.closest('button[data-confirmar], button[data-excluir-registro], button[data-excluir-rsvp], button[data-liberar], button[data-recebido], button[data-ocultar]');
     if (!b) return;
     const d = b.dataset;
 
@@ -286,6 +294,10 @@ function eventos() {
     else if (d.recebido) {
       await DB.definirStatus(d.recebido, 'recebido');
       toast('Marcado como recebido ♡');
+    }
+    else if (d.ocultar) {
+      await DB.definirStatus(d.ocultar, 'oculto');
+      toast('Presente excluído do site. Dá para restaurar no fim da lista.');
     }
     render();
   });
