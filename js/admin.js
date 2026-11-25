@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251400';
-import * as DB from './db.js?v=202611251400';
+import { PRESENTES } from './data.js?v=202611251404';
+import * as DB from './db.js?v=202611251404';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -62,9 +62,9 @@ async function carregar() {
   render();
 }
 
-/* Mesmo contato = mesma pessoa: vale a resposta mais recente, as anteriores ficam
-   à vista como "Substituída" e saem das contas e do CSV. A lista chega da mais
-   nova para a mais antiga. */
+/* Mesmo contato = mesma pessoa: vale a resposta mais recente. As anteriores
+   continuam no banco (histórico), mas saem da tabela, das contas e do CSV.
+   A lista chega da mais nova para a mais antiga. */
 export function chaveContato(c) {
   const s = String(c || '').trim().toLowerCase();
   if (s.includes('@')) return s;
@@ -150,7 +150,7 @@ function tabelaPresentes() {
 /* ------------------------------------------------------------ tabela rsvps */
 function tabelaRsvps() {
   const busca = ($('#busca-rsvps').value || '').toLowerCase();
-  const linhas = estado.rsvps.filter((r) => !busca || (r.nome + ' ' + r.contato).toLowerCase().includes(busca));
+  const linhas = validas().filter((r) => !busca || (r.nome + ' ' + r.contato).toLowerCase().includes(busca));
 
   $('#tab-rsvps').innerHTML = linhas.length ? `
     <thead><tr>
@@ -162,8 +162,7 @@ function tabelaRsvps() {
         <td>${esc(data(r.em))}</td>
         <td class="nome">${esc(r.nome)}</td>
         <td>${esc(r.contato)}</td>
-        <td>${r.substituida ? '<span class="tag tag--espera">Substituída</span>'
-          : r.presenca === 'nao' ? '<span class="tag tag--nao">Não vai</span>'
+        <td>${r.presenca === 'nao' ? '<span class="tag tag--nao">Não vai</span>'
           : '<span class="tag tag--ok">Confirmado</span>'}</td>
         <td>${esc(r.acompanhantes || 0)}</td>
         <td class="msg">${esc(r.mensagem) || '—'}</td>
