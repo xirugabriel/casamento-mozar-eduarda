@@ -764,7 +764,19 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   }
 }
 .rodape__grade { position: relative; display: grid; gap: clamp(1.4rem, 5vw, 2rem); justify-items: center; }
-.rodape__mono { display: block; width: clamp(3.8rem, 16vw, 5.25rem); margin-inline: auto; }
+.rodape__mono {
+  display: flex; align-items: center; justify-content: center; gap: .75rem;
+  width: fit-content; margin-inline: auto;
+  color: var(--floresta); text-decoration: none;
+}
+.rodape__mono::before, .rodape__mono::after {
+  content: ''; width: clamp(1rem, 5vw, 2rem); height: 1px; background: var(--linha);
+}
+.rodape__iniciais {
+  display: inline-flex; align-items: baseline; padding-right: .08em;
+  font: 400 clamp(2.8rem, 11vw, 3.75rem)/1.12 var(--serif);
+}
+.rodape__iniciais i { margin-left: -.15em; font-weight: 400; color: var(--madeira); }
 .rodape__nomes {
   margin: 1.1rem 0 .6rem;
   font: 400 clamp(.82rem, 3.6vw, .98rem)/1.5 var(--serif);
