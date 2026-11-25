@@ -881,9 +881,9 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 @media (min-width: 1000px) {
   /* A borda reta do recorte encosta no topo da capa, atrás do menu. */
   .folha--hero-se { top: 0; left: -2.5rem; width: clamp(360px, 36vw, 620px); }
-  .folha--hero-d { top: 12%; right: -1.5rem; width: clamp(200px, 20vw, 330px); opacity: .76; }
+  .folha--hero-d { top: 12%; right: -4.5rem; width: clamp(200px, 20vw, 330px); opacity: .76; }
   .folha--hero-ib { left: -2rem; bottom: 0; width: clamp(260px, 29vw, 490px); opacity: .7; }
-  .folha--hero-id { right: -2rem; bottom: 0; width: clamp(220px, 24vw, 420px); opacity: .64; }
+  .folha--hero-id { right: -5rem; bottom: 0; width: clamp(220px, 24vw, 420px); opacity: .64; }
   .folha--esq, .folha--dir { width: clamp(180px, 21vw, 330px); opacity: .48; }
   .folha--esq { left: -1.25rem; }
   .folha--dir { right: -1.25rem; }
