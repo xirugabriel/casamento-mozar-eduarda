@@ -185,6 +185,11 @@ button { font: inherit; color: inherit; }
   list-style: none; overflow-x: auto; scrollbar-width: none;
 }
 .nav ul::-webkit-scrollbar { display: none; }
+/* celulares de 320px: aperta o menu para os cinco itens caberem sem rolar */
+@media (max-width: 340px) {
+  .nav ul { gap: .4rem; padding-inline: .7rem; }
+  .nav a { letter-spacing: .06em; }
+}
 .nav a {
   font: 400 clamp(.55rem, 2.4vw, .63rem)/1 var(--sans);
   letter-spacing: .18em; text-transform: uppercase; text-decoration: none;
