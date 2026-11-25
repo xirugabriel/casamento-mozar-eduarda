@@ -57,7 +57,7 @@ export const CASAMENTO = {
      Endereço das funções de pagamento (InfinitePay) no Firebase. Vazio = o
      botão "Presentear" avisa que a lista ainda está sendo preparada.
      -------------------------------------------------------------------- */
-  checkout: '',   // depois do deploy: 'https://southamerica-east1-casamento-76063.cloudfunctions.net'
+  checkout: 'https://southamerica-east1-casamento-76063.cloudfunctions.net',
 
   contato: {
     whatsapp: '',               // TODO: ex. '5567999999999' (para dúvidas no rodapé)
