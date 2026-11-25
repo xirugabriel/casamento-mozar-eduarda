@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251351';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251351';
-import * as DB from './db.js?v=202611251351';
+import { CASAMENTO } from './config.js?v=202611251359';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251359';
+import * as DB from './db.js?v=202611251359';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -387,10 +387,13 @@ function mostrarResposta(r, jaEnviada) {
     ? (jaEnviada ? 'Você já nos avisou.' : 'Vamos sentir sua falta.')
     : (jaEnviada ? 'Presença já confirmada.' : 'Presença confirmada.');
   box.querySelector('.texto').textContent = r.presenca === 'nao'
-    ? 'Obrigado por avisar' + (nome ? ', ' + nome : '') + '. Você estará com a gente de outro jeito. ♡'
-    : 'Esperamos você' + (nome ? ', ' + nome + ',' : '') + ' para celebrar esse dia com a gente. ♡';
+    ? 'Obrigado por avisar' + (nome ? ', ' + nome : '') + '. Você estará com a gente de outro jeito.'
+    : 'Esperamos você' + (nome ? ', ' + nome + ',' : '') + ' para celebrar esse dia com a gente.';
   $('#form-rsvp').hidden = true;
   box.hidden = false;
+  const coracao = box.querySelector('.rsvp__coracao');
+  coracao.classList.remove('desenhar');
+  if (!jaEnviada) { void coracao.getBoundingClientRect(); coracao.classList.add('desenhar'); }   // reinicia o traço
 }
 
 function rsvp() {

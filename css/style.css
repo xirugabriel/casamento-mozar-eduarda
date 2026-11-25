@@ -774,6 +774,18 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .rsvp__conteudo { width: min(100%, 30rem); margin-inline: auto; }
 .rsvp__intro { margin: 1rem 0 clamp(1.5rem, 5vw, 2rem); }
 .rsvp__sucesso { text-align: center; padding: clamp(1.5rem, 5vw, 2.5rem) 0; }
+/* coração bronze: traça-se uma vez, só logo depois do envio (classe .desenhar);
+   quem volta ao convite já o encontra pronto */
+.rsvp__coracao {
+  display: block; width: 2.6rem; height: auto; margin: 0 auto 1rem; overflow: visible;
+  fill: none; stroke: var(--madeira); stroke-width: 1.5; stroke-linejoin: round;
+  filter: drop-shadow(0 1px 0 rgba(212, 175, 124, .55));
+}
+.rsvp__coracao.desenhar path {
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: tracar 1.1s cubic-bezier(.45, 0, .25, 1) .2s forwards;
+}
+@keyframes tracar { to { stroke-dashoffset: 0; } }
 
 /* ------------------------------------------------------- final + rodapé */
 .final { background: var(--marfim); padding: clamp(3rem, 9vw, 4.5rem) 0 0; text-align: center; }
@@ -889,6 +901,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   html { scroll-behavior: auto; }
   .trilho { scroll-behavior: auto; }
   .aquarela figure.rv { mask: none; }
+  .rsvp__coracao.desenhar path { animation: none; stroke-dashoffset: 0; }
   .abrindo .envelope__lacre, .abrindo .envelope__nomes,
   .abrindo .envelope__toque, .abrindo .envelope__aba { animation: none; }   /* só o esmaecer */
   .hero__scroll svg, .hero__conteudo > * { animation: none; }
