@@ -1,8 +1,8 @@
 /* =============================================================
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
-import { PRESENTES } from './data.js?v=202611251552';
-import * as DB from './db.js?v=202611251552';
+import { PRESENTES } from './data.js?v=202611251602';
+import * as DB from './db.js?v=202611251602';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -119,6 +119,26 @@ const marcaStatus = (r) => r.status === 'recebido'
     ? '<span class="tag tag--espera">Pix a conferir</span>'
     : '<span class="tag tag--espera">Compra a conferir</span>');
 
+/* WhatsApp para agradecer: o número que a pessoa deixou no presente ou, se não
+   deixou, o celular da confirmação de presença com o mesmo nome. Só celulares do
+   Brasil com DDD; sem número válido, sem botão. */
+export function linkZap(numero, texto) {
+  let d = String(numero || '').replace(/\D/g, '');
+  if (d.length === 10 || d.length === 11) d = '55' + d;
+  if (!(d.length >= 12 && d.length <= 13 && d.startsWith('55'))) return '';
+  return 'https://wa.me/' + d + '?text=' + encodeURIComponent(texto);
+}
+const mesmoNome = (a, b) => [a, b].map((s) => String(s || '').trim().toLowerCase().replace(/\s+/g, ' '))
+  .reduce((x, y) => x === y);
+
+function zapAgradecer(r) {
+  const rsvp = estado.rsvps.find((x) => mesmoNome(x.nome, r.nome) && linkZap(x.contato, '-'));
+  const numero = linkZap(r.whatsapp, '-') ? r.whatsapp : rsvp && rsvp.contato;
+  const nome = String(r.nome || '').trim().split(/\s+/)[0];
+  return linkZap(numero, `Oi, ${nome}! Recebemos o seu presente (${r.presenteNome}) e ficamos muito felizes. `
+    + 'Obrigado pelo carinho! ♡ Mozar & Eduarda');
+}
+
 function tabelaPresentes() {
   const busca = ($('#busca-presentes').value || '').toLowerCase();
   const linhas = estado.registros.filter((r) =>
@@ -129,7 +149,7 @@ function tabelaPresentes() {
       <th>Quando</th><th>Presente</th><th>Quem presenteou</th><th>Mensagem</th>
       <th>Como</th><th>Valor</th><th>Situação</th><th></th>
     </tr></thead>
-    <tbody>${linhas.map((r) => `
+    <tbody>${linhas.map((r) => { const zap = zapAgradecer(r); return `
       <tr>
         <td>${esc(data(r.em))}</td>
         <td class="nome">${esc(r.presenteNome)}</td>
@@ -139,11 +159,12 @@ function tabelaPresentes() {
         <td>${esc(brl(r.valor))}</td>
         <td>${marcaStatus(r)}</td>
         <td><div class="acoes">
+          ${zap ? `<a class="mini mini--forte" href="${esc(zap)}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
           ${r.status === 'recebido' ? '' :
             `<button class="mini mini--forte" data-confirmar="${esc(r.id)}">Confirmar</button>`}
           <button class="mini" data-excluir-registro="${esc(r.id)}">Excluir</button>
         </div></td>
-      </tr>`).join('')}</tbody>`
+      </tr>`; }).join('')}</tbody>`
     : '<tbody><tr><td class="vazio">Nenhum presente registrado ainda.</td></tr></tbody>';
 }
 

@@ -1,9 +1,9 @@
 /* =============================================================
    MOZAR & EDUARDA — comportamento do site
    ============================================================= */
-import { CASAMENTO } from './config.js?v=202611251552';
-import { PRESENTES, CATEGORIAS } from './data.js?v=202611251552';
-import * as DB from './db.js?v=202611251552';
+import { CASAMENTO } from './config.js?v=202611251602';
+import { PRESENTES, CATEGORIAS } from './data.js?v=202611251602';
+import * as DB from './db.js?v=202611251602';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -322,7 +322,7 @@ function lerFormulario() {
   const valor = p.tipo === 'livre' ? Number(f.valor.value) : Number(p.preco) || 0;
   if (p.tipo === 'livre' && (!valor || valor < 10)) return { erro: 'Escolha um valor a partir de R$ 10.' };
 
-  return { nome, mensagem, valor };
+  return { nome, mensagem, valor, whatsapp: f.whatsapp.value.trim() };
 }
 
 /* Volta da InfinitePay: a URL traz order_nsu, transaction_nsu e slug. O servidor

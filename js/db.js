@@ -7,7 +7,7 @@
    Nome, mensagem e valor de quem presenteou ficam em `registros`, que apenas
    o admin autenticado consegue ler.
    ============================================================= */
-import { FIREBASE, CASAMENTO } from './config.js?v=202611251552';
+import { FIREBASE, CASAMENTO } from './config.js?v=202611251602';
 
 const V = '10.12.5';
 const U = 'https://www.gstatic.com/firebasejs/' + V;
@@ -76,6 +76,7 @@ export async function pagar(presente, dados) {
   try {
     return await chamar('pagar', {
       presenteId: presente.id, nome: dados.nome, mensagem: dados.mensagem, valor: dados.valor,
+      whatsapp: dados.whatsapp,
       volta: location.origin + location.pathname,
     });
   } catch (e) { console.error(e); return { erro: 'rede' }; }

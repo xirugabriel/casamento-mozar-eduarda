@@ -56,6 +56,7 @@ export const pagar = onRequest({ ...opcoes, cors: ORIGENS }, async (req, res) =>
   const p = PRESENTES.find((x) => x.id === b.presenteId);
   const nome = texto(b.nome, 120);
   const mensagem = texto(b.mensagem, 600);
+  const whatsapp = texto(b.whatsapp, 30).replace(/[^\d+]/g, '');   // opcional: para os noivos agradecerem
   const valor = p && p.tipo === 'livre' ? Math.round(Number(b.valor) * 100) / 100 : p && p.preco;
 
   if (!p || nome.length < 2) return res.status(400).json({ erro: 'dados' });
@@ -79,7 +80,7 @@ export const pagar = onRequest({ ...opcoes, cors: ORIGENS }, async (req, res) =>
         tx.set(ref, { status: 'reservado', ate, pedido: pedido.id });
       }
       tx.set(pedido, {
-        presenteId: p.id, presenteNome: p.nome, nome, mensagem, valor,
+        presenteId: p.id, presenteNome: p.nome, nome, mensagem, valor, whatsapp,
         status: 'pendente', criadoEm: FieldValue.serverTimestamp(),
       });
     });
@@ -147,7 +148,7 @@ async function darBaixa({ order_nsu, transaction_nsu, slug, receipt_url }) {
     // o painel lê "registros": já entra como recebido, sem precisar de Confirmar
     tx.set(db.collection('registros').doc(ref.id), {
       presenteId: d.presenteId, presenteNome: d.presenteNome, nome: d.nome,
-      mensagem: d.mensagem, valor: d.valor, metodo, status: 'recebido',
+      mensagem: d.mensagem, valor: d.valor, metodo, status: 'recebido', whatsapp: d.whatsapp || '',
       em: FieldValue.serverTimestamp(),
     });
   });
