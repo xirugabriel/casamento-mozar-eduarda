@@ -200,14 +200,14 @@ button { font: inherit; color: inherit; }
   background: var(--floresta); color: var(--marfim);
   text-align: center; overflow: hidden;
 }
-.hero::after, .envelope::after {
+.hero::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background:
     radial-gradient(120% 82% at 50% 36%, rgba(255, 255, 255, .05), transparent 62%),
     radial-gradient(100% 100% at 50% 112%, rgba(0, 0, 0, .32), transparent 66%);
 }
 /* trama de tecido: dois fios cruzados mais o grão irregular do linho */
-.hero::before, .envelope::before {
+.hero::before {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
   background-image:
     repeating-linear-gradient(90deg, rgba(255, 255, 255, .032) 0 1px, transparent 1px 3px),
@@ -278,7 +278,10 @@ button { font: inherit; color: inherit; }
 
 /* envelope de abertura (primeira visita): cobre a tela até o toque. A capa fica
    pausada por baixo e só começa a entrar quando o envelope esmaece. */
-.envelope { display: none; }
+.envelope {
+  display: none;
+  --papel-envelope: url('../img/identidade/fibra-aba.webp') left top / 18rem auto repeat var(--floresta);
+}
 html.com-envelope { overflow: hidden; }
 html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
 .com-envelope .envelope {
@@ -288,6 +291,12 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   cursor: pointer; perspective: 1400px; -webkit-tap-highlight-color: transparent;
 }
 .envelope:focus-visible { outline: 1px solid var(--dourado); outline-offset: -10px; }
+.envelope::before, .envelope__aba span {
+  position: absolute; inset: 0; pointer-events: none;
+  background: var(--papel-envelope);
+  background-blend-mode: soft-light;
+}
+.envelope::before { content: ''; z-index: -2; }
 /* aba: triângulo do topo até o lacre; o filtro no pai desenha a sombra no recorte */
 .envelope__aba {
   position: absolute; inset: 0 0 auto; height: 50%;
@@ -295,12 +304,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .38));
 }
 .envelope__aba span {
-  position: absolute; inset: 0;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  background:
-    url('../img/identidade/fibra-aba.webp') center / 18rem auto repeat,
-    linear-gradient(160deg, #3d5845, #2d4836 55%, #233a2c);
-  background-blend-mode: soft-light;
 }
 .envelope__miolo {
   --lacre: clamp(6.8rem, 29vw, 10rem);
@@ -328,7 +332,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
   .com-envelope .envelope { appearance: none; border-radius: 0; }
   /* O Safari pode compor as barras fora do conteúdo. Faça a arte chegar
      ao mesmo verde sólido da página antes de encontrar as barras. */
-  .envelope::before, .envelope::after {
+  .envelope::before {
     mask-image: linear-gradient(
       transparent, #000 calc(env(safe-area-inset-top, 0px) + 3rem),
       #000 calc(100% - env(safe-area-inset-bottom, 0px) - 3rem), transparent
