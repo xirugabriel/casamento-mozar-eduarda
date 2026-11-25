@@ -246,17 +246,18 @@ button { font: inherit; color: inherit; }
   color: rgba(212, 175, 124, .88);
 }
 .hero__frase {
-  margin: clamp(2rem, 7vw, 3rem) 0 0;
-  font: 400 clamp(1.22rem, 5.4vw, 1.8rem)/1.7 var(--script);
+  margin: clamp(1.65rem, 5.5vw, 2.6rem) 0 0;
+  font: 400 clamp(1.22rem, 5.4vw, 1.8rem)/1.4 var(--script);
   color: var(--dourado);
+  text-wrap: balance;
 }
 .hero__frase span { display: block; }
 .hero__creditofrase {
-  margin: clamp(1.1rem, 4vw, 1.6rem) auto 0;
-  max-width: 34ch;
-  font: 400 clamp(.87rem, 3.45vw, 1.04rem)/1.65 var(--serif);
-  letter-spacing: .01em;
-  color: #dfd7c7;
+  margin: clamp(.8rem, 3vw, 1.15rem) auto 0;
+  max-width: min(40ch, 92%);
+  font: 400 clamp(.83rem, 3.15vw, .95rem)/1.55 var(--sans);
+  letter-spacing: .025em;
+  color: #a4ac96;
   text-wrap: balance;
 }
 .hero__dizeres { display: none; }
