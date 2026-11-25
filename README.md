@@ -9,11 +9,11 @@ site/
 ├── index.html          página do casamento
 ├── admin.html          painel dos noivos (/admin.html)
 ├── firestore.rules     regras de segurança do banco
+├── functions/          servidor da lojinha (pagamento InfinitePay) — Firebase Functions
 ├── css/style.css       identidade visual inteira (paleta, tipografia, componentes)
 ├── js/
 │   ├── config.js       ← ÚNICO arquivo do dia a dia: datas, locais, chave Pix, Firebase
 │   ├── data.js         ← lista de presentes
-│   ├── pix.js          gerador do QR Code Pix (padrão BACEN, feito no navegador)
 │   ├── db.js           camada de dados (Firestore, com modo local para testes)
 │   ├── main.js         comportamento do site
 │   └── admin.js        comportamento do painel
@@ -52,8 +52,7 @@ Tudo em `js/config.js`:
 | `cerimonia.endereco` | endereço completo da Matriz Paróquia São Pedro Apóstolo |
 | `cerimonia.mapsUrl` | link do Google Maps (botão **Compartilhar** no Maps). Vazio = busca pelo nome |
 | `recepcao.endereco` / `recepcao.mapsUrl` | idem, para o Rancho Bela Vista |
-| `pix.chave` | chave Pix dos noivos: CPF (só números), e-mail, telefone `+5567…` ou chave aleatória |
-| `pix.nome` | máx. 25 caracteres, sem acento — é o que aparece no app de quem paga |
+| `checkout` | endereço das funções de pagamento, depois do deploy (seção 6). Vazio = "Presentear" avisa que a lista está sendo preparada |
 | `contato.whatsapp` | opcional, formato `5567999999999`, vira o link de dúvidas no rodapé |
 | `dizeres` | os versaletes das laterais (abertura, aquarela e rodapé) |
 
@@ -64,12 +63,8 @@ Dois interruptores de layout, também em `js/config.js`:
 | `contagem` | `'dias'` mostra só o número de dias, como o briefing pediu. `'completa'` mostra dias / horas / minutos / segundos, como na arte de referência. Trocar a palavra já muda o site. |
 | `layoutPresentes` | `'carrossel'` desliza os presentes com setas e bolinhas, como na arte. `'grade'` mostra todos de uma vez — mais fácil de percorrer numa lista longa. |
 
-E a lista de presentes em `js/data.js`: nome, categoria, preço, foto e o link do
-produto no Mercado Livre.
-
-> O QR Code do Pix é gerado no próprio navegador, sem intermediário e sem taxa.
-> Quem paga vê o nome do presente no app do banco. Vale conferir o primeiro QR
-> com um Pix de R$ 1 para você mesmo antes de publicar.
+E a lista de presentes em `js/data.js`: nome, categoria, preço e foto. O mesmo
+arquivo vai para o servidor a cada deploy, então o preço cobrado é sempre o da lista.
 
 ---
 
@@ -79,7 +74,10 @@ produto no Mercado Livre.
 2. **Build > Firestore Database > Criar banco de dados** → modo de produção → região `southamerica-east1`.
 3. **Regras**: cole o conteúdo de `firestore.rules` e publique.
 4. **Build > Authentication > Começar > E-mail/senha**: ative e, na aba *Users*,
-   crie um usuário com o e-mail e a senha de vocês. É esse login que abre o painel.
+   crie um usuário com o e-mail e a senha de vocês. Copie o UID desse usuário.
+   Pelo console do Firestore, crie a coleção `administradores` e um documento
+   com esse UID como ID. Pode usar o campo `nome` para identificar a pessoa.
+   A existência do documento autoriza essa conta a consultar as respostas.
 5. **Visão geral do projeto > ícone `</>`** para registrar um app web. Copie o objeto
    `firebaseConfig` e cole em `FIREBASE`, no fim de `js/config.js`.
 6. Recarregue o site: o aviso de "modo local" some do console e os dados passam a ser reais.
@@ -143,26 +141,38 @@ Entre com o e-mail e a senha criados no passo 3.4. Ele tem três abas:
 
 ---
 
-## 6. Como o controle de presentes funciona
+## 6. A lojinha (pagamento pela InfinitePay)
 
-O Mercado Livre não avisa ninguém quando alguém compra um produto — não existe API
-pública para isso. Então o site resolve o problema no fluxo, não na integração:
+1. O convidado clica em **Presentear**, escreve nome e mensagem e vai para o pagamento.
+2. O servidor (`functions/`) confere o preço na lista, **segura o presente por 20
+   minutos** e pede à InfinitePay um link que vale esses mesmos 20 minutos.
+3. O convidado paga com Pix ou cartão na página da InfinitePay e volta ao convite.
+4. A InfinitePay avisa o servidor; o servidor **confirma com a InfinitePay** que o
+   pagamento é real (o aviso não é assinado) e dá baixa: o presente vira
+   *Presenteado ♡* e entra no painel já como recebido, com nome e mensagem.
+5. Se ninguém pagar em 20 minutos, o presente volta sozinho para a lista.
 
-1. O convidado clica em **Presentear** e escreve nome e mensagem.
-2. **Se escolher a loja**, o presente é reservado *antes* de o link abrir. É isso que
-   impede outra pessoa de comprar o mesmo item.
-3. **Se escolher o Pix**, o site mostra o QR com o valor e o nome do presente; a
-   reserva acontece quando ele confirma **Já fiz o Pix**.
-4. Os noivos conferem no painel e marcam **Confirmado**.
-5. Presentes escolhidos continuam na página, marcados com *Presenteado ♡*, e vão para
-   o fim da lista.
+O **Presente livre** nunca sai da lista: várias pessoas podem contribuir.
+O convidado não consegue gravar nada nos presentes — só o servidor e o painel.
 
-O **Presente livre** é o único que nunca sai da lista: várias pessoas podem contribuir.
+### Ligar (uma vez)
 
-Sobre segurança: as regras do Firestore deixam qualquer visitante marcar um presente
-livre como reservado (é o que permite presentear sem login) e ninguém consegue ler os
-nomes, mensagens e confirmações — só quem entra no painel. Se alguém reservar por
-engano ou brincadeira, é um clique em **Liberar** no painel.
+Pré-requisitos: plano **Blaze** no Firebase e, na InfinitePay, **Configurações do
+Checkout › Habilitar checkout integrado** e uma **API Key** (começa com `inchk_`).
+
+```bash
+npm install -g firebase-tools
+firebase login                                       # conta dona do projeto
+echo INFINITEPAY_HANDLE=suatag > functions/.env      # InfiniteTag, sem o $
+firebase functions:secrets:set INFINITEPAY_API_KEY   # cole a chave quando pedir
+cd functions && npm install && cd ..
+firebase deploy --only firestore:rules,functions
+```
+
+Depois preencha `checkout` em `js/config.js` com
+`https://southamerica-east1-casamento-76063.cloudfunctions.net` e publique o site.
+Faça um teste de verdade com um presente livre de R$ 10 (a InfinitePay não tem
+ambiente de testes) e confira o pagamento no painel e no app da InfinitePay.
 
 ---
 
