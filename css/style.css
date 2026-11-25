@@ -19,7 +19,6 @@
   --tinta:         #2F3A32;
   --tinta-suave:   #626C61;
   --linha:         rgba(139, 94, 60, .22);
-  --fibra-papel:   url('../img/identidade/fibra-aba.webp') left top / 18rem auto repeat;
 
   --serif:  'Playfair Display', 'Times New Roman', serif;
   --script: 'Allura', 'Segoe Script', cursive;
@@ -147,15 +146,24 @@ button { font: inherit; color: inherit; }
 /* ------------------------------------------------------------------- nav */
 .nav {
   position: fixed; inset: 0 0 auto; z-index: 60;
-  /* O fundo inclui o espaço acima dos links reservado ao notch. */
-  background: var(--fibra-papel) var(--floresta);
-  background-blend-mode: soft-light;
+  /* sobre a abertura, um véu escuro quase imperceptível mantém o menu
+     legível por cima das flores; ao rolar, vira a barra marfim. */
+  background: linear-gradient(180deg, rgba(22, 40, 31, .5) 15%, rgba(22, 40, 31, 0));
   border-bottom: 1px solid transparent;
-  transition: background-color .45s, border-color .45s;
+  transition: background .45s, border-color .45s;
 }
 .nav.on {
-  background-color: var(--marfim);
+  background: rgba(251, 247, 241, .95);
+  backdrop-filter: blur(12px);
   border-bottom-color: var(--linha);
+}
+/* O Safari pode estender a cor sólida do menu fixo à barra de status. */
+@media (hover: none) and (pointer: coarse) {
+  .nav { background: var(--floresta); }
+  .nav.on {
+    background: var(--marfim-claro);
+    backdrop-filter: none;
+  }
 }
 @media (any-pointer: coarse) {
   html, body { overscroll-behavior-y: none; }
@@ -272,7 +280,10 @@ button { font: inherit; color: inherit; }
 
 /* envelope de abertura (primeira visita): cobre a tela até o toque. A capa fica
    pausada por baixo e só começa a entrar quando o envelope esmaece. */
-.envelope { display: none; }
+.envelope {
+  display: none;
+  --papel-envelope: url('../img/identidade/fibra-aba.webp') left top / 18rem auto repeat var(--floresta);
+}
 html.com-envelope { overflow: hidden; }
 html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: paused; }
 .com-envelope .envelope {
@@ -284,7 +295,7 @@ html.com-envelope:not(.aberto) .hero__conteudo > * { animation-play-state: pause
 .envelope:focus-visible { outline: 1px solid var(--dourado); outline-offset: -10px; }
 .envelope::before, .envelope__aba span {
   position: absolute; inset: 0; pointer-events: none;
-  background: var(--fibra-papel) var(--floresta);
+  background: var(--papel-envelope);
   background-blend-mode: soft-light;
 }
 .envelope::before { content: ''; z-index: -2; }
