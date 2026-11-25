@@ -16,7 +16,22 @@ const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
 const lista = (categoria, itens) => itens.map(([nome, preco]) =>
   ({ id: slug(nome), nome, categoria, tipo: 'cota', preco, img: PH }));
 
+/* Vitrine com valores e categorias misturados, sempre na mesma ordem (semente
+   fixa): quem volta encontra cada presente no mesmo lugar. */
+// semente 1555: no máximo 2 da mesma categoria e 3 preços em escada seguidos
+function embaralhar(itens, semente = 1555) {
+  const l = itens.slice();
+  let s = semente;
+  const acaso = () => { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
+  for (let i = l.length - 1; i > 0; i--) {
+    const j = Math.floor(acaso() * (i + 1));
+    [l[i], l[j]] = [l[j], l[i]];
+  }
+  return l;
+}
+
 export const PRESENTES = [
+  ...embaralhar([
   ...lista('casa', [
     ['Geladeira frost free', 3000],
     ['Lava-louças', 2900],
@@ -127,6 +142,7 @@ export const PRESENTES = [
     ['Banho e tosa das cachorras', 200],
     ['Kit sobrevivência da primeira briga', 150],
     ['A noiva escolhe o filme da semana', 100],
+  ]),
   ]),
 
   // ---------- PRESENTE LIVRE ----------
