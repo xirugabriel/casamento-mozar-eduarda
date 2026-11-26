@@ -4,17 +4,19 @@
    O id sai do nome: renomear um presente muda o id — faça isso antes de
    alguém presentear. Para tirar um presente do site sem apagar daqui, use
    "Excluir da lista" no painel.
-   img: foto em img/presentes/ (enquanto não houver, usa o placeholder)
+   img: foto WebP em img/presentes/, com o mesmo nome do ID.
    Este arquivo também vai para o servidor a cada deploy (preço conferido lá).
    ============================================================= */
 
-const PH = 'img/presentes/_placeholder.svg';
+const foto = (id) => `img/presentes/${id}.webp`;
 
 const slug = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '')
   .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-const lista = (categoria, itens) => itens.map(([nome, preco]) =>
-  ({ id: slug(nome), nome, categoria, tipo: 'cota', preco, img: PH }));
+const lista = (categoria, itens) => itens.map(([nome, preco]) => {
+  const id = slug(nome);
+  return { id, nome, categoria, tipo: 'cota', preco, img: foto(id) };
+});
 
 /* Vitrine com valores e categorias misturados, sempre na mesma ordem (semente
    fixa): quem volta encontra cada presente no mesmo lugar. */
@@ -146,7 +148,7 @@ export const PRESENTES = [
   ]),
 
   // ---------- PRESENTE LIVRE ----------
-  { id: 'presente-livre', nome: 'Presente livre', categoria: 'livre', tipo: 'livre', multiplo: true, img: PH,
+  { id: 'presente-livre', nome: 'Presente livre', categoria: 'livre', tipo: 'livre', multiplo: true, img: foto('presente-livre'),
     descricao: 'Se preferir, contribua com o valor que quiser. Tudo será guardado para o começo da nossa vida juntos.' },
 ];
 
