@@ -54,12 +54,44 @@ export function observarPresentes(cb) {
     window.addEventListener('storage', avisar);
     return () => ouvintes.delete(cb);
   }
+  return observarColecao('presentes', cb);
+}
+
+function observarColecao(nome, cb) {
   const fs = fb.fs;
-  return fs.onSnapshot(fs.collection(fb.db, 'presentes'), function (snap) {
+  return fs.onSnapshot(fs.collection(fb.db, nome), function (snap) {
     const mapa = {};
     snap.forEach(function (d) { mapa[d.id] = d.data(); });
     cb(mapa);
-  }, function (err) { console.warn('[presentes]', err); cb({}); });
+  }, function (err) { console.warn('[' + nome + ']', err); });
+}
+
+export function observarPrecos(cb) {
+  if (MODO !== 'local') return observarColecao('precos', cb);
+  const ler = () => cb(LS.get('precos', {}));
+  ler();
+  window.addEventListener('storage', ler);
+  return () => window.removeEventListener('storage', ler);
+}
+
+export function precoAtual(presente, precos) {
+  const centavos = precos[presente.id]?.centavos;
+  return Number.isInteger(centavos) && centavos >= 1000 && centavos <= 1000000
+    ? centavos / 100 : presente.preco;
+}
+
+export async function definirPreco(presenteId, centavos) {
+  if (!Number.isInteger(centavos) || centavos < 1000 || centavos > 1000000) {
+    throw new RangeError('Preço fora do intervalo.');
+  }
+  const dados = { centavos };
+  if (MODO === 'local') {
+    const precos = LS.get('precos', {});
+    precos[presenteId] = dados;
+    LS.set('precos', precos);
+    return;
+  }
+  await fb.fs.setDoc(fb.fs.doc(fb.db, 'precos', presenteId), dados);
 }
 
 /** Presente indisponível: pago/recebido, ou reservado com a reserva ainda valendo.

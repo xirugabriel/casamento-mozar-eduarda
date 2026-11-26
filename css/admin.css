@@ -80,6 +80,16 @@
 .mini:disabled { opacity: .65; cursor: wait; }
 .mini--forte { background: var(--floresta); border-color: var(--floresta); color: var(--marfim); }
 .mini--forte:hover { background: var(--floresta-esc); }
+.preco-editor {
+  width: min(calc(100% - 2 * var(--gutter)), 24rem);
+  max-height: calc(100svh - var(--admin-safe-top) - 2rem);
+  padding: 1.25rem; border: 1px solid var(--linha); border-radius: .85rem;
+  background: var(--marfim-claro); color: var(--tinta);
+}
+.preco-editor::backdrop { background: rgb(22 40 31 / .62); }
+.preco-editor h2 { margin: 0; font: 400 1.45rem/1.2 var(--serif); color: var(--floresta); }
+.preco-editor p { margin: 0; }
+.preco-editor .acoes .mini { flex: 1 1 auto; }
 .mini:is([data-excluir-registro], [data-excluir-rsvp], [data-ocultar]) {
   background: #9f2933; border-color: #9f2933; color: #fff;
 }

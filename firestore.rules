@@ -27,6 +27,16 @@ service cloud.firestore {
       allow write: if noivos();
     }
 
+    // Preço do catálogo em centavos, separado da disponibilidade do presente.
+    match /precos/{presenteId} {
+      allow read: if true;
+      allow create, update: if noivos()
+        && request.resource.data.keys().hasOnly(['centavos'])
+        && request.resource.data.centavos is int
+        && request.resource.data.centavos >= 1000
+        && request.resource.data.centavos <= 1000000;
+    }
+
     // --------------------------------------- quem presenteou (privado)
     match /registros/{id} {
       allow read, update, delete: if noivos();

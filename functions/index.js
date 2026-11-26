@@ -59,10 +59,7 @@ export const pagar = onRequest({ ...opcoes, cors: ORIGENS }, async (req, res) =>
   const nome = texto(b.nome, 120);
   const mensagem = texto(b.mensagem, 600);
   const whatsapp = texto(b.whatsapp, 30).replace(/[^\d+]/g, '');   // opcional: para os noivos agradecerem
-  const valor = p && p.tipo === 'livre' ? Math.round(Number(b.valor) * 100) / 100 : p && p.preco;
-
   if (!p || nome.length < 2) return res.status(400).json({ erro: 'dados' });
-  if (!(valor >= 10 && valor <= 10000)) return res.status(400).json({ erro: 'valor' });
 
   // volta para a página de onde o convidado veio, se for uma origem conhecida
   let volta = SITE;
@@ -73,29 +70,37 @@ export const pagar = onRequest({ ...opcoes, cors: ORIGENS }, async (req, res) =>
 
   const pedido = db.collection('pedidos').doc();
   const ate = Timestamp.fromMillis(Date.now() + RESERVA_MIN * 60e3);
+  let resultado;
   try {
-    await db.runTransaction(async (tx) => {
+    resultado = await db.runTransaction(async (tx) => {
       const ref = db.doc('presentes/' + p.id);
       const st = (await tx.get(ref)).data();
       if (st && st.status === 'oculto') throw new Error('ocupado');   // excluído da lista no painel
+      if (!p.multiplo && ocupado(st)) throw new Error('ocupado');
+      const informado = Math.round(Number(b.valor) * 100);
+      const valorEditado = p.tipo === 'livre' ? undefined : (await tx.get(db.doc('precos/' + p.id))).get('centavos');
+      const centavos = p.tipo === 'livre' ? informado : (valorEditado ?? Math.round(p.preco * 100));
+      if (!Number.isInteger(centavos) || centavos < 1000 || centavos > 1000000) return { erro: 'valor' };
+      if (p.tipo !== 'livre' && informado !== centavos) return { erro: 'preco-alterado', valor: centavos / 100 };
       if (!p.multiplo) {
-        if (ocupado(st)) throw new Error('ocupado');
         tx.set(ref, { status: 'reservado', ate, pedido: pedido.id });
       }
       tx.set(pedido, {
-        presenteId: p.id, presenteNome: p.nome, nome, mensagem, valor, whatsapp,
+        presenteId: p.id, presenteNome: p.nome, nome, mensagem, valor: centavos / 100, whatsapp,
         status: 'pendente', criadoEm: FieldValue.serverTimestamp(),
       });
+      return { centavos };
     });
   } catch (e) {
     if (e.message === 'ocupado') return res.status(409).json({ erro: 'ocupado' });
     throw e;
   }
+  if (resultado.erro) return res.status(resultado.erro === 'preco-alterado' ? 409 : 400).json(resultado);
 
   try {
     const link = await infinitepay('/links', {
       handle: HANDLE.value(),
-      items: [{ quantity: 1, price: Math.round(valor * 100), description: p.nome }],
+      items: [{ quantity: 1, price: resultado.centavos, description: p.nome }],
       order_nsu: pedido.id,
       redirect_url: volta,
       webhook_url: `https://${REGIAO}-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/webhook`,

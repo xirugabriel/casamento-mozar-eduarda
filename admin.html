@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Lato:wght@300;400;700&family=Allura&display=swap">
 <link rel="stylesheet" href="css/style.css?v=revisao-1">
-<link rel="stylesheet" href="css/admin.css?v=revisao-1">
+<link rel="stylesheet" href="css/admin.css?v=precos-painel-1">
 </head>
 <body>
 
@@ -110,8 +110,7 @@
         <div class="barra">
           <input type="search" id="busca-lista" aria-label="Buscar presente" placeholder="Buscar presente…">
           <p class="texto">
-            Exclua da lista os presentes que não quiserem (dá para restaurar depois), libere um
-            presente de volta ou marque como recebido.
+            Edite o preço, oculte um presente da lista, libere ou marque como recebido.
           </p>
         </div>
         <div class="tabela-wrap"><table id="tab-lista" role="table"></table></div>
@@ -121,8 +120,24 @@
   </main>
 </div>
 
+<dialog class="preco-editor" id="editor-preco" aria-labelledby="titulo-editor-preco">
+  <form class="form" id="form-preco">
+    <h2 id="titulo-editor-preco">Editar preço</h2>
+    <p id="presente-editor-preco"></p>
+    <label class="campo">
+      <span>Novo preço (R$)</span>
+      <input name="preco" type="number" min="10" max="10000" step=".01" inputmode="decimal" required autofocus>
+    </label>
+    <p class="form__erro" id="erro-editor-preco" role="alert"></p>
+    <div class="acoes">
+      <button class="mini" id="cancelar-preco" type="button">Cancelar</button>
+      <button class="mini mini--forte" type="submit">Salvar preço</button>
+    </div>
+  </form>
+</dialog>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="js/admin.js?v=presentes-fotos-1"></script>
+<script type="module" src="js/admin.js?v=precos-painel-1"></script>
 </body>
 </html>

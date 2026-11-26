@@ -3,7 +3,7 @@
    ============================================================= */
 import { CASAMENTO } from './config.js?v=202611251641';
 import { PRESENTES, CATEGORIAS } from './data.js?v=presentes-fotos-1';
-import * as DB from './db.js?v=202611251641';
+import * as DB from './db.js?v=precos-painel-1';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -228,13 +228,13 @@ function locais() {
 }
 
 /* ------------------------------------------------------------- presentes */
-const estado = { status: {}, filtro: 'todos', atual: null, grade: false, vitrine: '' };
+const estado = { status: {}, precos: {}, filtro: 'todos', atual: null, grade: false, vitrine: '' };
 
 const ocupado = (p) => !p.multiplo && DB.ocupado(estado.status[p.id]);
 
 function cartao(p) {
   const off = ocupado(p);
-  const preco = p.tipo === 'livre' ? 'Valor à sua escolha' : brl(p.preco);
+  const preco = p.tipo === 'livre' ? 'Valor à sua escolha' : brl(DB.precoAtual(p, estado.precos));
   return `
     <article class="presente ${off ? 'presente--ocupado' : ''}">
       <div class="presente__foto">
@@ -355,10 +355,10 @@ function passo(nome) {
 }
 
 function abrirPresente(p) {
-  estado.atual = p;
+  estado.atual = { ...p, preco: DB.precoAtual(p, estado.precos) };
 
   $('#modal-titulo').textContent = p.nome;
-  $('#modal-valor').textContent = p.tipo === 'livre' ? 'Valor à sua escolha' : brl(p.preco);
+  $('#modal-valor').textContent = p.tipo === 'livre' ? 'Valor à sua escolha' : brl(estado.atual.preco);
 
   const livre = p.tipo === 'livre';
   const campoValor = $('#campo-valor-livre');
@@ -447,6 +447,12 @@ function modal() {
     if (r?.url) { location.href = r.url; return; }   // segue para a InfinitePay
 
     btn.disabled = false; btn.textContent = 'Ir para o pagamento';
+    if (r?.erro === 'preco-alterado') {
+      estado.atual.preco = r.valor;
+      $('#modal-valor').textContent = brl(r.valor);
+      erro.textContent = 'O preço mudou. Confira o novo valor antes de continuar.';
+      return;
+    }
     erro.textContent = r?.erro === 'ocupado'
       ? 'Este presente acabou de ser escolhido por outra pessoa. Escolha outro ♡'
       : 'Não conseguimos abrir o pagamento agora. Tente de novo em instantes.';
@@ -554,6 +560,7 @@ function rsvp() {
   try {
     await DB.init();
     DB.observarPresentes((mapa) => { estado.status = mapa; renderPresentes(); });
+    DB.observarPrecos((mapa) => { estado.precos = mapa; renderPresentes(); });
   } catch (e) {
     console.warn('[dados] seguindo sem sincronização:', e);
   }

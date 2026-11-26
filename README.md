@@ -63,8 +63,8 @@ Dois interruptores de layout, também em `js/config.js`:
 | `contagem` | `'dias'` mostra só o número de dias, como o briefing pediu. `'completa'` mostra dias / horas / minutos / segundos, como na arte de referência. Trocar a palavra já muda o site. |
 | `layoutPresentes` | `'carrossel'` desliza os presentes com setas e bolinhas, como na arte. `'grade'` mostra todos de uma vez — mais fácil de percorrer numa lista longa. |
 
-E a lista de presentes em `js/data.js`: nome, categoria, preço e foto. O mesmo
-arquivo vai para o servidor a cada deploy, então o preço cobrado é sempre o da lista.
+O catálogo em `js/data.js` define nome, categoria, preço inicial e foto. O preço
+salvo pelo painel passa a valer no convite e no checkout dos novos pedidos.
 
 ---
 
@@ -135,7 +135,8 @@ Entre com o e-mail e a senha criados no passo 3.4. Ele tem três abas:
   loja e o valor. Botão **Confirmar** quando o Pix cair na conta ou a encomenda chegar.
 - **Confirmações** — todos os RSVPs, com contato, acompanhantes e recado. Exporta CSV
   (abre direto no Excel).
-- **Status da lista** — todos os presentes. **Liberar** devolve um presente à lista
+- **Lista de presentes** — use **Editar preço** para mudar um valor fixo de R$ 10 a
+  R$ 10.000. **Liberar** devolve um presente à lista
   (para quem reservou e desistiu); **Marcar recebido** serve para quem presenteou por
   fora do site.
 
@@ -144,7 +145,7 @@ Entre com o e-mail e a senha criados no passo 3.4. Ele tem três abas:
 ## 6. A lojinha (pagamento pela InfinitePay)
 
 1. O convidado clica em **Presentear**, escreve nome e mensagem e vai para o pagamento.
-2. O servidor (`functions/`) confere o preço na lista, **segura o presente por 20
+2. O servidor (`functions/`) confere o preço atual, **segura o presente por 20
    minutos** e pede à InfinitePay um link que vale esses mesmos 20 minutos.
 3. O convidado paga com Pix ou cartão na página da InfinitePay e volta ao convite.
 4. A InfinitePay avisa o servidor; o servidor **confirma com a InfinitePay** que o

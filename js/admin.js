@@ -2,7 +2,7 @@
    Painel dos noivos — RSVPs, presentes e status da lista.
    ============================================================= */
 import { PRESENTES } from './data.js?v=presentes-fotos-1';
-import * as DB from './db.js?v=202611251641';
+import * as DB from './db.js?v=precos-painel-1';
 
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
@@ -18,7 +18,7 @@ function toast(m) {
   clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 3000);
 }
 
-const estado = { registros: [], rsvps: [], status: {} };
+const estado = { registros: [], rsvps: [], status: {}, precos: {} };
 
 /* ------------------------------------------------------------------ login */
 async function login() {
@@ -248,13 +248,15 @@ function tabelaLista() {
     <tbody>${linhas.map(({ p, s, quem }) => `
       <tr>
         <td class="nome">${esc(p.nome)}</td>
-        <td>${esc(brl(p.preco))}</td>
+        <td>${esc(brl(DB.precoAtual(p, estado.precos)))}</td>
         <td>${s === 'oculto' ? '<span class="tag tag--nao">Excluído do site</span>'
           : s === 'disponivel' ? '<span class="tag tag--espera">Disponível</span>'
           : s === 'recebido' ? '<span class="tag tag--ok">Recebido</span>'
           : '<span class="tag tag--espera">Aguardando pagamento</span>'}</td>
         <td>${esc(quem) || '—'}</td>
-        <td><div class="acoes">${s === 'oculto'
+        <td><div class="acoes">
+          <button class="mini" type="button" data-editar-preco="${esc(p.id)}">Editar preço</button>
+          ${s === 'oculto'
           ? `<button class="mini" data-liberar="${esc(p.id)}">Restaurar</button>`
           : `${s === 'disponivel' ? `<button class="mini" data-ocultar="${esc(p.id)}">Excluir da lista</button>`
               : `<button class="mini" data-liberar="${esc(p.id)}">Liberar</button>`}
@@ -291,6 +293,54 @@ function csv(qual) {
 }
 
 /* ---------------------------------------------------------------- eventos */
+function editorPrecos() {
+  const editor = $('#editor-preco');
+  const form = $('#form-preco');
+  const campo = form.elements.preco;
+  const salvar = $('button[type=submit]', form);
+  const cancelar = $('#cancelar-preco');
+  const erro = $('#erro-editor-preco');
+  let presente;
+
+  $('#tab-lista').addEventListener('click', (ev) => {
+    const botao = ev.target.closest('[data-editar-preco]');
+    if (!botao) return;
+    presente = PRESENTES.find((p) => p.id === botao.dataset.editarPreco && p.tipo !== 'livre');
+    if (!presente) return;
+    $('#presente-editor-preco').textContent = presente.nome;
+    campo.value = DB.precoAtual(presente, estado.precos).toFixed(2);
+    erro.textContent = '';
+    editor.showModal();
+  });
+  cancelar.addEventListener('click', () => editor.close());
+  editor.addEventListener('cancel', (ev) => { if (salvar.disabled) ev.preventDefault(); });
+  editor.addEventListener('close', () => {
+    const botao = $$('[data-editar-preco]').find((b) => b.dataset.editarPreco === presente?.id);
+    (botao || $('#busca-lista')).focus({ preventScroll: true });
+  });
+  form.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    if (salvar.disabled || !presente || !form.reportValidity()) return;
+    const centavos = Math.round(campo.valueAsNumber * 100);
+    erro.textContent = '';
+    salvar.disabled = cancelar.disabled = true;
+    try {
+      await DB.definirPreco(presente.id, centavos);
+      if (DB.MODO === 'local') {
+        estado.precos[presente.id] = { centavos };
+        tabelaLista();
+      }
+      editor.close();
+      toast('Preço atualizado.');
+    } catch (e) {
+      console.error('Falha ao salvar o preço:', e);
+      erro.textContent = 'Não foi possível salvar o preço. Tente novamente.';
+    } finally {
+      salvar.disabled = cancelar.disabled = false;
+    }
+  });
+}
+
 function eventos() {
   const abas = $$('.aba');
   const barraAbas = $('.abas');
@@ -379,6 +429,7 @@ function eventos() {
 /* ------------------------------------------------------------------ start */
 (async function iniciar() {
   eventos();
+  editorPrecos();
   try {
     await login();
   } catch (erro) {
@@ -388,4 +439,5 @@ function eventos() {
     return;
   }
   DB.observarPresentes((mapa) => { estado.status = mapa; if (!$('#tela-painel').hidden) render(); });
+  DB.observarPrecos((mapa) => { estado.precos = mapa; if (!$('#tela-painel').hidden) tabelaLista(); });
 })();
