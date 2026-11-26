@@ -60,11 +60,46 @@ function barrasDoSistema() {
   const meta = document.querySelector('meta[name="theme-color"]');
   const hero = $('#inicio');
   if (!hero) return;
-  const VERDE = '#1F3B2E';
-  const MARFIM = '#F6EFE7';
+  const VERDE = [31, 59, 46];
+  const MARFIM = [246, 239, 231];
   const toque = matchMedia('(any-pointer: coarse)');
+  const reduzir = matchMedia('(prefers-reduced-motion: reduce)');
   const viewport = window.visualViewport;
-  let atual = '';
+  let atual;
+  let alvo;
+  let quadro = 0;
+
+  function pintar(canais) {
+    atual = canais;
+    const cor = 'rgb(' + canais.map(Math.round).join(', ') + ')';
+    if (meta) meta.setAttribute('content', cor);
+    document.documentElement.style.backgroundColor = cor;
+    document.body.style.backgroundColor = cor;
+  }
+
+  function trocarCor(cor) {
+    if (cor === alvo) return;
+    alvo = cor;
+    cancelAnimationFrame(quadro);
+    if (!atual || !toque.matches || reduzir.matches) {
+      pintar(cor);
+      return;
+    }
+
+    const origem = atual;
+    const inicio = performance.now();
+    function mesclar(agora) {
+      const t = (agora - inicio) / 240;
+      if (t >= 1 || reduzir.matches) {
+        pintar(cor);
+        return;
+      }
+      const progresso = t * t * (3 - 2 * t);
+      pintar(origem.map((canal, i) => canal + (cor[i] - canal) * progresso));
+      quadro = requestAnimationFrame(mesclar);
+    }
+    quadro = requestAnimationFrame(mesclar);
+  }
 
   function aplicar() {
     const posicao = window.scrollY || document.body.scrollTop;
@@ -72,15 +107,7 @@ function barrasDoSistema() {
     const saiuDaCapa = toque.matches
       ? posicao > 4 && hero.getBoundingClientRect().bottom <= bordaInferior - 16
       : posicao >= hero.offsetHeight - 4;
-    const cor = saiuDaCapa ? MARFIM : VERDE;
-    if (cor === atual) return;
-    atual = cor;
-    if (meta) meta.setAttribute('content', cor);
-    /* o Safari tira a cor da faixa do <body>, não do <html>: com o body
-       marfim fixo a barra ficava clara e a hora saía em preto, mesmo com a
-       raiz já pintada de verde. As duas precisam mudar juntas. */
-    document.documentElement.style.backgroundColor = cor;
-    document.body.style.backgroundColor = cor;
+    trocarCor(saiuDaCapa ? MARFIM : VERDE);
   }
 
   aplicar();
