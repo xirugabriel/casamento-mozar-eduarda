@@ -54,20 +54,25 @@ function nav() {
 /* ------------------------------------------------------ barras do sistema */
 /* O Safari do iPhone pinta a faixa do notch e a da barra de endereço com a
    cor de fundo da página, não com a theme-color declarada. Como o fundo é
-   marfim fixo, as barras ficavam marfim mesmo sobre a abertura verde. Aqui a
-   cor acompanha a seção que está no topo — e a theme-color vai junto, porque
-   em outros navegadores é ela que manda. */
+   marfim fixo, as barras ficavam marfim mesmo sobre a abertura verde.
+   No celular, a barra inferior acompanha a borda visível da página. */
 function barrasDoSistema() {
   const meta = document.querySelector('meta[name="theme-color"]');
   const hero = $('#inicio');
   if (!hero) return;
   const VERDE = '#1F3B2E';
   const MARFIM = '#F6EFE7';
+  const toque = matchMedia('(any-pointer: coarse)');
+  const viewport = window.visualViewport;
   let atual = '';
 
   function aplicar() {
     const posicao = window.scrollY || document.body.scrollTop;
-    const cor = posicao < hero.offsetHeight - 4 ? VERDE : MARFIM;
+    const bordaInferior = Math.min(viewport?.height ?? window.innerHeight, document.body.clientHeight);
+    const saiuDaCapa = toque.matches
+      ? posicao > 4 && hero.getBoundingClientRect().bottom <= bordaInferior - 16
+      : posicao >= hero.offsetHeight - 4;
+    const cor = saiuDaCapa ? MARFIM : VERDE;
     if (cor === atual) return;
     atual = cor;
     if (meta) meta.setAttribute('content', cor);
@@ -82,6 +87,7 @@ function barrasDoSistema() {
   window.addEventListener('scroll', aplicar, { passive: true });
   document.body.addEventListener('scroll', aplicar, { passive: true });
   window.addEventListener('resize', aplicar);
+  viewport?.addEventListener('resize', aplicar);
 }
 
 /* --------------------------------------------------------------- dizeres */
